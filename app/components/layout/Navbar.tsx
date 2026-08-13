@@ -41,12 +41,13 @@ export default function Navbar() {
   return (
     <>
       {/* Navbar */}
-      <header className="sticky top-0 z-50 ">
+      <header className="sticky top-0  z-50 ">
         <div
           className="
             mx-auto flex max-w-7xl items-center justify-between
             px-6 py-4
             md:px-4 md:py-3
+            mt-1.5
             min-[940px]:px-10 min-[940px]:py-4
           "
         >
@@ -103,7 +104,7 @@ export default function Navbar() {
                   transition-colors
                   hover:text-[var(--color-primary)]
                   text-sm
-                  min-[940px]:text-md
+                  min-[940px]:text-[16px]
                 "
               >
                 {link.label}
