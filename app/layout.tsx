@@ -52,8 +52,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ar" dir="rtl" className={`${cairo.variable} ${plexArabic.variable}`}>
-      <body className="bg-white text-[var(--color-ink)] antialiased">
+    <html
+      lang="ar"
+      dir="rtl"
+      className={`${cairo.variable} ${plexArabic.variable}`}
+    >
+      <body
+        suppressHydrationWarning={true}
+        className="bg-white text-[var(--color-ink)] antialiased"
+      >
         <Navbar />
         {children}
       </body>

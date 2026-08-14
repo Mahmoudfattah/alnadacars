@@ -6,12 +6,10 @@
 globals.css
 Design system: Apple Blue
 Next.js + Tailwind v4
-
-Fonts are loaded via next/font in app/layout.tsx
-(Cairo -> --font-display, IBM Plex Sans Arabic -> --font-body).
-Do NOT redefine those two variables here — it races against the
-next/font stylesheet and silently breaks Arabic rendering.
 ==========================================================================
+
+Fonts are loaded via next/font in app/layout.tsx.
+Do NOT redefine --font-display here if it is already defined by next/font.
 */
 
 :root {
@@ -31,15 +29,17 @@ next/font stylesheet and silently breaks Arabic rendering.
   --color-bg-raised: #ffffff;
   --color-border: #d2d2d7;
 
-   /* Cash */
+  /* Cash */
   --color-cash: #1f9d55;
   --color-cash-tint: #e9f8ef;
 
-  /* CTA — literal Figma black/white system */
+  /* CTA */
   --color-cta: #111111;
   --color-cta-hover: #2b2b2b;
 
+  /* Typography */
   --font-numeral: ui-monospace, "SF Mono", Consolas, monospace;
+  --font-body: "Playpen Sans Arabic", cursive;
 
   /* Radius */
   --radius-sm: 10px;
@@ -57,8 +57,6 @@ next/font stylesheet and silently breaks Arabic rendering.
   --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
   --duration-fast: 150ms;
   --duration-base: 250ms;
-
-  --font-body: "Playpen Sans Arabic", cursive;
 }
 
 /* ==========================================================================
@@ -85,7 +83,6 @@ next/font stylesheet and silently breaks Arabic rendering.
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
     font-feature-settings: "ss01" 1;
-    
   }
 
   h1,
@@ -135,25 +132,125 @@ next/font stylesheet and silently breaks Arabic rendering.
   }
 }
 
-/* Keyframe primitive — kept outside @layer so components can trigger it
-   directly with an arbitrary Tailwind utility, e.g.
-   className="animate-[pulse-ring_2.4s_var(--ease-standard)_infinite]" */
-@keyframes pulse-ring {
-  0% {
-    transform: scale(1);
-    opacity: 0.45;
-  }
-  100% {
-    transform: scale(1.6);
-    opacity: 0;
+/* ==========================================================================
+   Utilities
+========================================================================== */
+
+@utility flex-center {
+  @apply flex justify-center items-center;
+}
+
+@utility col-center {
+  @apply flex flex-col justify-center items-center;
+}
+
+@utility abs-center {
+  @apply absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2;
+}
+
+@utility text-gradient {
+  background: linear-gradient(to bottom, #ffffff, #898989);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+@utility radial-gradient {
+  background: radial-gradient(
+    circle at center,
+    #434343 0%,
+    #000 50%,
+    transparent 100%
+  );
+}
+
+/*
+==========================================================================
+Car-shaped video mask
+==========================================================================
+احفظ الصورة (الكورولا البيضاء بعد شيل الخلفية) في: public/car-mask.png
+لازم تفضل الخلفية شفافة (PNG بـ alpha channel) عشان الماسك يشتغل صح -
+الأجزاء الشفافة = مخفية، الأجزاء اللي فيها السيارة = ظاهرة.
+
+مش @utility عادية لأننا محتاجين نتحكم في --mask-size كـ CSS variable
+عشان GSAP يقدر يعمل عليها tween سلس (tween على keywords زي "contain" مش بيشتغل).
+*/
+
+.car-mask {
+  --mask-size: 92%; /* قيمة ابتدائية، ظبطها بالعين حسب نسبة أبعاد car-mask.png */
+
+  mask-image: url("/carVideo.webp");
+  -webkit-mask-image: url("/carVideo.webp");
+
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+
+  mask-position: center center;
+  -webkit-mask-position: center center;
+
+  mask-size: var(--mask-size);
+  -webkit-mask-size: var(--mask-size);
+
+  will-change: mask-size, -webkit-mask-size;
+
+  /* بيعزل العنصر في GPU layer لوحده، بيقلل التقطيع أثناء تغيير الماسك */
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* ==========================================================================
+   Components
+========================================================================== */
+
+@layer components {
+  #art {
+    @apply flex-center flex-col min-h-dvh p-5 mt-20 relative ;
+
+    h2 {
+      @apply relative md:text-[20vw] text-8xl text-nowrap leading-none  text-center text-[#505050] mb-8;
+    }
+
+    .content {
+      @apply flex md:flex-row flex-col justify-between md:mb-16 md:mt-0 mt-40 gap-10;
+    }
+
+    /*
+    ==========================================================================
+    Masked content
+    ==========================================================================
+    */
+
+    .masked-container {
+      h2 {
+        @apply text-4xl md:text-5xl  text-center mb-10 text-white mt-32;
+      }
+
+      div {
+        @apply opacity-0 md:px-0 px-5 space-y-5 absolute md:bottom-5 bottom-52 left-1/2 -translate-x-1/2;
+
+        h3 {
+          @apply md:text-5xl text-2xl text-center font-serif md:w-full w-80 text-white;
+        }
+
+        p {
+          @apply text-lg text-center;
+        }
+      }
+    }
   }
 }
 
-/* :-webkit-any(input, textarea, select) {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-} */
+/* ==========================================================================
+   Text animation
+========================================================================== */
+
+.textP .char {
+  display: inline-block;
+}
+
+/* ==========================================================================
+   Scrollbar
+========================================================================== */
 
 ::-webkit-scrollbar {
   width: 8px;

@@ -1,12 +1,11 @@
+"use client";
 
+import { useRef } from "react";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
 import Link from "next/link";
 import Image from "next/image";
-import {
-  ArrowLeft,
-  Banknote,
-  CarFront,
-  Clock3,
-} from "lucide-react";
+import { ArrowLeft, Banknote, CarFront, Clock3 } from "lucide-react";
 
 const STATS = [
   {
@@ -37,13 +36,108 @@ const STATS = [
 ];
 
 export default function Hero() {
+  const heroRef = useRef<HTMLElement | null>(null);
+
+  useGSAP(
+    () => {
+      const tl = gsap.timeline({
+        defaults: { ease: "power4.out" },
+      });
+
+      // 1. دخول العناصر النصية بنعومة احترافية
+      tl.fromTo(
+        ".hero-badge",
+        { autoAlpha: 0, y: 30 },
+        { autoAlpha: 1, y: 0, duration: 1 }
+      )
+        .fromTo(
+          ".hero-title-line",
+          { autoAlpha: 0, y: 30 },
+          { autoAlpha: 1, y: 0, duration: 1 },
+          "-=0.88"
+        )
+        .fromTo(
+          ".hero-description",
+          { autoAlpha: 0, y: 30 },
+          { autoAlpha: 1, y: 0, duration: 1 },
+          "-=0.88"
+        )
+        .fromTo(
+          ".reveal-item:not(.hero-badge):not(.hero-description)",
+          { autoAlpha: 0, y: 30 },
+          { autoAlpha: 1, y: 0, stagger: 0.12, duration: 1 },
+          "-=0.88"
+        )
+        .fromTo(
+          ".hero-map",
+          { autoAlpha: 0, scale: 0.95 },
+          { autoAlpha: 1, scale: 1, duration: 1.2 },
+          "-=0.8"
+        );
+
+      // 2. مشهد السيارة: دخول ناعم مع تداخل (Crossfade) وتصحيح الموضع
+      tl.fromTo(
+        ".hero-car-clean",
+        { autoAlpha: 0, x: -400, rotation: -2 },
+        { 
+          autoAlpha: 1, 
+          x: 0, 
+          rotation: 0, 
+          duration: 1.4, 
+          ease: "power3.out" 
+        },
+        "-=0.5"
+      )
+        // يبدأ التلاشي للسيارة السليمة وهي لا تزال في الثلث الأخير من حركتها
+        .to(
+          ".hero-car-clean", 
+          { autoAlpha: 0, duration: 0.6, ease: "power2.inOut" }, 
+          "-=0.6"
+        )
+        // في نفس اللحظة التي تبدأ فيها السيارة السليمة بالتلاشي، تظهر السيارة المصدومة
+        // مع تعديل طفيف في الحجم (scale) والمسافة (x) لتستقر بنعومة
+        .fromTo(
+          ".hero-car-damaged",
+          { autoAlpha: 0, scale: 0.96, x: 15, rotation: 1 },
+          { 
+            autoAlpha: 1, 
+            scale: 1, 
+            x: 0, 
+            rotation: 0, 
+            duration: 0.8, 
+            ease: "power2.out" 
+          },
+          "<" // علامة التزامن (<) تجعل هذه الحركة تبدأ تماماً مع حركة التلاشي السابقة
+        );
+
+      // 3. الطفو المستمر الحريري
+      gsap.to(".hero-car-damaged", {
+        y: -12,
+        rotation: -1,
+        duration: 3,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut",
+        delay: 0.4, // تأخير بسيط حتى تكتمل حركة الدخول والدمج بالكامل
+      });
+
+      gsap.to(".hero-map", {
+        scale: 1.03,
+        rotation: 1,
+        duration: 5,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut",
+      });
+    },
+    { scope: heroRef }
+  );
+
   return (
     <section
       id="home"
-      className="
-        relative overflow-hidden
-        bg-[var(--color-bg-raised)]
-      "
+      ref={heroRef}
+      className="relative overflow-hidden bg-[var(--color-bg-raised)]"
     >
       <div
         className="
@@ -57,35 +151,19 @@ export default function Hero() {
           md:py-10
         "
       >
-        {/* =====================================================
-            TEXT COLUMN
-        ====================================================== */}
-        <div className="flex flex-col overflow-hidden items-start gap-6">
-          {/* Badge */}
-          <span
-            className="
-              inline-flex items-center gap-2
-              rounded-[var(--radius-pill)]
-              bg-[var(--color-primary)]/10
-              px-4 py-2
-              text-xs font-semibold
-              text-[var(--color-primary)]
-            "
-          >
-            <span
-              className="
-                h-2 w-2
-                rounded-full
-                bg-[var(--color-primary)]
-              "
-            />
-
+        {/* TEXT COLUMN */}
+        <div className="flex flex-col items-start gap-6">
+          <span className="reveal-item hero-badge inline-flex items-center gap-2 rounded-full border border-slate-200/60 bg-white/60 px-5 py-2.5 text-xs font-semibold text-slate-700 shadow-sm backdrop-blur-md">
+            <span className="relative flex h-2.5 w-2.5">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75"></span>
+              <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-emerald-500"></span>
+            </span>
             كاش فوري خلال 30 دقيقة
           </span>
 
-          {/* Heading */}
           <h1
             className="
+              hero-title-line
               text-balance
               text-4xl font-bold
               leading-[1.3]
@@ -94,165 +172,63 @@ export default function Hero() {
               md:text-[40px]
             "
           >
-           شراء سيارات مصدومة وتالف
-            <br />
-             في جدة ومكة
-           
-            نقداً وبأفضل سعر
+            شراء سيارات مصدومة وتالف في جدة ومكة نقداً وبأفضل سعر
           </h1>
 
-          {/* Description */}
           <p
-            className="
-              max-w-md
-              text-base
-              leading-relaxed
-              text-[var(--color-ink-soft)]
-              md:text-lg
-            "
+            className="reveal-item hero-description max-w-lg text-base leading-relaxed text-slate-600 md:text-lg font-medium"
           >
             نشتري سيارتك المصدومة أو التالفة أياً كانت حالتها، بمعاينة فورية
-            وسعر عادل، مع سطحة مجانية لنقل السيارة من موقعك في جدة ومكة
-            المكرمة.
+            وسعر عادل، مع{" "}
+            <strong className="text-slate-900 font-bold">سطحة مجانية</strong>{" "}
+            لنقل السيارة من موقعك.
           </p>
 
-          {/* CTA Buttons */}
-          <div className="flex flex-wrap items-center gap-4 pt-2">
-            {/* Primary CTA */}
+          <div className="reveal-item flex flex-wrap items-center gap-4 pt-4">
             <Link
               href="#contact"
-              className="
-                inline-flex items-center gap-2
-                rounded-[var(--radius-pill)]
-                bg-[var(--color-cta)]
-                px-8 py-4
-                text-sm font-semibold
-                text-white
-                shadow-[var(--shadow-sm)]
-                transition-all
-                hover:-translate-y-0.5
-                hover:bg-[var(--color-cta-hover)]
-                hover:shadow-[var(--shadow-md)]
-              "
+              className="group relative inline-flex items-center gap-3 overflow-hidden rounded-full bg-slate-900 px-8 py-4 text-sm font-semibold text-white transition-all hover:bg-slate-800 hover:shadow-xl hover:shadow-slate-900/20 hover:-translate-y-1"
             >
-              احصل على السعر الآن
-
+              <span className="relative z-10">احصل على السعر الآن</span>
               <ArrowLeft
-                size={17}
-                strokeWidth={2}
+                size={18}
+                strokeWidth={2.5}
+                className="relative z-10 transition-transform duration-300 group-hover:-translate-x-1"
               />
             </Link>
 
-            {/* Secondary CTA */}
             <Link
               href="#how-it-works"
-              className="
-                inline-flex items-center gap-2
-                rounded-[var(--radius-pill)]
-                border
-                border-[var(--color-border)]
-                px-8 py-4
-                text-sm font-semibold
-                text-[var(--color-ink)]
-                transition-all
-                hover:-translate-y-0.5
-                hover:bg-[var(--color-bg-soft)]
-              "
+              className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white/50 px-8 py-4 text-sm font-semibold text-slate-700 backdrop-blur-sm transition-all hover:bg-white hover:shadow-md hover:-translate-y-1"
             >
               كيف تعمل الخدمة
             </Link>
           </div>
 
-          {/* =====================================================
-              TRUST STATS
-          ====================================================== */}
-          <div
-            className="
-              mt-4 grid w-full
-              grid-cols-3
-              border-t
-              border-[var(--color-border)]
-              pt-6
-            "
-          >
+          {/* TRUST STATS */}
+          <div className="reveal-item mt-8 grid w-full grid-cols-3 gap-4 rounded-3xl border border-white/40 bg-white/40 p-4 shadow-[0_8px_30px_rgb(0,0,0,0.04)] backdrop-blur-xl">
             {STATS.map((stat, index) => {
               const Icon = stat.icon;
-
               return (
                 <div
                   key={stat.label}
-                  className={`
-                    flex items-center gap-2
-                    px-2
-                    sm:gap-3
-                    sm:px-4
-                    ${
-                      index !== 0
-                        ? "border-r border-[var(--color-border)]"
-                        : ""
-                    }
-                  `}
+                  className="flex flex-col items-center justify-center gap-3 text-center sm:flex-row sm:text-right sm:justify-start"
                 >
-                
                   <div
-                    className={`
-                      flex h-10 w-10
-                      shrink-0
-                      items-center
-                      justify-center
-                      rounded-full
-                      ${stat.iconBg}
-                      ${stat.iconColor}
-                      ring-1
-                      ${stat.iconRing}
-                      transition-all
-                      duration-300
-                      hover:scale-105
-                    `}
+                    className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl ${stat.iconBg} ${stat.iconColor} ring-1 ${stat.iconRing} shadow-sm`}
                   >
-                    <Icon
-                      size={19}
-                      strokeWidth={1.8}
-                    />
+                    <Icon size={20} strokeWidth={2} />
                   </div>
-
-                  {/* Stat content */}
-                  <div className="flex min-w-0 flex-col gap-1">
-                    <span
-                      className="
-                        numeral
-                        text-lg font-bold
-                        text-[var(--color-ink)]
-                        sm:text-sm
-                        md:text-xl
-                      "
-                    >
+                  <div className="flex flex-col gap-0.5">
+                    <span className="text-lg font-extrabold text-slate-900 sm:text-base md:text-xl tracking-tight">
                       {stat.value}
-
                       {stat.unit && (
-                        <span
-                          className="
-                            mr-1
-                            text-[10px]
-                            font-medium
-                            text-[var(--color-ink-soft)]
-                            sm:text-xs
-                          "
-                        >
+                        <span className="mr-1 text-[11px] font-semibold text-slate-500">
                           {stat.unit}
                         </span>
                       )}
                     </span>
-
-                    <span
-                      className="
-                        text-[10px]
-                        leading-relaxed
-                        text-[var(--color-ink-soft)]
-                        sm:text-xs
-                        md:text-sm
-                      "
-                    >
+                    <span className="text-[10px] font-medium text-slate-500 sm:text-xs">
                       {stat.label}
                     </span>
                   </div>
@@ -262,9 +238,7 @@ export default function Hero() {
           </div>
         </div>
 
-        {/* =====================================================
-            IMAGE COLUMN
-        ====================================================== */}
+        {/* IMAGE COLUMN WITH CRASH ANIMATION */}
         <div
           className="
             relative
@@ -275,11 +249,10 @@ export default function Hero() {
             md:max-w-none
           "
         >
-          {/* =================================================
-              MAP BACKGROUND
-          ================================================== */}
+          {/* MAP */}
           <div
             className="
+              hero-map
               absolute
               inset-x-0
               top-[-5%]
@@ -298,20 +271,23 @@ export default function Hero() {
             />
           </div>
 
-          {/* =================================================
-              DAMAGED CAR
-          ================================================== */}
+          {/* 1. CLEAN CAR */}
+          <Image
+            src="/car.png"
+            alt="سيارة سليمة"
+            fill
+            priority
+            className="hero-car-clean relative z-10 object-contain drop-shadow-2xl"
+            sizes="(max-width: 768px) 90vw, 45vw"
+          />
+
+          {/* 2. DAMAGED CAR */}
           <Image
             src="/cardamage.png"
             alt="سيارة مصدومة جاهزة للبيع فوراً"
             fill
             priority
-            className="
-              relative
-              z-10
-              object-contain
-              drop-shadow-2xl
-            "
+            className="hero-car-damaged absolute inset-0 z-10 object-contain drop-shadow-2xl opacity-0"
             sizes="(max-width: 768px) 90vw, 45vw"
           />
         </div>
@@ -319,4 +295,3 @@ export default function Hero() {
     </section>
   );
 }
-
