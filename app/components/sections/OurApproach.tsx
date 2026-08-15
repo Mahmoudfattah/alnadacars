@@ -72,7 +72,7 @@ export default function OurApproach() {
       const timeline = gsap.timeline({
         scrollTrigger: {
           trigger: section,
-          start: '25% center',
+          start: '20% center',
           once: true,
           invalidateOnRefresh: false,
         },

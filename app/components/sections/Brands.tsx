@@ -54,6 +54,9 @@ export default function Brands() {
         overflow-hidden
         bg-[var(--color-bg-raised)]
         py-8
+
+
+        mx-auto flex max-w-[1400px] fgap-3 px-6 text-center md:px-10 lg:px-16
       "
     >
       {/* LEFT FADE */}
