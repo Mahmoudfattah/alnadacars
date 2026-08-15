@@ -581,15 +581,17 @@ export default function Navbar() {
                   text-xs
                   font-semibold
                   text-white
-                  shadow-[var(--shadow-sm)]
+                
                   transition-all
-                  hover:-translate-y-0.5
+                
+                  
                   hover:bg-[var(--color-cta-hover)]
-                  hover:shadow-[var(--shadow-md)]
+              
 
                   min-[940px]:px-6
                   min-[940px]:py-3
                   min-[940px]:text-sm
+                  hover:shadow-md hover:-translate-y-1!
                 "
               >
                 تواصل معنا
@@ -756,6 +758,7 @@ export default function Navbar() {
             text-sm
             font-semibold
             text-white
+            hover:shadow-md hover:-translate-y-1
           "
         >
           تواصل معنا

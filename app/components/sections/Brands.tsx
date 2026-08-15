@@ -109,11 +109,10 @@ export default function Brands() {
               shrink-0
               items-center
               justify-center
-              opacity-60
-              grayscale
+              opacity-100
+            
               transition-all
-              hover:opacity-100
-              hover:grayscale-0
+            
               md:w-32
             "
           >

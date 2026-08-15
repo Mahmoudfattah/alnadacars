@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Playpen+Sans+Arabic:wght@100..800&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Playpen+Sans+Arabic:wght@100..800&display=swap");
 @import "tailwindcss";
 
 /*
@@ -109,9 +109,11 @@ Do NOT redefine --font-display here if it is already defined by next/font.
     font-variant-numeric: tabular-nums;
   }
 
-  :focus-visible {
+  :focus,
+  :focus-visible,
+  :active {
     outline: none;
-    box-shadow: var(--shadow-focus);
+    box-shadow: none;
     border-radius: var(--radius-sm);
   }
 
@@ -191,7 +193,9 @@ Car-shaped video mask
   mask-size: var(--mask-size);
   -webkit-mask-size: var(--mask-size);
 
-  will-change: mask-size, -webkit-mask-size;
+  will-change:
+    mask-size,
+    -webkit-mask-size;
 
   /* بيعزل العنصر في GPU layer لوحده، بيقلل التقطيع أثناء تغيير الماسك */
   transform: translateZ(0);
@@ -204,7 +208,7 @@ Car-shaped video mask
 
 @layer components {
   #art {
-    @apply flex-center flex-col min-h-dvh p-5 mt-20 relative ;
+    @apply flex-center flex-col min-h-dvh p-5 mt-20 relative;
 
     h2 {
       @apply relative md:text-[20vw] text-8xl text-nowrap leading-none  text-center text-[#505050] mb-8;
