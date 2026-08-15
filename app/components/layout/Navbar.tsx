@@ -586,17 +586,16 @@ export default function Navbar() {
                     md:h-16
                     md:w-16
 
-                    min-[940px]:h-[100px]
-                    min-[940px]:w-[100px]
+                    min-[940px]:h-25
+                    min-[940px]:w-25
                   "
                 />
 
                 <span
                   className="
                     hidden
-                    font-[var(--font-display)]
                     font-bold
-                    text-[var(--color-cta)]
+                    text-(--color-cta)
                     sm:block
                     md:text-sm
                     min-[940px]:text-base
@@ -646,8 +645,8 @@ export default function Navbar() {
                     min-[940px]:text-[16px]
                     ${
                       activeHash === link.href
-                        ? "text-[var(--color-primary)] font-semibold"
-                        : "text-[var(--color-ink)] hover:text-[var(--color-primary)]"
+                        ? "text-(--color-primary) font-semibold"
+                        : "text-(--color-ink) hover:text-(--color-primary)"
                     }
                   `}
                 >
@@ -677,8 +676,8 @@ export default function Navbar() {
                   shrink-0
                   items-center
                   gap-2
-                  rounded-[var(--radius-pill)]
-                  bg-[var(--color-cta)]
+                  rounded-(--radius-pill)
+                  bg-(--color-cta)
                   px-4
                   py-2
                   text-xs
@@ -688,7 +687,7 @@ export default function Navbar() {
                   transition-all
                 
                   
-                  hover:bg-[var(--color-cta-hover)]
+                  hover:bg-(--color-cta-hover)
               
 
                   min-[940px]:px-6
@@ -738,7 +737,7 @@ export default function Navbar() {
         className="
           fixed
           inset-0
-          z-[90]
+          z-90
           bg-black/30
           backdrop-blur-sm
           opacity-0
@@ -758,15 +757,15 @@ export default function Navbar() {
           fixed
           left-0
           top-0
-          z-[100]
+          z-100
 
           h-dvh
           w-[60%]
-          max-w-[380px]
+          max-w-95
 
           overflow-y-auto
 
-          bg-[var(--color-bg-raised)]
+          bg-(--color-bg-raised)
 
           px-6
           py-6
@@ -823,7 +822,7 @@ export default function Navbar() {
                 block
 
                 border-b
-                border-[var(--color-border)]
+border-(--color-border)
 
                 py-6
 
@@ -833,8 +832,8 @@ export default function Navbar() {
 
                 ${
                   activeHash === link.href
-                    ? "text-[var(--color-primary)]"
-                    : "text-[var(--color-ink)] hover:text-[var(--color-primary)]"
+                    ? "text-(--color-primary)"
+                    : "text-(--color-ink) hover:text-(--color-primary)"
                 }
               `}
             >
@@ -859,9 +858,9 @@ export default function Navbar() {
             items-center
             justify-center
 
-            rounded-[var(--radius-pill)]
+            rounded-(--radius-pill)
 
-            bg-[var(--color-cta)]
+            bg-(--color-cta)
 
             px-6
             py-3

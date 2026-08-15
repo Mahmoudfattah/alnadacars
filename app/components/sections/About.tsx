@@ -5,24 +5,10 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import Image from "next/image";
 import { useRef, useState } from "react";
+import type { CSSProperties } from "react";
 import { Volume2, VolumeOff } from "lucide-react";
 
 gsap.registerPlugin(ScrollTrigger);
-
-/*
-  Stops ScrollTrigger from calling refresh() when a mobile browser's
-  address bar shows/hides during scroll. That resize event was
-  re-calculating this section's pin start/end positions WHILE the
-  user was mid-scroll through it, which is what looked like the
-  layout "breaking" until the pin finished and the video mask fully
-  expanded. This is a GSAP-recommended, one-time global setting —
-  ideally it lives in a single shared GSAP setup module so it's only
-  ever set once app-wide, but there isn't one in this codebase yet,
-  so it's set here (calling it more than once is harmless/idempotent).
-*/
-if (typeof window !== "undefined") {
-  ScrollTrigger.config({ ignoreMobileResize: true });
-}
 
 const REASONS_PRIMARY = [
   "تقييم فوري ومجاني لسيارتك المصدومة",
@@ -56,9 +42,8 @@ const About = () => {
         },
         (context) => {
           const { isMobile } = context.conditions || {};
-          const start = isMobile ? "top 10%" : "top top";
+          const start = isMobile ? "top 15%" : "top 20%";
 
-          // Initial state setup (Hardware accelerated)
           gsap.set(maskRef.current, {
             "--mask-size": isMobile ? "72%" : "62%",
             scale: 1,
@@ -67,23 +52,20 @@ const About = () => {
 
           gsap.set(".will-fade", { opacity: 1, y: 0, force3D: true });
           gsap.set("#masked-content", { opacity: 0, y: 30, force3D: true });
-          
-          // Initial state for the wheels (Hidden and centered)
-          gsap.set([".wheel-left", ".wheel-right"], { 
-            opacity: 0, 
-            x: 0, 
-            rotation: 0, 
-            force3D: true 
+
+          gsap.set([".wheel-left", ".wheel-right"], {
+            opacity: 0,
+            x: 0,
+            rotation: 0,
+            force3D: true,
           });
 
           const timeline = gsap.timeline({
             scrollTrigger: {
               trigger: containerRef.current,
               start,
-              end: isMobile ? "+=120%" : "+=150%",
-              scrub: 1, // Smooth scrub matching reference video physics
-              pin: true,
-              anticipatePin: 1,
+              end: isMobile ? "+=110%" : "+=140%",
+              scrub: 0.7,
               invalidateOnRefresh: true,
               onEnter: () => videoRef.current?.play().catch(() => {}),
               onEnterBack: () => videoRef.current?.play().catch(() => {}),
@@ -108,26 +90,34 @@ const About = () => {
               duration: 1.5,
               ease: "power2.inOut",
             } as gsap.TweenVars,
-            "-=0.4"
+            "-=0.4",
           );
 
           // 2.5 ANIMATE WHEELS ALONGSIDE THE MASK EXPANSION
           // The '<' makes these start at the exact same time as the mask expansion above
-          timeline.to(".wheel-left", {
-            opacity: 1,
-            x: isMobile ? -80 : -200, // Moves out to the left like leaf-left
-            rotation: -180,           // Rolls backwards
-            duration: 1.5,
-            ease: "power2.inOut",
-          }, "<");
+          timeline.to(
+            ".wheel-left",
+            {
+              opacity: 1,
+              x: isMobile ? -80 : -200, // Moves out to the left like leaf-left
+              rotation: -180, // Rolls backwards
+              duration: 1.5,
+              ease: "power2.inOut",
+            },
+            "<",
+          );
 
-          timeline.to(".wheel-right", {
-            opacity: 1,
-            x: isMobile ? 80 : 200,   // Moves out to the right like leaf-right
-            rotation: 180,            // Rolls forwards
-            duration: 1.5,
-            ease: "power2.inOut",
-          }, "<");
+          timeline.to(
+            ".wheel-right",
+            {
+              opacity: 1,
+              x: isMobile ? 80 : 200, // Moves out to the right like leaf-right
+              rotation: 180, // Rolls forwards
+              duration: 1.5,
+              ease: "power2.inOut",
+            },
+            "<",
+          );
 
           // 3. Fade in bottom text cleanly
           timeline.to(
@@ -138,19 +128,19 @@ const About = () => {
               duration: 1,
               ease: "power2.out",
             },
-            "-=0.5"
+            "-=0.5",
           );
 
           return () => {
             timeline.scrollTrigger?.kill();
             timeline.kill();
           };
-        }
+        },
       );
 
       return () => mm.revert();
     },
-    { scope: containerRef }
+    { scope: containerRef },
   );
 
   const enableSound = async () => {
@@ -183,7 +173,7 @@ const About = () => {
     <section
       id="about"
       ref={containerRef}
-      className="relative w-full min-h-dvh overflow-hidden mb-4 bg-[var(--color-bg-soft)]"
+      className="relative mb-4 w-full min-h-dvh overflow-hidden bg-(--color-bg-soft)"
     >
       <div className="container mx-auto min-h-screen max-w-6xl flex flex-col items-center justify-center gap-8 px-4 relative z-10">
         {/* TITLE */}
@@ -217,19 +207,21 @@ const About = () => {
 
           {/* CENTER VIDEO WITH MASK AND WHEELS */}
           <div className="cocktail-img relative w-full aspect-video md:h-[65vh] md:aspect-auto mx-auto flex items-center justify-center overflow-visible rounded-2xl">
-            
             {/* --- NEW ADDITION: LEFT WHEEL --- */}
-            <img
+            <Image
               src="/ChatGPT Image 15 أغسطس 2026، 05_34_06 م.webp"
               alt="Left Wheel"
-              className="wheel-left absolute left-0 top-1/2 -translate-y-1/2 w-24 md:w-44 z-0 object-contain pointer-events-none will-change-transform"
+              width={176}
+              height={176}
+              className="wheel-left absolute left-0 top-1/2 z-0 -translate-y-1/2 object-contain pointer-events-none will-change-transform md:w-44"
             />
 
-            {/* --- NEW ADDITION: RIGHT WHEEL --- */}
-            <img
+            <Image
               src="/ChatGPT Image 15 أغسطس 2026، 05_36_28 م.webp"
               alt="Right Wheel"
-              className="wheel-right absolute right-0 top-1/2 -translate-y-1/2 w-24 md:w-44 z-0 object-contain pointer-events-none will-change-transform"
+              width={176}
+              height={176}
+              className="wheel-right absolute right-0 top-1/2 z-0 -translate-y-1/2 object-contain pointer-events-none will-change-transform md:w-44"
             />
 
             {/* VIDEO MASK LAYER */}
@@ -239,8 +231,8 @@ const About = () => {
               style={
                 {
                   "--mask-size": "62%",
-                  transform: "translateZ(0)", // Force GPU layer
-                } as React.CSSProperties
+                  transform: "translateZ(0)",
+                } as CSSProperties
               }
             >
               <video
@@ -258,7 +250,7 @@ const About = () => {
               <button
                 type="button"
                 onClick={soundOn ? disableSound : enableSound}
-                className="absolute bottom-4 left-4 z-[100] rounded-full bg-black/40 backdrop-blur-md border border-white/20 text-white w-10 h-10 flex items-center justify-center text-sm shadow-lg transition-transform hover:scale-110 active:scale-95"
+                className="absolute bottom-4 left-4 z-100 flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-black/40 text-sm text-white shadow-lg backdrop-blur-md transition-transform hover:scale-110 active:scale-95"
               >
                 {soundOn ? <VolumeOff size={16} /> : <Volume2 size={16} />}
               </button>
