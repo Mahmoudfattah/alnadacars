@@ -30,7 +30,7 @@ export default function Navbar() {
   const overlay = useRef<HTMLDivElement | null>(null);
 
   const mobileTimeline = useRef<gsap.core.Timeline | null>(null);
-  const logoRef = useRef<HTMLElement | null>(null);
+  const logoRef = useRef<HTMLAnchorElement | null>(null);
   const navLinksRef = useRef<HTMLElement | null>(null);
   const ctaRef = useRef<HTMLAnchorElement | null>(null);
 
