@@ -61,9 +61,9 @@ export default function Brands() {
         relative
         mx-auto
         w-full
-        max-w-[1400px]
+        max-w-350
         overflow-hidden
-        bg-[var(--color-bg-raised)]
+        bg-(--color-bg-raised)
         px-6
         py-12
         md:px-10
@@ -112,12 +112,12 @@ export default function Brands() {
                   h-auto
                   max-h-8
                   w-auto
-                  max-w-[70px]
+                  max-w-17.5
                   object-contain
                   md:max-h-10
-                  md:max-w-[86px]
+                  md:max-w-21.5
                   lg:max-h-12
-                  lg:max-w-[100px]
+                  lg:max-w-25
                 "
               />
             </div>

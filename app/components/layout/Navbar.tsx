@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Menu, X } from "lucide-react";
@@ -36,14 +36,6 @@ export default function Navbar() {
   const logoRef = useRef<HTMLAnchorElement | null>(null);
   const navLinksRef = useRef<HTMLElement | null>(null);
   const ctaRef = useRef<HTMLAnchorElement | null>(null);
-
-  /* =====================================================
-     GSAP CONTEXT
-  ====================================================== */
-
-  const { contextSafe } = useGSAP({
-    scope: container,
-  });
 
   /* =====================================================
      DESKTOP NAVBAR ANIMATIONS
@@ -296,27 +288,22 @@ export default function Navbar() {
      OPEN MOBILE MENU
   ====================================================== */
 
-  const openMenu = contextSafe(() => {
-    if (!navMobile.current || !overlay.current) return;
+  const openMenu = useCallback(() => {
+    const navEl = navMobile.current;
+    const overlayEl = overlay.current;
+
+    if (!navEl || !overlayEl) return;
 
     setIsOpen(true);
 
-    /*
-      Kill previous animation if user clicks quickly
-    */
-
     mobileTimeline.current?.kill();
 
-    const links = navMobile.current.querySelectorAll(".mobile-link");
+    const links = navEl.querySelectorAll(".mobile-link");
 
     mobileTimeline.current = gsap.timeline();
 
-    /*
-      1. Fade in overlay
-    */
-
     mobileTimeline.current.to(
-      overlay.current,
+      overlayEl,
       {
         opacity: 1,
         duration: 0.5,
@@ -325,12 +312,8 @@ export default function Navbar() {
       0,
     );
 
-    /*
-      2. Drawer slowly enters from the left
-    */
-
     mobileTimeline.current.to(
-      navMobile.current,
+      navEl,
       {
         xPercent: 0,
         duration: 0.8,
@@ -338,10 +321,6 @@ export default function Navbar() {
       },
       0,
     );
-
-    /*
-      3. Links appear one after another
-    */
 
     mobileTimeline.current.to(
       links,
@@ -354,28 +333,27 @@ export default function Navbar() {
       },
       "-=0.35",
     );
-  });
+  }, []);
 
   /* =====================================================
      CLOSE MOBILE MENU
   ====================================================== */
 
-  const closeMenu = contextSafe(() => {
-    if (!navMobile.current || !overlay.current) return;
+  const closeMenu = useCallback(() => {
+    const navEl = navMobile.current;
+    const overlayEl = overlay.current;
+
+    if (!navEl || !overlayEl) return;
 
     mobileTimeline.current?.kill();
 
-    const links = navMobile.current.querySelectorAll(".mobile-link");
+    const links = navEl.querySelectorAll(".mobile-link");
 
     mobileTimeline.current = gsap.timeline({
       onComplete: () => {
         setIsOpen(false);
       },
     });
-
-    /*
-      1. Links disappear first
-    */
 
     mobileTimeline.current.to(
       links,
@@ -389,12 +367,8 @@ export default function Navbar() {
       0,
     );
 
-    /*
-      2. Drawer slides back to the left
-    */
-
     mobileTimeline.current.to(
-      navMobile.current,
+      navEl,
       {
         xPercent: -100,
         duration: 0.65,
@@ -403,12 +377,8 @@ export default function Navbar() {
       "-=0.05",
     );
 
-    /*
-      3. Overlay fades out
-    */
-
     mobileTimeline.current.to(
-      overlay.current,
+      overlayEl,
       {
         opacity: 0,
         duration: 0.4,
@@ -416,15 +386,15 @@ export default function Navbar() {
       },
       "-=0.35",
     );
-  });
+  }, []);
 
   /* =====================================================
      CLOSE MENU WHEN CLICKING A LINK
   ====================================================== */
 
-  const handleMobileLinkClick = contextSafe(() => {
+  const handleMobileLinkClick = useCallback(() => {
     closeMenu();
-  });
+  }, [closeMenu]);
 
   /* =====================================================
      ESCAPE KEY
@@ -521,7 +491,7 @@ export default function Navbar() {
               border-l
               border-r
               border-b
-              border-[var(--color-border)]
+              border-(--color-border)
               opacity-0
             "
           />
@@ -717,7 +687,7 @@ export default function Navbar() {
                 justify-center
                 rounded-full
                 border
-                text-[var(--color-ink)]
+                text-(--color-ink)
                 md:hidden
               "
             >
@@ -793,7 +763,7 @@ export default function Navbar() {
               justify-center
               rounded-full
               border
-              text-[var(--color-ink)]
+              text-(--color-ink)
             "
           >
             <X size={22} />

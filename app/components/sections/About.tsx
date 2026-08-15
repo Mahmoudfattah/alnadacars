@@ -42,7 +42,7 @@ const About = () => {
         },
         (context) => {
           const { isMobile } = context.conditions || {};
-          const start = isMobile ? "top 15%" : "top 20%";
+          const start = isMobile ? "top 10%" : "top top";
 
           gsap.set(maskRef.current, {
             "--mask-size": isMobile ? "72%" : "62%",
@@ -60,17 +60,21 @@ const About = () => {
             force3D: true,
           });
 
-          const timeline = gsap.timeline({
-            scrollTrigger: {
-              trigger: containerRef.current,
-              start,
-              end: isMobile ? "+=110%" : "+=140%",
-              scrub: 0.7,
-              invalidateOnRefresh: true,
-              onEnter: () => videoRef.current?.play().catch(() => {}),
-              onEnterBack: () => videoRef.current?.play().catch(() => {}),
-            },
-          });
+         const timeline = gsap.timeline({
+  scrollTrigger: {
+    trigger: containerRef.current,
+    // يفضل تثبيته أسفل النافبار مباشرة، يمكنك تعديل الـ start ليكون "top 10%" مثلاً
+    start: start, 
+    // قمنا بزيادة مسافة الـ end لإعطاء مساحة أكبر (وقت أطول) للمستخدم لرؤية الحركة براحة
+    end: isMobile ? "+=120%" : "+=150%", 
+    scrub: 1, // جعل القيمة 1 تجعل الحركة أنعم قليلاً أثناء السكرول
+    pin: true, // 👈 التعديل الأهم: هذا ما يمنع الصفحة من النزول حتى ينتهي الأنميشن
+    anticipatePin: 1, // لمنع حدوث أي قفزة (Jump) في الـ UI عند بدء التثبيت
+    invalidateOnRefresh: true,
+    onEnter: () => videoRef.current?.play().catch(() => {}),
+    onEnterBack: () => videoRef.current?.play().catch(() => {}),
+  },
+});
 
           // 1. Fade out header & side lists smoothly
           timeline.to(".will-fade", {
