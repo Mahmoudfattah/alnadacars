@@ -9,27 +9,36 @@ import { useRef } from "react";
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
 
-// Injecting the SEO keywords from your handwritten list into the alt tags
 const IMAGES = [
   {
     src: "/car1.webp",
-    alt: "شراء سيارات مصدومة وتالف جدة مكة الطائف",
+    alt: "شراء سيارات مصدومة في جدة ومكة والطائف",
+    title: "شراء سيارات مصدومة",
+    subtitle: "في جدة ومكة والطائف",
   },
   {
     src: "/car2.webp",
-    alt: "شراء سيارات معطلة وشراء سيارات السكراب جدة",
+    alt: "شراء سيارات تالفة ومكبس في جدة ومكة",
+    title: "سيارات تالفة ومكبس",
+    subtitle: "سعر فوري وشراء نقدي",
   },
   {
     src: "/car3.webp",
-    alt: "شراء سيارات مصدومة تشليح وخربانه جدة مكة الطائف",
+    alt: "شراء سيارات تشليح وقطع غيار في جدة ومكة",
+    title: "شراء سيارات تشليح",
+    subtitle: "معاملة شفافة وسريعة",
   },
   {
     src: "/car4.webp",
-    alt: "شراء سيارات مصدومة وتالف في جدة ومكة والطائف والجموم",
+    alt: "شراء سيارات متعطلة ومصدومة في جدة ومكة",
+    title: "سيارات متعطلة",
+    subtitle: "بيعها بسهولة وبدون تعقيد",
   },
   {
     src: "/car5.webp",
-    alt: "شراء سيارات تالف قديمة متعطلة مكة",
+    alt: "شراء سيارات قديمة وتالفه في مكة وجدة",
+    title: "شراء سيارات قديمة",
+    subtitle: "تقييم عادل ونتيجة في نفس اليوم",
   },
 ];
 
@@ -72,7 +81,7 @@ export default function OurApproach() {
       const timeline = gsap.timeline({
         scrollTrigger: {
           trigger: section,
-          start: '12% center',
+          start: "12% center",
           once: true,
           invalidateOnRefresh: false,
         },
@@ -102,7 +111,7 @@ export default function OurApproach() {
             stagger: 0.08,
             clearProps: "transform",
           },
-          "-=0.35"
+          "-=0.35",
         );
 
       // ---------------------------------------------
@@ -116,13 +125,13 @@ export default function OurApproach() {
       scope: sectionRef,
       dependencies: [],
       revertOnUpdate: true,
-    }
+    },
   );
 
   return (
     <section
       ref={sectionRef}
-      id="approach"
+      id="how-it-works"
       dir="rtl"
       className="mx-auto max-w-[1300px] px-5  2xl:px-0"
     >
@@ -135,13 +144,12 @@ export default function OurApproach() {
           {/* TITLE */}
 
           <div className="lg:col-span-8">
-            {/* Added one of your main keywords here for visibility */}
             <p className="mb-8 inline-block rounded-full bg-[var(--color-cta)] px-4 py-2 text-sm font-medium text-white">
-              شراء سيارات تشليح جدة ومكة بأفضل الأسعار
+              شراء سيارات مصدومة وتالفة ومكبس في جدة ومكة والطائف
             </p>
 
             <h2 className="max-w-lg text-5xl font-bold leading-tight text-[var(--color-ink)] md:text-5xl">
-              نهتم بكل تفصيلة، من أول معاينة وحتى استلامك للكاش
+              شراء سيارات مصدومة وتالفة ومكبس بسرعة وشفافية كاملة
             </h2>
           </div>
 
@@ -149,18 +157,18 @@ export default function OurApproach() {
 
           <div className="mt-4 flex flex-col justify-between gap-2 lg:col-span-4 lg:mt-0">
             <p className="text-lg leading-relaxed text-[var(--color-ink-soft)]">
-              كل سيارة مصدومة نشتريها بنعاملها باهتمام كامل — تقييم دقيق، سعر
-              عادل، وتعامل شفاف من أول اتصال لحد استلام المبلغ نقداً. ده اللي
-              بيخلي عملاءنا يرشحونا لغيرهم.
+              نشتري سيارات مصدومة، تالفة، ومكبس في جدة ومكة والطائف بأعلى
+              مستويات الثقة والشفافية. نضمن لك تقييمًا عادلًا، صفقة سريعة،
+              واستلام نقدي بدون تعقيد أو ضغط.
             </p>
 
             <div className="flex flex-col justify-between gap-2 md:gap-2">
               <p className="numeral text-4xl font-bold text-[var(--color-ink)] md:text-5xl">
-                +500
+                +5000
               </p>
 
               <p className="text-sm font-medium text-[var(--color-ink-soft)]">
-                سيارة تم شراؤها
+                سيارة تم شراؤها بنظام موثوق
               </p>
             </div>
           </div>
@@ -172,40 +180,42 @@ export default function OurApproach() {
       ============================================ */}
 
       <div className="mb-5 grid grid-cols-1 gap-5 px-5 md:px-0 xl:grid-cols-12">
-        {/* IMAGE 1 */}
-        <div className="approach-grid-item group relative h-72 overflow-hidden rounded-3xl xl:col-span-3">
-          <Image
-            src={IMAGES[0].src}
-            alt={IMAGES[0].alt}
-            fill
-            priority
-            className="object-cover transition-transform duration-700 ease-in-out group-hover:scale-101"
-            sizes="(max-width: 1280px) 100vw, 25vw"
-          />
-        </div>
+        {IMAGES.slice(0, 3).map((image, index) => (
+          <div
+            key={image.title}
+            className={`approach-grid-item group relative h-72 overflow-hidden rounded-3xl ${
+              index === 0
+                ? "xl:col-span-3"
+                : index === 1
+                  ? "xl:col-span-6"
+                  : "xl:col-span-3"
+            }`}
+          >
+            <Image
+              src={image.src}
+              alt={image.alt}
+              fill
+              priority={index < 2}
+              className="object-cover transition-transform duration-700 ease-in-out group-hover:scale-105"
+              sizes={
+                index === 0
+                  ? "(max-width: 1280px) 100vw, 25vw"
+                  : index === 1
+                    ? "(max-width: 1280px) 100vw, 50vw"
+                    : "(max-width: 1280px) 100vw, 25vw"
+              }
+            />
 
-        {/* IMAGE 2 */}
-        <div className="approach-grid-item group relative h-72 overflow-hidden rounded-3xl xl:col-span-6">
-          <Image
-            src={IMAGES[1].src}
-            alt={IMAGES[1].alt}
-            fill
-            priority
-            className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-            sizes="(max-width: 1280px) 100vw, 50vw"
-          />
-        </div>
+            <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-transparent" />
 
-        {/* IMAGE 3 */}
-        <div className="approach-grid-item group relative h-72 overflow-hidden rounded-3xl xl:col-span-3">
-          <Image
-            src={IMAGES[2].src}
-            alt={IMAGES[2].alt}
-            fill
-            className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-            sizes="(max-width: 1280px) 100vw, 25vw"
-          />
-        </div>
+            <div className="absolute inset-x-0 bottom-0 p-4 text-right text-white">
+              <p className="text-lg text-white font-bold md:text-2xl">{image.title}</p>
+              <p className="mt-1 text-xs text-white/80 md:text-sm">
+                {image.subtitle}
+              </p>
+            </div>
+          </div>
+        ))}
       </div>
 
       {/* ============================================
@@ -213,27 +223,35 @@ export default function OurApproach() {
       ============================================ */}
 
       <div className="grid grid-cols-1 gap-5 px-5 md:grid-cols-12 md:px-0">
-        {/* IMAGE 4 */}
-        <div className="approach-grid-item group relative h-72 overflow-hidden rounded-3xl md:col-span-8">
-          <Image
-            src={IMAGES[3].src}
-            alt={IMAGES[3].alt}
-            fill
-            className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-            sizes="(max-width: 768px) 100vw, 65vw"
-          />
-        </div>
+        {IMAGES.slice(3).map((image, index) => (
+          <div
+            key={image.title}
+            className={`approach-grid-item group relative h-72 overflow-hidden rounded-3xl ${
+              index === 0 ? "md:col-span-8" : "md:col-span-4"
+            }`}
+          >
+            <Image
+              src={image.src}
+              alt={image.alt}
+              fill
+              className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+              sizes={
+                index === 0
+                  ? "(max-width: 768px) 100vw, 65vw"
+                  : "(max-width: 768px) 100vw, 35vw"
+              }
+            />
 
-        {/* IMAGE 5 */}
-        <div className="approach-grid-item group relative h-72 overflow-hidden rounded-3xl md:col-span-4">
-          <Image
-            src={IMAGES[4].src}
-            alt={IMAGES[4].alt}
-            fill
-            className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-            sizes="(max-width: 768px) 100vw, 35vw"
-          />
-        </div>
+            <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-transparent" />
+
+            <div className="absolute inset-x-0 bottom-0 p-4 text-right text-white">
+              <p className="text-lg text-white font-bold md:text-2xl">{image.title}</p>
+              <p className="mt-1 text-xs text-white/80 md:text-sm">
+                {image.subtitle}
+              </p>
+            </div>
+          </div>
+        ))}
       </div>
     </section>
   );

@@ -181,7 +181,7 @@ const About = () => {
     // actual rendered height dependent on an unrelated file — this
     // makes the intended value explicit and self-documenting.
     <section
-      id="art"
+      id="about"
       ref={containerRef}
       className="relative w-full min-h-dvh overflow-hidden mb-4 bg-[var(--color-bg-soft)]"
     >

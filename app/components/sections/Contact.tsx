@@ -2,10 +2,10 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { MessageCircle, Phone } from "lucide-react";
+import { CarFront, Globe, MessageCircle, Music2, Phone } from "lucide-react";
 
-const WHATSAPP_NUMBER = "966561849429";
-const PHONE_NUMBERS = ["0561849429", "0532449975", "0563319110"];
+const WHATSAPP_NUMBER = "966563319110";
+const PHONE_NUMBERS = ["0563319110", "0532449975", " 0561849429"];
 
 const CONTACT_METHODS = [
   {
@@ -29,6 +29,29 @@ const QUICK_LINKS = [
   { label: "من نحن", href: "#about" },
   { label: "كيف تعمل الخدمة", href: "#how-it-works" },
   { label: "المدن التي نخدمها", href: "#cities" },
+];
+
+const SOCIAL_LINKS = [
+  {
+    label: "TikTok",
+    href: "https://www.tiktok.com/@ahmdtop3?_r=1&_t=ZS-988TmPzlcFM",
+    icon: Music2,
+  },
+  {
+    label: "Ahmed Alhawary",
+    href: "https://ahmed-alhawary.com/",
+    icon: Globe,
+  },
+  {
+    label: "Alnada Cars",
+    href: "https://alnada-cars.com/",
+    icon: CarFront,
+  },
+  {
+    label: "Netlify",
+    href: "https://silver-muffin-1fb75b.netlify.app/",
+    icon: Globe,
+  },
 ];
 
 export default function ContactFooter() {
@@ -117,6 +140,13 @@ export default function ContactFooter() {
                     className="resize-none border-b border-white/25 bg-transparent pb-3 text-[15px] leading-relaxed text-white outline-none transition-colors placeholder:text-white/35 "
                   />
                 </div>
+                <button
+                  type="submit"
+                  className="mt-2 inline-flex w-fit items-center justify-center gap-2 rounded-[var(--radius-pill)] bg-white px-8 py-4 text-sm font-semibold text-[var(--color-ink)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/90 hover:shadow-lg active:scale-95 cursor-pointer"
+                >
+                  <MessageCircle size={18} />
+                  أرسل عبر واتساب
+                </button>
               </form>
 
               <div className="flex flex-col gap-8">
@@ -152,15 +182,7 @@ export default function ContactFooter() {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 gap-16 lg:grid-cols-2 pt-4 ">
-              <button
-                type="submit"
-                className="mt-2 inline-flex w-fit items-center justify-center gap-2 rounded-[var(--radius-pill)] bg-white px-8 py-4 text-sm font-semibold text-[var(--color-ink)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/90 hover:shadow-lg active:scale-95 cursor-pointer"
-              >
-                <MessageCircle size={18} />
-                أرسل عبر واتساب
-              </button>
-
+            <div className="grid grid-cols-1 gap-16 pt-4 lg:grid-cols-2">
               <nav>
                 <p className="mb-4 text-sm text-white/50">روابط سريعة</p>
 
@@ -177,10 +199,23 @@ export default function ContactFooter() {
                   ))}
                 </ul>
               </nav>
+              <div className="mt-6 flex flex-wrap items-center gap-3">
+                {SOCIAL_LINKS.map(({ label, href, icon: Icon }) => (
+                  <a
+                    key={label}
+                    href={href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={label}
+                    className="group flex h-11 w-11 items-center justify-center rounded-full border border-white/15 bg-white/5 text-white/80 transition-all duration-300 hover:-translate-y-0.5 hover:border-white hover:bg-white hover:text-[var(--color-ink)]"
+                  >
+                    <Icon className="h-5 w-5" />
+                  </a>
+                ))}
+              </div>
             </div>
 
             {/* Right: direct contact + quick links */}
-           
           </div>
 
           {/* Bottom bar */}

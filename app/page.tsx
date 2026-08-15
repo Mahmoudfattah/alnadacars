@@ -7,7 +7,7 @@ import Brands from "./components/sections/Brands";
 import About from "./components/sections/About";
 import OurApproach from "./components/sections/OurApproach";
 import ServicesGrid from "./components/sections/ServicesGrid";
-import CitiesWeServe from "./components/CitiesWeServe";
+import CitiesWeServe from "./components/sections/CitiesWeServe";
 import Contact from "./components/sections/Contact";
 
 

@@ -11,14 +11,17 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
 
 const NAV_LINKS = [
-  { label: "الرئيسية", href: "/" },
+  // { label: "الرئيسية", href: "/" },
   { label: "من نحن", href: "#about" },
   { label: "كيف تعمل الخدمة", href: "#how-it-works" },
   { label: "المدن التي نخدمها", href: "#cities" },
 ];
 
+const NAV_OFFSET = 110;
+
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [activeHash, setActiveHash] = useState("");
 
   /* =====================================================
      REFS
@@ -173,6 +176,89 @@ export default function Navbar() {
       scope: container,
     },
   );
+
+  /* =====================================================
+     HASH SCROLL + ACTIVE STATE
+  ====================================================== */
+
+  const scrollToSection = (hash: string) => {
+    const id = hash.replace("#", "");
+    if (!id) return;
+
+    const section = document.getElementById(id);
+    if (!section) return;
+
+    const top =
+      section.getBoundingClientRect().top + window.scrollY - NAV_OFFSET;
+
+    window.scrollTo({
+      top,
+      behavior: "smooth",
+    });
+
+    setActiveHash(hash);
+    window.history.replaceState(null, "", hash);
+  };
+
+  useEffect(() => {
+    const sections = NAV_LINKS.map((link) => {
+      if (!link.href.startsWith("#")) return null;
+      return document.getElementById(link.href.slice(1));
+    }).filter(Boolean) as HTMLElement[];
+
+    if (!sections.length) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visibleEntries = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+
+        if (visibleEntries.length > 0) {
+          const activeSection = visibleEntries[0].target as HTMLElement;
+          const nextHash = `#${activeSection.id}`;
+          setActiveHash(nextHash);
+          if (window.location.hash !== nextHash) {
+            window.history.replaceState(null, "", nextHash);
+          }
+        } else if (window.scrollY < 120) {
+          setActiveHash("");
+          const cleanUrl = `${window.location.pathname}${window.location.search}`;
+          if (window.location.pathname + window.location.search !== cleanUrl) {
+            window.history.replaceState(null, "", cleanUrl);
+          }
+        }
+      },
+      {
+        root: null,
+        threshold: [0.2, 0.4, 0.6, 0.8],
+        rootMargin: "-15% 0px -45% 0px",
+      },
+    );
+
+    sections.forEach((section) => observer.observe(section));
+
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const handleTopOfPage = () => {
+      if (window.scrollY < 120) {
+        setActiveHash("");
+        const cleanUrl = `${window.location.pathname}${window.location.search}`;
+        if (window.location.hash) {
+          window.history.replaceState(null, "", cleanUrl);
+        }
+      }
+    };
+
+    handleTopOfPage();
+    window.addEventListener("scroll", handleTopOfPage, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", handleTopOfPage);
+    };
+  }, []);
 
   /* =====================================================
      MOBILE INITIAL GSAP STATE
@@ -480,7 +566,11 @@ export default function Navbar() {
                   md:gap-1.5
                   min-[940px]:gap-2
                 "
-                onClick={() => {
+                onClick={(event) => {
+                  event.preventDefault();
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                  setActiveHash("");
+                  window.history.replaceState(null, "", "/");
                   if (isOpen) closeMenu();
                 }}
               >
@@ -536,17 +626,30 @@ export default function Navbar() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="
+                  onClick={(event) => {
+                    if (!link.href.startsWith("#")) {
+                      if (isOpen) closeMenu();
+                      return;
+                    }
+
+                    event.preventDefault();
+                    scrollToSection(link.href);
+                    if (isOpen) closeMenu();
+                  }}
+                  className={`
                     nav
                     opacity-0 -translate-y-5
                     whitespace-nowrap
                     text-sm
                     font-medium
-                    text-[var(--color-ink)]
                     transition-colors
-                    hover:text-[var(--color-primary)]
                     min-[940px]:text-[16px]
-                  "
+                    ${
+                      activeHash === link.href
+                        ? "text-[var(--color-primary)] font-semibold"
+                        : "text-[var(--color-ink)] hover:text-[var(--color-primary)]"
+                    }
+                  `}
                 >
                   {link.label}
                 </Link>
@@ -707,8 +810,14 @@ export default function Navbar() {
             <Link
               key={link.href}
               href={link.href}
-              onClick={handleMobileLinkClick}
-              className="
+              onClick={(event) => {
+                if (link.href.startsWith("#")) {
+                  event.preventDefault();
+                  scrollToSection(link.href);
+                }
+                handleMobileLinkClick();
+              }}
+              className={`
                 mobile-link
 
                 block
@@ -722,10 +831,12 @@ export default function Navbar() {
                 text-base
                 font-medium
 
-                text-[var(--color-ink)]
-
-                hover:text-[var(--color-primary)]
-              "
+                ${
+                  activeHash === link.href
+                    ? "text-[var(--color-primary)]"
+                    : "text-[var(--color-ink)] hover:text-[var(--color-primary)]"
+                }
+              `}
             >
               {link.label}
             </Link>

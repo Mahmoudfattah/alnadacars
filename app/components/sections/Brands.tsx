@@ -19,48 +19,33 @@ const BRANDS = [
 
 export default function Brands() {
   const containerRef = useRef<HTMLElement | null>(null);
-  const trackRef = useRef<HTMLDivElement | null>(null);
-  const firstGroupRef = useRef<HTMLDivElement | null>(null);
+  const listRef = useRef<HTMLDivElement | null>(null);
 
   useGSAP(
     () => {
-      if (!trackRef.current || !firstGroupRef.current) return;
+      if (!listRef.current) return;
 
-      const track = trackRef.current;
-      const firstGroup = firstGroupRef.current;
+      const brandItems = listRef.current.children;
 
-      const getGroupWidth = () => firstGroup.offsetWidth;
+      // Initial state: hidden and slightly offset downwards
+      gsap.set(brandItems, {
+        opacity: 0,
+        y: 30,
+      });
 
-      const createAnimation = () => {
-        gsap.killTweensOf(track);
-
-        const distance = getGroupWidth();
-
-        gsap.set(track, {
-          x: 0,
-        });
-
-        return gsap.to(track, {
-          x: -distance,
-          duration: 22,
-          ease: "none",
-          repeat: -1,
-        });
-      };
-
-      const animation = createAnimation();
-
-      const handleResize = () => {
-        animation.kill();
-        createAnimation();
-      };
-
-      window.addEventListener("resize", handleResize);
-
-      return () => {
-        animation.kill();
-        window.removeEventListener("resize", handleResize);
-      };
+      // Animate into view with stagger when scrolled into view
+      gsap.to(brandItems, {
+        opacity: 1,
+        y: 0,
+        duration: 0.8,
+        stagger: 0.1,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: "top 85%",
+          once: true, // Animates only once when scrolling down
+        },
+      });
     },
     {
       scope: containerRef,
@@ -80,157 +65,63 @@ export default function Brands() {
         overflow-hidden
         bg-[var(--color-bg-raised)]
         px-6
-        py-8
+        py-12
         md:px-10
+        md:py-16
         lg:px-16
       "
     >
-      {/* LEFT FADE */}
-      <div
-        className="
-          pointer-events-none
-          absolute
-          inset-y-0
-          left-0
-          z-20
-          w-16
-          bg-gradient-to-r
-          from-[var(--color-bg-raised)]
-          to-transparent
-          md:w-28
-        "
-      />
-
-      {/* RIGHT FADE */}
-      <div
-        className="
-          pointer-events-none
-          absolute
-          inset-y-0
-          right-0
-          z-20
-          w-16
-          bg-gradient-to-l
-          from-[var(--color-bg-raised)]
-          to-transparent
-          md:w-28
-        "
-      />
-
-      {/* VIEWPORT */}
-      <div className="w-full overflow-hidden">
-        {/* MOVING TRACK */}
+      {/* VIEWPORT / GRID CONTAINER */}
+      <div className="w-full">
         <div
-          ref={trackRef}
-          dir="ltr"
+          ref={listRef}
           className="
             flex
-            w-max
-            flex-nowrap
+            flex-wrap
             items-center
+            justify-center
+            gap-4
+            md:gap-6
+            lg:gap-8
+            lg:flex-nowrap
+            lg:overflow-hidden
           "
         >
-          {/* =================================================
-              GROUP 1
-          ================================================== */}
-
-          <div
-            ref={firstGroupRef}
-            className="
-              flex
-              shrink-0
-              items-center
-              gap-10
-              pr-10
-              md:gap-14
-              md:pr-14
-              lg:gap-16
-              lg:pr-16
-            "
-          >
-            {BRANDS.map((brand) => (
-              <div
-                key={`group-1-${brand.name}`}
+          {BRANDS.map((brand) => (
+            <div
+              key={brand.name}
+              className="
+                flex
+                h-14
+                w-14
+                shrink-0
+                items-center
+                justify-center
+                md:h-16
+                md:w-20
+                lg:h-18
+                lg:w-24
+              "
+            >
+              <Image
+                src={brand.src}
+                alt={`شعار سيارة ${brand.name}`}
+                width={100}
+                height={72}
                 className="
-                  flex
-                  h-20
-                  w-20
-                  shrink-0
-                  items-center
-                  justify-center
-                  md:h-24
-                  md:w-28
+                  h-auto
+                  max-h-8
+                  w-auto
+                  max-w-[70px]
+                  object-contain
+                  md:max-h-10
+                  md:max-w-[86px]
+                  lg:max-h-12
+                  lg:max-w-[100px]
                 "
-              >
-                <Image
-                  src={brand.src}
-                  alt={`شعار سيارة ${brand.name}`}
-                  width={120}
-                  height={80}
-                  className="
-                    h-auto
-                    max-h-11
-                    w-auto
-                    max-w-[90px]
-                    object-contain
-                    md:max-h-14
-                    md:max-w-[120px]
-                  "
-                />
-              </div>
-            ))}
-          </div>
-
-          {/* =================================================
-              GROUP 2 — EXACT COPY
-          ================================================== */}
-
-          <div
-            aria-hidden="true"
-            className="
-              flex
-              shrink-0
-              items-center
-              gap-10
-              pr-10
-              md:gap-14
-              md:pr-14
-              lg:gap-16
-              lg:pr-16
-            "
-          >
-            {BRANDS.map((brand) => (
-              <div
-                key={`group-2-${brand.name}`}
-                className="
-                  flex
-                  h-20
-                  w-20
-                  shrink-0
-                  items-center
-                  justify-center
-                  md:h-24
-                  md:w-28
-                "
-              >
-                <Image
-                  src={brand.src}
-                  alt=""
-                  width={120}
-                  height={80}
-                  className="
-                    h-auto
-                    max-h-11
-                    w-auto
-                    max-w-[90px]
-                    object-contain
-                    md:max-h-14
-                    md:max-w-[120px]
-                  "
-                />
-              </div>
-            ))}
-          </div>
+              />
+            </div>
+          ))}
         </div>
       </div>
     </section>
