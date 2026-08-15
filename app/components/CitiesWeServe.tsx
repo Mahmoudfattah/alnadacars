@@ -88,7 +88,7 @@ export default function CitiesWeServe() {
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: section,
-          start: "20% center",
+          start: "12% center",
           toggleActions: "play none none none",
           once: true,
         },

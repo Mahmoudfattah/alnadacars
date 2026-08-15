@@ -9,6 +9,21 @@ import { Volume2, VolumeOff } from "lucide-react";
 
 gsap.registerPlugin(ScrollTrigger);
 
+/*
+  Stops ScrollTrigger from calling refresh() when a mobile browser's
+  address bar shows/hides during scroll. That resize event was
+  re-calculating this section's pin start/end positions WHILE the
+  user was mid-scroll through it, which is what looked like the
+  layout "breaking" until the pin finished and the video mask fully
+  expanded. This is a GSAP-recommended, one-time global setting —
+  ideally it lives in a single shared GSAP setup module so it's only
+  ever set once app-wide, but there isn't one in this codebase yet,
+  so it's set here (calling it more than once is harmless/idempotent).
+*/
+if (typeof window !== "undefined") {
+  ScrollTrigger.config({ ignoreMobileResize: true });
+}
+
 const REASONS_PRIMARY = [
   "تقييم فوري ومجاني لسيارتك المصدومة",
   "أسعار تنافسية تفوق متوسط السوق",
@@ -159,10 +174,16 @@ const About = () => {
   };
 
   return (
+    // min-h-dvh set explicitly here (not min-h-screen) to match
+    // globals.css's #art rule instead of silently conflicting with
+    // it. #art{ min-h-dvh } was already winning at runtime due to
+    // ID selector specificity beating this class, but that made the
+    // actual rendered height dependent on an unrelated file — this
+    // makes the intended value explicit and self-documenting.
     <section
       id="art"
       ref={containerRef}
-      className="relative w-full min-h-screen overflow-hidden mb-4 bg-[var(--color-bg-soft)]"
+      className="relative w-full min-h-dvh overflow-hidden mb-4 bg-[var(--color-bg-soft)]"
     >
       <div className="container mx-auto min-h-screen max-w-6xl flex flex-col items-center justify-center gap-8 px-4 relative z-10">
         {/* TITLE */}
