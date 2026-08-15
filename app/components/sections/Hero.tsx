@@ -262,7 +262,7 @@ export default function Hero() {
             "
           >
             <Image
-              src="/map.png"
+              src="/map.webp"
               alt=""
               fill
               priority
@@ -283,7 +283,7 @@ export default function Hero() {
 
           {/* 2. DAMAGED CAR */}
           <Image
-            src="/cardamage.png"
+            src="/cardamage.webp"
             alt="سيارة مصدومة جاهزة للبيع فوراً"
             fill
             priority

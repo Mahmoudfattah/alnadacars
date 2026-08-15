@@ -201,7 +201,7 @@ const About = () => {
               <li key={index} className="flex items-center gap-4 group">
                 <div className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-50 border border-blue-200 shrink-0">
                   <Image
-                    src="/check.png"
+                    src="/check.webp"
                     alt="check"
                     width={16}
                     height={16}
@@ -220,14 +220,14 @@ const About = () => {
             
             {/* --- NEW ADDITION: LEFT WHEEL --- */}
             <img
-              src="/ChatGPT Image 15 أغسطس 2026، 05_34_06 م.png"
+              src="/ChatGPT Image 15 أغسطس 2026، 05_34_06 م.webp"
               alt="Left Wheel"
               className="wheel-left absolute left-0 top-1/2 -translate-y-1/2 w-24 md:w-44 z-0 object-contain pointer-events-none will-change-transform"
             />
 
             {/* --- NEW ADDITION: RIGHT WHEEL --- */}
             <img
-              src="/ChatGPT Image 15 أغسطس 2026، 05_36_28 م.png"
+              src="/ChatGPT Image 15 أغسطس 2026، 05_36_28 م.webp"
               alt="Right Wheel"
               className="wheel-right absolute right-0 top-1/2 -translate-y-1/2 w-24 md:w-44 z-0 object-contain pointer-events-none will-change-transform"
             />
@@ -271,7 +271,7 @@ const About = () => {
               <li key={index} className="flex items-center gap-4 group">
                 <div className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-50 border border-blue-200 shrink-0">
                   <Image
-                    src="/check.png"
+                    src="/check.webp"
                     alt="check"
                     width={16}
                     height={16}

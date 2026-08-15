@@ -6,15 +6,15 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 
 const BRANDS = [
-  { name: "Aston Martin", src: "/Aston-Martin-Logo.png" },
+  { name: "Aston Martin", src: "/Aston-Martin-Logo.webp" },
   { name: "Audi", src: "/audi-logo.png" },
-  { name: "Benz", src: "/Benz-Logo.png" },
-  { name: "BMW", src: "/BMW-Logo.png" },
-  { name: "Ferrari", src: "/Ferrari-Logo.png" },
-  { name: "Maserati", src: "/Maserati-Logo.png" },
-  { name: "Peugeot", src: "/Peugeot-Logo.png" },
-  { name: "Porsche", src: "/Porsche-Logo.png" },
-  { name: "Volkswagen", src: "/Volkswagen-Logo.png" },
+  { name: "Benz", src: "/Benz-Logo.webp" },
+  { name: "BMW", src: "/BMW-Logo.webp" },
+  { name: "Ferrari", src: "/Ferrari-Logo.webp" },
+  { name: "Maserati", src: "/Maserati-Logo.webp" },
+  { name: "Peugeot", src: "/Peugeot-Logo.webp" },
+  { name: "Porsche", src: "/Porsche-Logo.webp" },
+  { name: "Volkswagen", src: "/Volkswagen-Logo.webp" },
 ];
 
 export default function Brands() {

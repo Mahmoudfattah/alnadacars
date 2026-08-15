@@ -575,7 +575,7 @@ export default function Navbar() {
                 }}
               >
                 <Image
-                  src="/logocut.png"
+                  src="/logocut.webp"
                   alt="شراء السيارات المصدومة"
                   width={100}
                   height={100}
