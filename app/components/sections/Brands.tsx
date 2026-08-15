@@ -17,46 +17,72 @@ const BRANDS = [
   { name: "Volkswagen", src: "/Volkswagen-Logo.png" },
 ];
 
-// Two identical sets = seamless loop
-const DOUBLE_BRANDS = [...BRANDS, ...BRANDS];
-
 export default function Brands() {
   const containerRef = useRef<HTMLElement | null>(null);
-  const marqueeRef = useRef<HTMLDivElement | null>(null);
+  const trackRef = useRef<HTMLDivElement | null>(null);
+  const firstGroupRef = useRef<HTMLDivElement | null>(null);
 
-  // useGSAP(
-  //   () => {
-  //     if (!marqueeRef.current) return;
+  useGSAP(
+    () => {
+      if (!trackRef.current || !firstGroupRef.current) return;
 
-  //     // RIGHT → LEFT
-  //     // Move exactly one complete set to the left,
-  //     // then restart seamlessly from the beginning.
-  //     gsap.to(marqueeRef.current, {
-  //       xPercent: -50,
-  //       duration: 25,
-  //       ease: "none",
-  //       repeat: -1,
-  //     });
-  //   },
-  //   {
-  //     scope: containerRef,
-  //   }
-  // );
+      const track = trackRef.current;
+      const firstGroup = firstGroupRef.current;
+
+      const getGroupWidth = () => firstGroup.offsetWidth;
+
+      const createAnimation = () => {
+        gsap.killTweensOf(track);
+
+        const distance = getGroupWidth();
+
+        gsap.set(track, {
+          x: 0,
+        });
+
+        return gsap.to(track, {
+          x: -distance,
+          duration: 22,
+          ease: "none",
+          repeat: -1,
+        });
+      };
+
+      const animation = createAnimation();
+
+      const handleResize = () => {
+        animation.kill();
+        createAnimation();
+      };
+
+      window.addEventListener("resize", handleResize);
+
+      return () => {
+        animation.kill();
+        window.removeEventListener("resize", handleResize);
+      };
+    },
+    {
+      scope: containerRef,
+    },
+  );
 
   return (
     <section
-      id="brands"
       ref={containerRef}
+      id="brands"
       aria-label="أنواع السيارات"
       className="
         relative
+        mx-auto
         w-full
+        max-w-[1400px]
         overflow-hidden
         bg-[var(--color-bg-raised)]
+        px-6
         py-8
-
-
-        mx-auto flex max-w-[1400px] fgap-3 px-6 text-center md:px-10 lg:px-16
+        md:px-10
+        lg:px-16
       "
     >
       {/* LEFT FADE */}
@@ -66,12 +92,12 @@ export default function Brands() {
           absolute
           inset-y-0
           left-0
-          z-10
-          w-20
+          z-20
+          w-16
           bg-gradient-to-r
           from-[var(--color-bg-raised)]
           to-transparent
-          md:w-32
+          md:w-28
         "
       />
 
@@ -82,57 +108,130 @@ export default function Brands() {
           absolute
           inset-y-0
           right-0
-          z-10
-          w-20
+          z-20
+          w-16
           bg-gradient-to-l
           from-[var(--color-bg-raised)]
           to-transparent
-          md:w-32
+          md:w-28
         "
       />
 
-      {/* MARQUEE */}
-      <div
-        ref={marqueeRef}
-        dir="ltr"
-        className="
-          flex
-          w-max
-          flex-nowrap
-          items-center
-          gap-12
-        "
-      >
-        {DOUBLE_BRANDS.map((brand, index) => (
+      {/* VIEWPORT */}
+      <div className="w-full overflow-hidden">
+        {/* MOVING TRACK */}
+        <div
+          ref={trackRef}
+          dir="ltr"
+          className="
+            flex
+            w-max
+            flex-nowrap
+            items-center
+          "
+        >
+          {/* =================================================
+              GROUP 1
+          ================================================== */}
+
           <div
-            key={`${brand.name}-${index}`}
+            ref={firstGroupRef}
             className="
               flex
-              w-24
               shrink-0
               items-center
-              justify-center
-              opacity-100
-            
-              transition-all
-            
-              md:w-32
+              gap-10
+              pr-10
+              md:gap-14
+              md:pr-14
+              lg:gap-16
+              lg:pr-16
             "
           >
-            <Image
-              src={brand.src}
-              alt={`شعار سيارة ${brand.name}`}
-              width={120}
-              height={80}
-              className="
-                max-h-12
-                w-auto
-                object-contain
-                md:max-h-14
-              "
-            />
+            {BRANDS.map((brand) => (
+              <div
+                key={`group-1-${brand.name}`}
+                className="
+                  flex
+                  h-20
+                  w-20
+                  shrink-0
+                  items-center
+                  justify-center
+                  md:h-24
+                  md:w-28
+                "
+              >
+                <Image
+                  src={brand.src}
+                  alt={`شعار سيارة ${brand.name}`}
+                  width={120}
+                  height={80}
+                  className="
+                    h-auto
+                    max-h-11
+                    w-auto
+                    max-w-[90px]
+                    object-contain
+                    md:max-h-14
+                    md:max-w-[120px]
+                  "
+                />
+              </div>
+            ))}
           </div>
-        ))}
+
+          {/* =================================================
+              GROUP 2 — EXACT COPY
+          ================================================== */}
+
+          <div
+            aria-hidden="true"
+            className="
+              flex
+              shrink-0
+              items-center
+              gap-10
+              pr-10
+              md:gap-14
+              md:pr-14
+              lg:gap-16
+              lg:pr-16
+            "
+          >
+            {BRANDS.map((brand) => (
+              <div
+                key={`group-2-${brand.name}`}
+                className="
+                  flex
+                  h-20
+                  w-20
+                  shrink-0
+                  items-center
+                  justify-center
+                  md:h-24
+                  md:w-28
+                "
+              >
+                <Image
+                  src={brand.src}
+                  alt=""
+                  width={120}
+                  height={80}
+                  className="
+                    h-auto
+                    max-h-11
+                    w-auto
+                    max-w-[90px]
+                    object-contain
+                    md:max-h-14
+                    md:max-w-[120px]
+                  "
+                />
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     </section>
   );

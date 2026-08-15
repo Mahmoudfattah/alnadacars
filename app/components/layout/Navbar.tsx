@@ -30,7 +30,6 @@ export default function Navbar() {
   const overlay = useRef<HTMLDivElement | null>(null);
 
   const mobileTimeline = useRef<gsap.core.Timeline | null>(null);
-
   const logoRef = useRef<HTMLAnchorElement | null>(null);
   const navLinksRef = useRef<HTMLElement | null>(null);
   const ctaRef = useRef<HTMLAnchorElement | null>(null);
@@ -50,7 +49,7 @@ export default function Navbar() {
   useGSAP(
     () => {
       /* -------------------------------------------------
-         Initial desktop animation
+         Initial animation using refs (faster & deterministic)
       ------------------------------------------------- */
 
       const tl = gsap.timeline();
@@ -59,22 +58,16 @@ export default function Navbar() {
       if (logoRef.current) {
         tl.to(
           logoRef.current,
-          {
-            autoAlpha: 1,
-            y: 0,
-            duration: 0.5,
-            ease: "power2.out",
-          },
+          { autoAlpha: 1, y: 0, duration: 0.5, ease: "power2.out" },
           0,
         );
       }
 
-      // Nav links
+      // Nav links (children of navLinksRef)
       if (navLinksRef.current) {
         const links = Array.from(
           navLinksRef.current.querySelectorAll(".nav"),
         ) as Element[];
-
         if (links.length) {
           tl.to(
             links,
@@ -90,16 +83,11 @@ export default function Navbar() {
         }
       }
 
-      // CTA
+      // CTA button
       if (ctaRef.current) {
         tl.to(
           ctaRef.current,
-          {
-            autoAlpha: 1,
-            y: 0,
-            duration: 0.6,
-            ease: "power2.out",
-          },
+          { autoAlpha: 1, y: 0, duration: 0.6, ease: "power2.out" },
           0,
         );
       }
@@ -121,7 +109,10 @@ export default function Navbar() {
         paused: true,
       });
 
-      // Move navbar slightly down when scrolling
+      /*
+        Move navbar slightly down when scrolling
+      */
+
       scrollAnimation.to(
         nav,
         {
@@ -132,7 +123,10 @@ export default function Navbar() {
         0,
       );
 
-      // Glass background
+      /*
+        Glass background
+      */
+
       scrollAnimation.to(
         glass,
         {
@@ -143,7 +137,11 @@ export default function Navbar() {
         0,
       );
 
-      // Border
+      /*
+        Left + Right + Bottom border
+        No top border
+      */
+
       scrollAnimation.to(
         border,
         {
@@ -169,7 +167,6 @@ export default function Navbar() {
       return () => {
         trigger.kill();
         scrollAnimation.kill();
-        tl.kill();
       };
     },
     {
@@ -179,37 +176,35 @@ export default function Navbar() {
 
   /* =====================================================
      MOBILE INITIAL GSAP STATE
-
-     IMPORTANT:
-     GSAP is now the ONLY system controlling the
-     horizontal position of the mobile drawer.
-
-     We intentionally DO NOT use Tailwind translate
-     utilities on the drawer because Tailwind and GSAP
-     would otherwise fight over the same transform.
   ====================================================== */
 
-  useGSAP(() => {
-    if (!navMobile.current || !overlay.current) return;
+  useGSAP(
+    () => {
+      if (!navMobile.current || !overlay.current) return;
 
-    const links =
-      navMobile.current.querySelectorAll(".mobile-link");
+      const links = navMobile.current.querySelectorAll(".mobile-link");
 
-    // Initial closed state
-    gsap.set(navMobile.current, {
-      x: "-100%",
-    });
+      /*
+        Initial closed state
+      */
 
-    gsap.set(overlay.current, {
-      opacity: 0,
-      pointerEvents: "none",
-    });
+      gsap.set(navMobile.current, {
+        xPercent: -100,
+      });
 
-    gsap.set(links, {
-      opacity: 0,
-      x: 30,
-    });
-  });
+      gsap.set(overlay.current, {
+        opacity: 0,
+      });
+
+      gsap.set(links, {
+        opacity: 0,
+        x: 30,
+      });
+    },
+    {
+      scope: navMobile,
+    },
+  );
 
   /* =====================================================
      OPEN MOBILE MENU
@@ -218,51 +213,49 @@ export default function Navbar() {
   const openMenu = contextSafe(() => {
     if (!navMobile.current || !overlay.current) return;
 
-    // Prevent opening twice
-    if (isOpen) return;
-
     setIsOpen(true);
 
-    // Kill previous animation
+    /*
+      Kill previous animation if user clicks quickly
+    */
+
     mobileTimeline.current?.kill();
 
-    const links =
-      navMobile.current.querySelectorAll(".mobile-link");
+    const links = navMobile.current.querySelectorAll(".mobile-link");
 
     mobileTimeline.current = gsap.timeline();
 
-    /* -------------------------------------------------
-       1. Overlay
-    ------------------------------------------------- */
+    /*
+      1. Fade in overlay
+    */
 
     mobileTimeline.current.to(
       overlay.current,
       {
         opacity: 1,
-        pointerEvents: "auto",
         duration: 0.5,
         ease: "power2.out",
       },
       0,
     );
 
-    /* -------------------------------------------------
-       2. Drawer
-    ------------------------------------------------- */
+    /*
+      2. Drawer slowly enters from the left
+    */
 
     mobileTimeline.current.to(
       navMobile.current,
       {
-        x: "0%",
+        xPercent: 0,
         duration: 0.8,
         ease: "power3.out",
       },
       0,
     );
 
-    /* -------------------------------------------------
-       3. Links
-    ------------------------------------------------- */
+    /*
+      3. Links appear one after another
+    */
 
     mobileTimeline.current.to(
       links,
@@ -286,8 +279,7 @@ export default function Navbar() {
 
     mobileTimeline.current?.kill();
 
-    const links =
-      navMobile.current.querySelectorAll(".mobile-link");
+    const links = navMobile.current.querySelectorAll(".mobile-link");
 
     mobileTimeline.current = gsap.timeline({
       onComplete: () => {
@@ -295,9 +287,9 @@ export default function Navbar() {
       },
     });
 
-    /* -------------------------------------------------
-       1. Hide links
-    ------------------------------------------------- */
+    /*
+      1. Links disappear first
+    */
 
     mobileTimeline.current.to(
       links,
@@ -311,29 +303,28 @@ export default function Navbar() {
       0,
     );
 
-    /* -------------------------------------------------
-       2. Close drawer
-    ------------------------------------------------- */
+    /*
+      2. Drawer slides back to the left
+    */
 
     mobileTimeline.current.to(
       navMobile.current,
       {
-        x: "-100%",
+        xPercent: -100,
         duration: 0.65,
         ease: "power3.inOut",
       },
       "-=0.05",
     );
 
-    /* -------------------------------------------------
-       3. Hide overlay
-    ------------------------------------------------- */
+    /*
+      3. Overlay fades out
+    */
 
     mobileTimeline.current.to(
       overlay.current,
       {
         opacity: 0,
-        pointerEvents: "none",
         duration: 0.4,
         ease: "power2.out",
       },
@@ -372,27 +363,12 @@ export default function Navbar() {
   ====================================================== */
 
   useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
+    document.body.style.overflow = isOpen ? "hidden" : "";
 
     return () => {
       document.body.style.overflow = "";
     };
   }, [isOpen]);
-
-  /* =====================================================
-     CLEANUP MOBILE TIMELINE
-  ====================================================== */
-
-  useEffect(() => {
-    return () => {
-      mobileTimeline.current?.kill();
-      mobileTimeline.current = null;
-    };
-  }, []);
 
   /* =====================================================
      JSX
@@ -441,6 +417,11 @@ export default function Navbar() {
 
           {/* =============================================
               BORDER
+
+              ONLY:
+              LEFT
+              RIGHT
+              BOTTOM
           ============================================== */}
 
           <div
@@ -471,10 +452,12 @@ export default function Navbar() {
               justify-between
               px-6
               py-3
+
               md:grid
               md:grid-cols-[1fr_auto_1fr]
               md:px-6
               md:py-3
+
               min-[940px]:px-10
               min-[940px]:py-4
             "
@@ -489,19 +472,16 @@ export default function Navbar() {
                 ref={logoRef}
                 className="
                   logo
+                  opacity-0 -translate-y-5
                   flex
                   shrink-0
                   items-center
                   gap-2
-                  opacity-0
-                  -translate-y-5
                   md:gap-1.5
                   min-[940px]:gap-2
                 "
                 onClick={() => {
-                  if (isOpen) {
-                    closeMenu();
-                  }
+                  if (isOpen) closeMenu();
                 }}
               >
                 <Image
@@ -512,8 +492,10 @@ export default function Navbar() {
                   priority
                   className="
                     object-contain
+
                     md:h-16
                     md:w-16
+
                     min-[940px]:h-[100px]
                     min-[940px]:w-[100px]
                   "
@@ -556,12 +538,11 @@ export default function Navbar() {
                   href={link.href}
                   className="
                     nav
+                    opacity-0 -translate-y-5
                     whitespace-nowrap
                     text-sm
                     font-medium
                     text-[var(--color-ink)]
-                    opacity-0
-                    -translate-y-5
                     transition-colors
                     hover:text-[var(--color-primary)]
                     min-[940px]:text-[16px]
@@ -588,6 +569,7 @@ export default function Navbar() {
                 ref={ctaRef}
                 className="
                   btn
+                  opacity-0 -translate-y-5
                   inline-flex
                   shrink-0
                   items-center
@@ -599,15 +581,17 @@ export default function Navbar() {
                   text-xs
                   font-semibold
                   text-white
-                  opacity-0
-                  -translate-y-5
+                
                   transition-all
+                
+                  
                   hover:bg-[var(--color-cta-hover)]
-                  hover:shadow-md
-                  hover:-translate-y-1!
+              
+
                   min-[940px]:px-6
                   min-[940px]:py-3
                   min-[940px]:text-sm
+                  hover:shadow-md hover:-translate-y-1!
                 "
               >
                 تواصل معنا
@@ -635,11 +619,7 @@ export default function Navbar() {
                 md:hidden
               "
             >
-              {isOpen ? (
-                <X size={19} />
-              ) : (
-                <Menu size={19} />
-              )}
+              <Menu size={19} />
             </button>
           </div>
         </div>
@@ -652,45 +632,44 @@ export default function Navbar() {
       <div
         ref={overlay}
         onClick={closeMenu}
-        aria-hidden={!isOpen}
         className="
           fixed
           inset-0
           z-[90]
           bg-black/30
+          backdrop-blur-sm
           opacity-0
           pointer-events-none
-          backdrop-blur-sm
           sm:hidden
         "
       />
 
       {/* =================================================
           MOBILE DRAWER
-
-          IMPORTANT:
-          There is NO Tailwind translate class here.
-
-          GSAP exclusively controls the X position.
       ================================================== */}
 
       <nav
         ref={navMobile}
         dir="rtl"
-        aria-hidden={!isOpen}
         className="
           fixed
           left-0
           top-0
           z-[100]
+
           h-dvh
           w-[60%]
           max-w-[380px]
+
           overflow-y-auto
+
           bg-[var(--color-bg-raised)]
+
           px-6
           py-6
+
           shadow-[20px_0_50px_rgba(0,0,0,0.12)]
+
           md:hidden
         "
       >
@@ -731,16 +710,20 @@ export default function Navbar() {
               onClick={handleMobileLinkClick}
               className="
                 mobile-link
+
                 block
+
                 border-b
                 border-[var(--color-border)]
+
                 py-6
+
                 text-right
                 text-base
                 font-medium
+
                 text-[var(--color-ink)]
-                opacity-0
-                translate-x-[30px]
+
                 hover:text-[var(--color-primary)]
               "
             >
@@ -758,22 +741,24 @@ export default function Navbar() {
           onClick={handleMobileLinkClick}
           className="
             mobile-link
+
             mt-6
             flex
             w-full
             items-center
             justify-center
+
             rounded-[var(--radius-pill)]
+
             bg-[var(--color-cta)]
+
             px-6
             py-3
+
             text-sm
             font-semibold
             text-white
-            opacity-0
-            translate-x-[30px]
-            hover:shadow-md
-            hover:-translate-y-1
+            hover:shadow-md hover:-translate-y-1
           "
         >
           تواصل معنا
