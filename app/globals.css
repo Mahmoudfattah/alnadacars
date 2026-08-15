@@ -1,4 +1,3 @@
-@import url("https://fonts.googleapis.com/css2?family=Playpen+Sans+Arabic:wght@100..800&display=swap");
 @import "tailwindcss";
 
 /*
@@ -9,7 +8,16 @@ Next.js + Tailwind v4
 ==========================================================================
 
 Fonts are loaded via next/font in app/layout.tsx.
-Do NOT redefine --font-display here if it is already defined by next/font.
+Do NOT redefine --font-display or --font-body here — both are owned by
+next/font (Cairo -> --font-display, IBM Plex Sans Arabic -> --font-body).
+
+If a third, decorative script font (Playpen Sans Arabic) is needed for a
+specific element (e.g. a logo/heading), load it via next/font/google in
+layout.tsx like the other two and expose it under its OWN variable
+(e.g. --font-script), then apply that class only where it's meant to be
+used. Do NOT reintroduce it as the global --font-body — it previously
+collided with the next/font-provided body font here, causing the
+rendered body font to depend on stylesheet injection order.
 */
 
 :root {
@@ -39,7 +47,7 @@ Do NOT redefine --font-display here if it is already defined by next/font.
 
   /* Typography */
   --font-numeral: ui-monospace, "SF Mono", Consolas, monospace;
-  --font-body: "Playpen Sans Arabic", cursive;
+  /* --font-display and --font-body are provided by next/font in layout.tsx */
 
   /* Radius */
   --radius-sm: 10px;
@@ -109,12 +117,23 @@ Do NOT redefine --font-display here if it is already defined by next/font.
     font-variant-numeric: tabular-nums;
   }
 
-  :focus,
-  :focus-visible,
+  /*
+  Focus states: keep outlines for keyboard users (WCAG 2.4.7).
+  Only :active (mouse/touch press) is visually quieted — :focus-visible
+  (keyboard/AT) always gets a visible ring via --shadow-focus.
+  */
+  :focus {
+    outline: none;
+  }
+
+  :focus-visible {
+    outline: none;
+    box-shadow: var(--shadow-focus);
+    border-radius: var(--radius-sm);
+  }
+
   :active {
     outline: none;
-    box-shadow: none;
-    border-radius: var(--radius-sm);
   }
 
   ::selection {
@@ -176,6 +195,13 @@ Car-shaped video mask
 
 مش @utility عادية لأننا محتاجين نتحكم في --mask-size كـ CSS variable
 عشان GSAP يقدر يعمل عليها tween سلس (tween على keywords زي "contain" مش بيشتغل).
+
+ملاحظة: mask-image بتستخدم /carVideo.webp مش /car-mask.png زي ما التعليق فوق
+بيقول - محتاج أتأكد من public/ إن ده هو الملف الصح ومعاه alpha channel،
+لسه ماعدلتش السطر ده لحد ما أشوف الكومبوننت اللي بيستخدم car-mask.
+
+will-change اتشالت من هنا وبقت GSAP هي اللي بتحطها وتشيلها وقت الـ tween
+نفسه (onStart/onComplete) بدل ما تفضل شغالة طول الوقت على العنصر.
 */
 
 .car-mask {
@@ -192,10 +218,6 @@ Car-shaped video mask
 
   mask-size: var(--mask-size);
   -webkit-mask-size: var(--mask-size);
-
-  will-change:
-    mask-size,
-    -webkit-mask-size;
 
   /* بيعزل العنصر في GPU layer لوحده، بيقلل التقطيع أثناء تغيير الماسك */
   transform: translateZ(0);

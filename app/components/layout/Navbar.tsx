@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Menu, X } from "lucide-react";
@@ -176,6 +176,17 @@ export default function Navbar() {
 
   /* =====================================================
      MOBILE INITIAL GSAP STATE
+
+     NOTE: the drawer/overlay/links are already hidden by
+     default via Tailwind classes in the JSX below (matching
+     the pattern used for the logo/nav-links/CTA). These
+     gsap.set() calls just keep GSAP's internal state in sync
+     with that CSS starting point — they are NOT what hides
+     the drawer on first paint anymore. Do not remove the
+     Tailwind classes and rely on this effect alone; that
+     reintroduces the flash-of-open-menu bug on slow mobile
+     hydration (server-rendered HTML has no inline transform
+     until this client effect runs).
   ====================================================== */
 
   useGSAP(
@@ -356,7 +367,8 @@ export default function Navbar() {
     return () => {
       window.removeEventListener("keydown", handleEscape);
     };
-  }, [isOpen, closeMenu]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen]);
 
   /* =====================================================
      PREVENT BODY SCROLL
@@ -646,6 +658,13 @@ export default function Navbar() {
 
       {/* =================================================
           MOBILE DRAWER
+
+          -translate-x-full below is the CSS-level default
+          hidden state, matching gsap.set({ xPercent: -100 })
+          in the effect above. This is what actually prevents
+          the drawer from flashing open on first mobile paint
+          — it renders hidden even in the server-rendered HTML,
+          before any client JS/GSAP has run.
       ================================================== */}
 
       <nav
@@ -660,6 +679,8 @@ export default function Navbar() {
           h-dvh
           w-[60%]
           max-w-[380px]
+
+          -translate-x-full
 
           overflow-y-auto
 
@@ -713,6 +734,9 @@ export default function Navbar() {
 
                 block
 
+                opacity-0
+                translate-x-[30px]
+
                 border-b
                 border-[var(--color-border)]
 
@@ -747,6 +771,9 @@ export default function Navbar() {
             w-full
             items-center
             justify-center
+
+            opacity-0
+            translate-x-[30px]
 
             rounded-[var(--radius-pill)]
 

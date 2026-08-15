@@ -166,7 +166,7 @@ const About = () => {
     >
       <div className="container mx-auto min-h-screen max-w-6xl flex flex-col items-center justify-center gap-8 px-4 relative z-10">
         {/* TITLE */}
-        <h2 className="will-fade text-center text-5xl md:text-7xl font-extrabold leading-[1.2] text-gray-900 will-change-transform">
+        <h2 className="will-fade text-center text-4xl md:text-7xl font-extrabold leading-[1.2] text-gray-900 will-change-transform">
           شراء سيارات مصدومة
           <br />
           <span className="text-blue-400 drop-shadow-sm">جدة ومكة</span>

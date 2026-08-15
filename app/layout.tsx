@@ -62,7 +62,7 @@ export default function RootLayout({
         className="bg-white text-[var(--color-ink)] antialiased"
       >
         <Navbar />
-        {children}
+        <main>{children}</main>
       </body>
     </html>
   );

@@ -42,7 +42,7 @@ export default function ServicesGrid() {
 
           // يبدأ عندما يصل منتصف الـ section
           // إلى منتصف الـ viewport
-          start: "60% center",
+          start: "30% center",
 
           // يعمل مرة واحدة فقط
           toggleActions: "play none none none",
