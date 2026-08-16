@@ -720,33 +720,31 @@ export default function Navbar() {
           MOBILE DRAWER
       ================================================== */}
 
-    <nav
-  ref={navMobile}
-  dir="rtl"
-  className="
-    fixed
-    left-0
-    top-0
-    z-100
+      <nav
+        ref={navMobile}
+        dir="rtl"
+        className="
+          fixed
+          left-0
+          top-0
+          z-100
 
-    -translate-x-full   {/* ← ADD THIS: closed by default, matches gsap.set's xPercent:-100 */}
+          h-dvh
+          w-[60%]
+          max-w-95
 
-    h-dvh
-    w-[60%]
-    max-w-95
+          overflow-y-auto
 
-    overflow-y-auto
+          bg-(--color-bg-raised)
 
-    bg-(--color-bg-raised)
+          px-6
+          py-6
 
-    px-6
-    py-6
+          shadow-[20px_0_50px_rgba(0,0,0,0.12)]
 
-    shadow-[20px_0_50px_rgba(0,0,0,0.12)]
-
-    md:hidden
-  "
->
+          md:hidden
+        "
+      >
         {/* =============================================
             CLOSE BUTTON
         ============================================== */}
