@@ -33,6 +33,9 @@ export default function Navbar() {
   const overlay = useRef<HTMLDivElement | null>(null);
 
   const mobileTimeline = useRef<gsap.core.Timeline | null>(null);
+  const logoRef = useRef<HTMLAnchorElement | null>(null);
+  const navLinksRef = useRef<HTMLElement | null>(null);
+  const ctaRef = useRef<HTMLAnchorElement | null>(null);
 
   /* =====================================================
      DESKTOP NAVBAR ANIMATIONS
@@ -40,6 +43,54 @@ export default function Navbar() {
 
   useGSAP(
     () => {
+      /* -------------------------------------------------
+         Initial animation using refs (faster & deterministic)
+      ------------------------------------------------- */
+
+      const tl = gsap.timeline();
+
+      // Logo
+      if (logoRef.current) {
+        tl.to(
+          logoRef.current,
+          { autoAlpha: 1, y: 0, duration: 0.5, ease: "power2.out" },
+          0,
+        );
+      }
+
+      // Nav links (children of navLinksRef)
+      if (navLinksRef.current) {
+        const links = Array.from(
+          navLinksRef.current.querySelectorAll(".nav"),
+        ) as Element[];
+        if (links.length) {
+          tl.to(
+            links,
+            {
+              autoAlpha: 1,
+              y: 0,
+              duration: 0.5,
+              stagger: 0.05,
+              ease: "power2.out",
+            },
+            0,
+          );
+        }
+      }
+
+      // CTA button
+      if (ctaRef.current) {
+        tl.to(
+          ctaRef.current,
+          { autoAlpha: 1, y: 0, duration: 0.6, ease: "power2.out" },
+          0,
+        );
+      }
+
+      /* -------------------------------------------------
+         Scroll animation
+      ------------------------------------------------- */
+
       const nav = container.current;
 
       if (!nav) return;
@@ -474,8 +525,10 @@ export default function Navbar() {
             <div className="flex justify-start">
               <Link
                 href="/"
+                ref={logoRef}
                 className="
                   logo
+                  opacity-0 -translate-y-5
                   flex
                   shrink-0
                   items-center
@@ -528,6 +581,7 @@ export default function Navbar() {
             ========================================== */}
 
             <nav
+              ref={navLinksRef}
               className="
                 hidden
                 items-center
@@ -553,6 +607,7 @@ export default function Navbar() {
                   }}
                   className={`
                     nav
+                    opacity-0 -translate-y-5
                     whitespace-nowrap
                     text-sm
                     font-medium
@@ -583,8 +638,10 @@ export default function Navbar() {
             >
               <Link
                 href="#contact"
+                ref={ctaRef}
                 className="
                   btn
+                  opacity-0 -translate-y-5
                   inline-flex
                   shrink-0
                   items-center
@@ -663,31 +720,33 @@ export default function Navbar() {
           MOBILE DRAWER
       ================================================== */}
 
-      <nav
-        ref={navMobile}
-        dir="rtl"
-        className="
-          fixed
-          left-0
-          top-0
-          z-100
+    <nav
+  ref={navMobile}
+  dir="rtl"
+  className="
+    fixed
+    left-0
+    top-0
+    z-100
 
-          h-dvh
-          w-[60%]
-          max-w-95
+    -translate-x-full   {/* ← ADD THIS: closed by default, matches gsap.set's xPercent:-100 */}
 
-          overflow-y-auto
+    h-dvh
+    w-[60%]
+    max-w-95
 
-          bg-(--color-bg-raised)
+    overflow-y-auto
 
-          px-6
-          py-6
+    bg-(--color-bg-raised)
 
-          shadow-[20px_0_50px_rgba(0,0,0,0.12)]
+    px-6
+    py-6
 
-          md:hidden
-        "
-      >
+    shadow-[20px_0_50px_rgba(0,0,0,0.12)]
+
+    md:hidden
+  "
+>
         {/* =============================================
             CLOSE BUTTON
         ============================================== */}
