@@ -701,50 +701,51 @@ export default function Navbar() {
           MOBILE OVERLAY
       ================================================== */}
 
-      <div
-        ref={overlay}
-        onClick={closeMenu}
-        className="
-          fixed
-          inset-0
-          z-90
-          bg-black/30
-          backdrop-blur-sm
-          opacity-0
-          pointer-events-none
-          sm:hidden
-        "
-      />
+     <div
+  ref={overlay}
+  onClick={closeMenu}
+  className={`
+    fixed
+    inset-0
+    z-90
+    bg-black/30
+    backdrop-blur-sm
+    opacity-0
+    sm:hidden
+    ${isOpen ? "pointer-events-auto" : "pointer-events-none"}
+  `}
+/>
 
       {/* =================================================
           MOBILE DRAWER
       ================================================== */}
 
-      <nav
-        ref={navMobile}
-        dir="rtl"
-        className="
-          fixed
-          left-0
-          top-0
-          z-100
+     <nav
+  ref={navMobile}
+  dir="rtl"
+  style={{ transform: "translateX(-100%)" }}   {/* closed by default, GSAP overwrites this exact property */}
+  className="
+    fixed
+    left-0
+    top-0
+    z-100
 
-          h-dvh
-          w-[60%]
-          max-w-95
+    h-dvh
+    w-[60%]
+    max-w-95
 
-          overflow-y-auto
+    overflow-y-auto
 
-          bg-(--color-bg-raised)
+    bg-(--color-bg-raised)
 
-          px-6
-          py-6
+    px-6
+    py-6
 
-          shadow-[20px_0_50px_rgba(0,0,0,0.12)]
+    shadow-[20px_0_50px_rgba(0,0,0,0.12)]
 
-          md:hidden
-        "
-      >
+    md:hidden
+  "
+>
         {/* =============================================
             CLOSE BUTTON
         ============================================== */}
