@@ -22,6 +22,7 @@ const NAV_OFFSET = 110;
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [activeHash, setActiveHash] = useState("");
+  const [isMounted, setIsMounted] = useState(false);
 
   /* =====================================================
      REFS
@@ -33,9 +34,11 @@ export default function Navbar() {
   const overlay = useRef<HTMLDivElement | null>(null);
 
   const mobileTimeline = useRef<gsap.core.Timeline | null>(null);
-  const logoRef = useRef<HTMLAnchorElement | null>(null);
-  const navLinksRef = useRef<HTMLElement | null>(null);
-  const ctaRef = useRef<HTMLAnchorElement | null>(null);
+
+  useEffect(() => {
+    const frame = window.requestAnimationFrame(() => setIsMounted(true));
+    return () => window.cancelAnimationFrame(frame);
+  }, []);
 
   /* =====================================================
      DESKTOP NAVBAR ANIMATIONS
@@ -43,54 +46,6 @@ export default function Navbar() {
 
   useGSAP(
     () => {
-      /* -------------------------------------------------
-         Initial animation using refs (faster & deterministic)
-      ------------------------------------------------- */
-
-      const tl = gsap.timeline();
-
-      // Logo
-      if (logoRef.current) {
-        tl.to(
-          logoRef.current,
-          { autoAlpha: 1, y: 0, duration: 0.5, ease: "power2.out" },
-          0,
-        );
-      }
-
-      // Nav links (children of navLinksRef)
-      if (navLinksRef.current) {
-        const links = Array.from(
-          navLinksRef.current.querySelectorAll(".nav"),
-        ) as Element[];
-        if (links.length) {
-          tl.to(
-            links,
-            {
-              autoAlpha: 1,
-              y: 0,
-              duration: 0.5,
-              stagger: 0.05,
-              ease: "power2.out",
-            },
-            0,
-          );
-        }
-      }
-
-      // CTA button
-      if (ctaRef.current) {
-        tl.to(
-          ctaRef.current,
-          { autoAlpha: 1, y: 0, duration: 0.6, ease: "power2.out" },
-          0,
-        );
-      }
-
-      /* -------------------------------------------------
-         Scroll animation
-      ------------------------------------------------- */
-
       const nav = container.current;
 
       if (!nav) return;
@@ -438,12 +393,12 @@ export default function Navbar() {
 
       <header
         ref={container}
-        className="
-          sticky
-          top-0
-          z-50
-          px-0
-        "
+        className={
+          "sticky top-0 z-50 px-0 transition-all duration-300 " +
+          (isMounted
+            ? "pointer-events-auto opacity-100 translate-y-0"
+            : "pointer-events-none opacity-0 -translate-y-2")
+        }
       >
         <div
           className="
@@ -525,10 +480,8 @@ export default function Navbar() {
             <div className="flex justify-start">
               <Link
                 href="/"
-                ref={logoRef}
                 className="
                   logo
-                  opacity-0 -translate-y-5
                   flex
                   shrink-0
                   items-center
@@ -581,7 +534,6 @@ export default function Navbar() {
             ========================================== */}
 
             <nav
-              ref={navLinksRef}
               className="
                 hidden
                 items-center
@@ -607,7 +559,6 @@ export default function Navbar() {
                   }}
                   className={`
                     nav
-                    opacity-0 -translate-y-5
                     whitespace-nowrap
                     text-sm
                     font-medium
@@ -638,10 +589,8 @@ export default function Navbar() {
             >
               <Link
                 href="#contact"
-                ref={ctaRef}
                 className="
                   btn
-                  opacity-0 -translate-y-5
                   inline-flex
                   shrink-0
                   items-center

@@ -48,66 +48,66 @@ export default function Hero() {
       tl.fromTo(
         ".hero-badge",
         { autoAlpha: 0, y: 30 },
-        { autoAlpha: 1, y: 0, duration: 1 }
+        { autoAlpha: 1, y: 0, duration: 1 },
       )
         .fromTo(
           ".hero-title-line",
           { autoAlpha: 0, y: 30 },
           { autoAlpha: 1, y: 0, duration: 1 },
-          "-=0.88"
+          "-=0.88",
         )
         .fromTo(
           ".hero-description",
           { autoAlpha: 0, y: 30 },
           { autoAlpha: 1, y: 0, duration: 1 },
-          "-=0.88"
+          "-=0.88",
         )
         .fromTo(
           ".reveal-item:not(.hero-badge):not(.hero-description)",
           { autoAlpha: 0, y: 30 },
           { autoAlpha: 1, y: 0, stagger: 0.12, duration: 1 },
-          "-=0.88"
+          "-=0.88",
         )
         .fromTo(
           ".hero-map",
           { autoAlpha: 0, scale: 0.95 },
           { autoAlpha: 1, scale: 1, duration: 1.2 },
-          "-=0.8"
+          "-=0.8",
         );
 
       // 2. مشهد السيارة: دخول ناعم مع تداخل (Crossfade) وتصحيح الموضع
       tl.fromTo(
         ".hero-car-clean",
         { autoAlpha: 0, x: -400, rotation: -2 },
-        { 
-          autoAlpha: 1, 
-          x: 0, 
-          rotation: 0, 
-          duration: 1.4, 
-          ease: "power3.out" 
+        {
+          autoAlpha: 1,
+          x: 0,
+          rotation: 0,
+          duration: 1.4,
+          ease: "power3.out",
         },
-        "-=0.5"
+        "-=0.5",
       )
         // يبدأ التلاشي للسيارة السليمة وهي لا تزال في الثلث الأخير من حركتها
         .to(
-          ".hero-car-clean", 
-          { autoAlpha: 0, duration: 0.6, ease: "power2.inOut" }, 
-          "-=0.6"
+          ".hero-car-clean",
+          { autoAlpha: 0, duration: 0.6, ease: "power2.inOut" },
+          "-=0.6",
         )
         // في نفس اللحظة التي تبدأ فيها السيارة السليمة بالتلاشي، تظهر السيارة المصدومة
         // مع تعديل طفيف في الحجم (scale) والمسافة (x) لتستقر بنعومة
         .fromTo(
           ".hero-car-damaged",
           { autoAlpha: 0, scale: 0.96, x: 15, rotation: 1 },
-          { 
-            autoAlpha: 1, 
-            scale: 1, 
-            x: 0, 
-            rotation: 0, 
-            duration: 0.8, 
-            ease: "power2.out" 
+          {
+            autoAlpha: 1,
+            scale: 1,
+            x: 0,
+            rotation: 0,
+            duration: 0.8,
+            ease: "power2.out",
           },
-          "<" // علامة التزامن (<) تجعل هذه الحركة تبدأ تماماً مع حركة التلاشي السابقة
+          "<", // علامة التزامن (<) تجعل هذه الحركة تبدأ تماماً مع حركة التلاشي السابقة
         );
 
       // 3. الطفو المستمر الحريري
@@ -130,7 +130,7 @@ export default function Hero() {
         ease: "sine.inOut",
       });
     },
-    { scope: heroRef }
+    { scope: heroRef },
   );
 
   return (
@@ -175,9 +175,7 @@ export default function Hero() {
             شراء سيارات مصدومة وتالف في جدة ومكة نقداً وبأفضل سعر
           </h1>
 
-          <p
-            className="reveal-item hero-description max-w-lg text-base leading-relaxed text-slate-600 md:text-lg font-medium"
-          >
+          <p className="reveal-item hero-description max-w-lg text-base leading-relaxed text-slate-600 md:text-lg font-medium">
             نشتري سيارتك المصدومة أو التالفة أياً كانت حالتها، بمعاينة فورية
             وسعر عادل، مع{" "}
             <strong className="text-slate-900 font-bold">سطحة مجانية</strong>{" "}
@@ -207,7 +205,7 @@ export default function Hero() {
 
           {/* TRUST STATS */}
           <div className="reveal-item mt-8 grid w-full grid-cols-3 gap-4 rounded-3xl border border-white/40 bg-white/40 p-4 shadow-[0_8px_30px_rgb(0,0,0,0.04)] backdrop-blur-xl">
-            {STATS.map((stat, index) => {
+            {STATS.map((stat) => {
               const Icon = stat.icon;
               return (
                 <div
