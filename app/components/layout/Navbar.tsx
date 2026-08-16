@@ -723,7 +723,7 @@ export default function Navbar() {
      <nav
   ref={navMobile}
   dir="rtl"
-  style={{ transform: "translateX(-100%)" }}   {/* closed by default, GSAP overwrites this exact property */}
+  style={{ transform: "translateX(-100%)" }} 
   className="
     fixed
     left-0
