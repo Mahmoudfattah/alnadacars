@@ -9,7 +9,7 @@ import Contact from "./components/sections/Contact";
 
 export default function Home() {
   return (
-    <div className="">
+    <>
       <Hero />
       <Brands />
       {/* <CarBrandsSection/> */}
@@ -18,6 +18,6 @@ export default function Home() {
       <ServicesGrid />
       <CitiesWeServe />
       <Contact />
-    </div>
+    </>
   );
 }
