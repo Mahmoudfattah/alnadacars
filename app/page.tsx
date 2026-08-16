@@ -17,7 +17,7 @@ export default function Home() {
       <Hero/>
 <Brands/>
 {/* <CarBrandsSection/> */}
-          {/* <About /> */}
+          <About />
           <OurApproach   />
              <ServicesGrid />
              < CitiesWeServe/>
