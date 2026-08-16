@@ -56,25 +56,24 @@ const About = () => {
           gsap.set([".wheel-left", ".wheel-right"], {
             opacity: 0,
             x: 0,
+            y: 0,
             rotation: 0,
             force3D: true,
           });
 
-         const timeline = gsap.timeline({
-  scrollTrigger: {
-    trigger: containerRef.current,
-    // يفضل تثبيته أسفل النافبار مباشرة، يمكنك تعديل الـ start ليكون "top 10%" مثلاً
-    start: start, 
-    // قمنا بزيادة مسافة الـ end لإعطاء مساحة أكبر (وقت أطول) للمستخدم لرؤية الحركة براحة
-    end: isMobile ? "+=120%" : "+=150%", 
-    scrub: 1, // جعل القيمة 1 تجعل الحركة أنعم قليلاً أثناء السكرول
-    pin: true, // 👈 التعديل الأهم: هذا ما يمنع الصفحة من النزول حتى ينتهي الأنميشن
-    anticipatePin: 1, // لمنع حدوث أي قفزة (Jump) في الـ UI عند بدء التثبيت
-    invalidateOnRefresh: true,
-    onEnter: () => videoRef.current?.play().catch(() => {}),
-    onEnterBack: () => videoRef.current?.play().catch(() => {}),
-  },
-});
+          const timeline = gsap.timeline({
+            scrollTrigger: {
+              trigger: containerRef.current,
+              start: start,
+              end: isMobile ? "+=120%" : "+=150%",
+              scrub: 1,
+              pin: true,
+              anticipatePin: 1,
+              invalidateOnRefresh: true,
+              onEnter: () => videoRef.current?.play().catch(() => {}),
+              onEnterBack: () => videoRef.current?.play().catch(() => {}),
+            },
+          });
 
           // 1. Fade out header & side lists smoothly
           timeline.to(".will-fade", {
@@ -103,8 +102,9 @@ const About = () => {
             ".wheel-left",
             {
               opacity: 1,
-              x: isMobile ? -80 : -200, // Moves out to the left like leaf-left
-              rotation: -180, // Rolls backwards
+              x: isMobile ? 0 : -200,
+              y: isMobile ? -120 : 0,
+              rotation: isMobile ? -180 : -180,
               duration: 1.5,
               ease: "power2.inOut",
             },
@@ -115,8 +115,9 @@ const About = () => {
             ".wheel-right",
             {
               opacity: 1,
-              x: isMobile ? 80 : 200, // Moves out to the right like leaf-right
-              rotation: 180, // Rolls forwards
+              x: isMobile ? 0 : 200,
+              y: isMobile ? 120 : 0,
+              rotation: isMobile ? 180 : 180,
               duration: 1.5,
               ease: "power2.inOut",
             },
@@ -217,7 +218,7 @@ const About = () => {
               alt="Left Wheel"
               width={176}
               height={176}
-              className="wheel-left absolute left-0 top-1/2 z-0 -translate-y-1/2 object-contain pointer-events-none will-change-transform md:w-44"
+              className="wheel-left absolute left-1/2 top-0 z-0 -translate-x-1/2 md:left-0 md:top-1/2 md:-translate-x-0 md:-translate-y-1/2 object-contain pointer-events-none will-change-transform md:w-44"
             />
 
             <Image
@@ -225,7 +226,7 @@ const About = () => {
               alt="Right Wheel"
               width={176}
               height={176}
-              className="wheel-right absolute right-0 top-1/2 z-0 -translate-y-1/2 object-contain pointer-events-none will-change-transform md:w-44"
+              className="wheel-right absolute left-1/2 bottom-0 z-0 -translate-x-1/2 md:right-0 md:left-auto md:bottom-auto md:top-1/2 md:-translate-x-0 md:-translate-y-1/2 object-contain pointer-events-none will-change-transform md:w-44"
             />
 
             {/* VIDEO MASK LAYER */}
