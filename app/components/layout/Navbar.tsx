@@ -186,32 +186,6 @@ export default function Navbar() {
   }, []);
 
   /* =====================================================
-     MOBILE INITIAL GSAP STATE
-  ====================================================== */
-
-  useGSAP(
-    () => {
-      if (!navMobile.current || !overlay.current) return;
-
-      const links = navMobile.current.querySelectorAll(".mobile-link");
-
-      gsap.set(navMobile.current, {
-        xPercent: -100,
-      });
-
-      gsap.set(overlay.current, {
-        opacity: 0,
-      });
-
-      gsap.set(links, {
-        opacity: 0,
-        x: 30,
-      });
-    },
-    { scope: navMobile },
-  );
-
-  /* =====================================================
      OPEN MOBILE MENU
   ====================================================== */
 
@@ -431,7 +405,8 @@ export default function Navbar() {
       <div
         ref={overlay}
         onClick={closeMenu}
-        className={`fixed inset-0 z-[90] bg-black/30 backdrop-blur-sm opacity-0 sm:hidden ${
+        style={{ opacity: 0 }}
+        className={`fixed inset-0 z-[90] bg-black/30 backdrop-blur-sm sm:hidden ${
           isOpen ? "pointer-events-auto" : "pointer-events-none"
         }`}
       />
@@ -440,6 +415,7 @@ export default function Navbar() {
       <nav
         ref={navMobile}
         dir="rtl"
+        style={{ transform: "translateX(-100%)" }}
         className="fixed left-0 top-0 z-[100] h-dvh w-[60%] max-w-95 overflow-y-auto bg-(--color-bg-raised) px-6 py-6 shadow-[20px_0_50px_rgba(0,0,0,0.12)] md:hidden"
       >
         <div className="flex items-center justify-end">
@@ -458,14 +434,15 @@ export default function Navbar() {
             <Link
               key={link.href}
               href={link.href}
+              style={{ opacity: 0, transform: "translateX(30px)" }}
               onClick={(event) => {
                 if (link.href.startsWith("#")) {
                   event.preventDefault();
                   scrollToSection(link.href);
                 }
-             
+                handleMobileLinkClick();
               }}
-              className={`mobile-link block border-b border-(--color-border) py-6 text-right text-base font-medium opacity-0 translate-x-[30px] ${
+              className={`mobile-link block border-b border-(--color-border) py-6 text-right text-base font-medium ${
                 activeHash === link.href
                   ? "text-(--color-primary)"
                   : "text-(--color-ink) hover:text-(--color-primary)"
@@ -478,8 +455,9 @@ export default function Navbar() {
 
         <Link
           href="#contact"
+          style={{ opacity: 0, transform: "translateX(30px)" }}
           onClick={handleMobileLinkClick}
-          className="mobile-link mt-6 flex w-full items-center justify-center rounded-(--radius-pill) bg-(--color-cta) px-6 py-3 text-sm font-semibold text-white hover:shadow-md hover:-translate-y-1 opacity-0 translate-x-[30px]"
+          className="mobile-link mt-6 flex w-full items-center justify-center rounded-(--radius-pill) bg-(--color-cta) px-6 py-3 text-sm font-semibold text-white hover:shadow-md hover:-translate-y-1"
         >
           تواصل معنا
         </Link>
