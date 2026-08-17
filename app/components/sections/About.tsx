@@ -32,40 +32,44 @@ const About = () => {
   const [soundOn, setSoundOn] = useState(false);
   const [videoLoaded, setVideoLoaded] = useState(false);
 
+  useEffect(() => {
+    const section = containerRef.current;
+
+    if (!section) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVideoLoaded(true);
+          observer.disconnect();
+        }
+      },
+      {
+        rootMargin: "300px 0px",
+        threshold: 0.01,
+      }
+    );
+
+    observer.observe(section);
+
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
-  const section = containerRef.current;
+    if (!videoLoaded) return;
 
-  if (!section) return;
+    const video = videoRef.current;
 
-  const observer = new IntersectionObserver(
-    ([entry]) => {
-      if (entry.isIntersecting) {
-        setVideoLoaded(true);
-        observer.disconnect();
-      }
-    },
-    {
-      rootMargin: "300px 0px",
-      threshold: 0.01,
-    }
-  );
+    if (!video) return;
 
-  observer.observe(section);
+    video.play().catch(() => {});
 
-  return () => observer.disconnect();
-}, []);
+    // 👈 تعديل جديد: إجبار GSAP على إعادة حساب الأبعاد بعد تحميل الفيديو في الـ DOM
+    setTimeout(() => {
+      ScrollTrigger.refresh();
+    }, 100);
+  }, [videoLoaded]);
 
-
-useEffect(() => {
-  if (!videoLoaded) return;
-
-  const video = videoRef.current;
-
-  if (!video) return;
-
-  video.play().catch(() => {});
-}, [videoLoaded]);
   useGSAP(
     () => {
       const mm = gsap.matchMedia();
@@ -103,6 +107,7 @@ useEffect(() => {
               end: isMobile ? "+=120%" : "+=150%",
               scrub: 1,
               pin: true,
+              pinType: "transform", // 👈 تعديل جديد: يمنع تكسر التثبيت إذا كان هناك overflow في العناصر الأب
               anticipatePin: 1,
               invalidateOnRefresh: true,
               onEnter: () => videoRef.current?.play().catch(() => {}),
@@ -128,11 +133,10 @@ useEffect(() => {
               duration: 1.5,
               ease: "power2.inOut",
             } as gsap.TweenVars,
-            "-=0.4",
+            "-=0.4"
           );
 
           // 2.5 ANIMATE WHEELS ALONGSIDE THE MASK EXPANSION
-          // The '<' makes these start at the exact same time as the mask expansion above
           timeline.to(
             ".wheel-left",
             {
@@ -143,7 +147,7 @@ useEffect(() => {
               duration: 1.5,
               ease: "power2.inOut",
             },
-            "<",
+            "<"
           );
 
           timeline.to(
@@ -156,7 +160,7 @@ useEffect(() => {
               duration: 1.5,
               ease: "power2.inOut",
             },
-            "<",
+            "<"
           );
 
           // 3. Fade in bottom text cleanly
@@ -168,19 +172,19 @@ useEffect(() => {
               duration: 1,
               ease: "power2.out",
             },
-            "-=0.5",
+            "-=0.5"
           );
 
           return () => {
             timeline.scrollTrigger?.kill();
             timeline.kill();
           };
-        },
+        }
       );
 
       return () => mm.revert();
     },
-    { scope: containerRef },
+    { scope: containerRef }
   );
 
   const enableSound = async () => {
@@ -204,29 +208,26 @@ useEffect(() => {
   };
 
   return (
-    // min-h-dvh set explicitly here (not min-h-screen) to match
-    // globals.css's #art rule instead of silently conflicting with
-    // it. #art{ min-h-dvh } was already winning at runtime due to
-    // ID selector specificity beating this class, but that made the
-    // actual rendered height dependent on an unrelated file — this
-    // makes the intended value explicit and self-documenting.
     <section
       id="about"
       ref={containerRef}
-      className="relative mb-4 w-full min-h-dvh overflow-hidden bg-(--color-bg-soft)"
+      // 👈 تعديل جديد: تغيير min-h-dvh إلى min-h-screen لتجنب مشاكل شريط العنوان في الجوال
+      className="relative mb-4 w-full min-h-screen overflow-hidden bg-(--color-bg-soft)"
     >
-      <div className="  container
-    mx-auto
-    h-full
-    max-w-6xl
-    flex
-    flex-col
-    items-center
-    justify-center
-    gap-8
-    px-4
-    relative
-    z-10">
+      <div
+        className="container
+        mx-auto
+        h-full
+        max-w-6xl
+        flex
+        flex-col
+        items-center
+        justify-center
+        gap-8
+        px-4
+        relative
+        z-10"
+      >
         {/* TITLE */}
         <h2 className="will-fade text-center text-4xl md:text-7xl font-extrabold leading-[1.2] text-gray-900 will-change-transform">
           شراء سيارات مصدومة
@@ -257,36 +258,39 @@ useEffect(() => {
           </ul>
 
           {/* CENTER VIDEO WITH MASK AND WHEELS */}
-          <div className=" cocktail-img
-    relative
-    w-full
-    aspect-video
-    md:aspect-auto
-    md:h-[65vh]
-    mx-auto
-    flex
-    items-center
-    justify-center
-    overflow-visible
-    rounded-2xl">
-            {/* --- NEW ADDITION: LEFT WHEEL --- */}
+          <div
+            className="cocktail-img
+            relative
+            w-full
+            aspect-video
+            md:aspect-auto
+            md:h-[65vh]
+            mx-auto
+            flex
+            items-center
+            justify-center
+            overflow-visible
+            rounded-2xl"
+          >
+            {/* --- LEFT WHEEL --- */}
             <Image
               src="/ChatGPT Image 15 أغسطس 2026، 05_34_06 م.webp"
               alt=""
-                aria-hidden="true"
+              aria-hidden="true"
               width={176}
               height={176}
-               sizes="176px"
+              sizes="176px"
               className="wheel-left absolute left-1/2 top-0 z-0 -translate-x-1/2 md:left-0 md:top-1/2 md:-translate-x-0 md:-translate-y-1/2 object-contain pointer-events-none will-change-transform md:w-44"
             />
 
+            {/* --- RIGHT WHEEL --- */}
             <Image
               src="/ChatGPT Image 15 أغسطس 2026، 05_36_28 م.webp"
               alt=""
               aria-hidden="true"
               width={176}
               height={176}
-               sizes="176px"
+              sizes="176px"
               className="wheel-right absolute left-1/2 bottom-0 z-0 -translate-x-1/2 md:right-0 md:left-auto md:bottom-auto md:top-1/2 md:-translate-x-0 md:-translate-y-1/2 object-contain pointer-events-none will-change-transform md:w-44"
             />
 
@@ -319,15 +323,16 @@ useEffect(() => {
                 type="button"
                 onClick={soundOn ? disableSound : enableSound}
                 className="absolute bottom-4 left-4 z-100 flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-black/40 text-sm text-white shadow-lg backdrop-blur-md transition-transform hover:scale-110 active:scale-95"
-                 aria-label={
-                      soundOn
-                        ? "إيقاف صوت الفيديو"
-                        : "تشغيل صوت الفيديو"
-                    }
-
-                    aria-pressed={soundOn}
+                aria-label={
+                  soundOn ? "إيقاف صوت الفيديو" : "تشغيل صوت الفيديو"
+                }
+                aria-pressed={soundOn}
               >
-                {soundOn ? <VolumeOff size={16}  aria-hidden="true" /> : <Volume2 size={16}  aria-hidden="true" />}
+                {soundOn ? (
+                  <VolumeOff size={16} aria-hidden="true" />
+                ) : (
+                  <Volume2 size={16} aria-hidden="true" />
+                )}
               </button>
             </div>
           </div>
