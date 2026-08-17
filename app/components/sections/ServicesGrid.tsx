@@ -4,6 +4,7 @@ import { Cog, ZapOff, MapPin } from "lucide-react";
 import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
+import { ScrollTrigger } from "gsap/all";
 
 const SERVICES = [
   {
@@ -25,6 +26,7 @@ const SERVICES = [
     featured: false,
   },
 ];
+gsap.registerPlugin(ScrollTrigger);
 
 export default function ServicesGrid() {
   const container = useRef(null);

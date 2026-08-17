@@ -66,7 +66,7 @@ export default function Hero() {
           opacity: 1,
           y: 0,
           duration: 0.7,
-        }
+        },
       )
         .fromTo(
           ".hero-description",
@@ -79,7 +79,7 @@ export default function Hero() {
             y: 0,
             duration: 0.7,
           },
-          "-=0.5"
+          "-=0.5",
         )
         .fromTo(
           ".reveal-item:not(.hero-badge):not(.hero-description)",
@@ -93,7 +93,7 @@ export default function Hero() {
             stagger: 0.1,
             duration: 0.7,
           },
-          "-=0.5"
+          "-=0.5",
         )
         .fromTo(
           ".hero-map",
@@ -106,7 +106,7 @@ export default function Hero() {
             scale: 1,
             duration: 0.8,
           },
-          "-=0.5"
+          "-=0.5",
         );
 
       // ============================================================
@@ -127,7 +127,7 @@ export default function Hero() {
           duration: 1.4,
           ease: "power3.out",
         },
-        "-=0.5"
+        "-=0.5",
       )
 
         // ============================================================
@@ -141,7 +141,7 @@ export default function Hero() {
             duration: 0.6,
             ease: "power2.inOut",
           },
-          "-=0.6"
+          "-=0.6",
         )
 
         // ============================================================
@@ -164,7 +164,7 @@ export default function Hero() {
             duration: 0.8,
             ease: "power2.out",
           },
-          "<"
+          "<",
         );
 
       // ============================================================
@@ -196,7 +196,7 @@ export default function Hero() {
     },
     {
       scope: heroRef,
-    }
+    },
   );
 
   return (
@@ -230,7 +230,6 @@ export default function Hero() {
 
               <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-emerald-500" />
             </span>
-
             كاش فوري خلال 30 دقيقة
           </span>
 
@@ -274,9 +273,7 @@ export default function Hero() {
           >
             نشتري سيارتك المصدومة أو التالفة أياً كانت حالتها، بمعاينة فورية
             وسعر عادل، مع{" "}
-            <strong className="font-bold text-slate-900">
-              سطحة مجانية
-            </strong>{" "}
+            <strong className="font-bold text-slate-900">سطحة مجانية</strong>{" "}
             لنقل السيارة من موقعك.
           </p>
 
@@ -306,9 +303,7 @@ export default function Hero() {
                 hover:shadow-slate-900/20
               "
             >
-              <span className="relative z-10">
-                احصل على السعر الآن
-              </span>
+              <span className="relative z-10">احصل على السعر الآن</span>
 
               <ArrowLeft
                 size={18}
@@ -404,10 +399,7 @@ export default function Hero() {
                       shadow-sm
                     `}
                   >
-                    <Icon
-                      size={20}
-                      strokeWidth={2}
-                    />
+                    <Icon size={20} strokeWidth={2} />
                   </div>
 
                   <div className="flex flex-col gap-0.5">
