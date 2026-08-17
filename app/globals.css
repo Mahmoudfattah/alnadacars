@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Playpen+Sans+Arabic:wght@100..800&display=swap");
+
 @import "tailwindcss";
 
 /*
@@ -38,8 +38,8 @@ Do NOT redefine --font-display here if it is already defined by next/font.
   --color-cta-hover: #2b2b2b;
 
   /* Typography */
-  --font-numeral: ui-monospace, "SF Mono", Consolas, monospace;
-  --font-body: "Playpen Sans Arabic", cursive;
+--font-numeral: ui-monospace, "SF Mono", Consolas, monospace;
+  
 
   /* Radius */
   --radius-sm: 10px;
