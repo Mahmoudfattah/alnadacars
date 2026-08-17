@@ -22,7 +22,7 @@ export default function Home() {
       {/* <CarBrandsSection/> */}
 
       {/* Left Bottom Corner - WhatsApp Button (Smaller Size) */}
-      <div className="fixed bottom-4 right-4 z-50">
+      <div className="fixed bottom-4 right-2 z-50">
         <a
           href={`https://wa.me/${internationalNumber}`}
           target="_blank"
@@ -41,7 +41,7 @@ export default function Home() {
       </div>
 
       {/* Right Bottom Corner - Call Button (Smaller Size) */}
-      <div className="fixed bottom-4 left-4 z-50">
+      <div className="fixed bottom-4 left-2 z-50">
         <a
           href={`tel:${phoneNumber}`}
           aria-label="Call Us"
