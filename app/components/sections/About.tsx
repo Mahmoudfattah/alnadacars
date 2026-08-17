@@ -4,7 +4,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import Image from "next/image";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { CSSProperties } from "react";
 import { Volume2, VolumeOff } from "lucide-react";
 
@@ -30,7 +30,42 @@ const About = () => {
   const maskRef = useRef<HTMLDivElement | null>(null);
 
   const [soundOn, setSoundOn] = useState(false);
+  const [videoLoaded, setVideoLoaded] = useState(false);
 
+
+  useEffect(() => {
+  const section = containerRef.current;
+
+  if (!section) return;
+
+  const observer = new IntersectionObserver(
+    ([entry]) => {
+      if (entry.isIntersecting) {
+        setVideoLoaded(true);
+        observer.disconnect();
+      }
+    },
+    {
+      rootMargin: "300px 0px",
+      threshold: 0.01,
+    }
+  );
+
+  observer.observe(section);
+
+  return () => observer.disconnect();
+}, []);
+
+
+useEffect(() => {
+  if (!videoLoaded) return;
+
+  const video = videoRef.current;
+
+  if (!video) return;
+
+  video.play().catch(() => {});
+}, [videoLoaded]);
   useGSAP(
     () => {
       const mm = gsap.matchMedia();
@@ -178,9 +213,29 @@ const About = () => {
     <section
       id="about"
       ref={containerRef}
-      className="relative mb-4 w-full min-h-dvh overflow-hidden bg-(--color-bg-soft)"
+      className="   relative
+    mb-4
+    w-full
+    min-h-[720px]
+    h-[100svh]
+    max-h-[900px]
+    overflow-hidden
+    bg-(--color-bg-soft)
+    [contain:layout_paint]
+    "
     >
-      <div className="container mx-auto min-h-screen max-w-6xl flex flex-col items-center justify-center gap-8 px-4 relative z-10">
+      <div className=" container
+    mx-auto
+    h-full
+    max-w-6xl
+    flex
+    flex-col
+    items-center
+    justify-center
+    gap-8
+    px-4
+    relative
+    z-10">
         {/* TITLE */}
         <h2 className="will-fade text-center text-4xl md:text-7xl font-extrabold leading-[1.2] text-gray-900 will-change-transform">
           شراء سيارات مصدومة
@@ -211,21 +266,36 @@ const About = () => {
           </ul>
 
           {/* CENTER VIDEO WITH MASK AND WHEELS */}
-          <div className="cocktail-img relative w-full aspect-video md:h-[65vh] md:aspect-auto mx-auto flex items-center justify-center overflow-visible rounded-2xl">
+          <div className="cocktail-img
+    relative
+    w-full
+    aspect-video
+    md:aspect-auto
+    md:h-[65vh]
+    mx-auto
+    flex
+    items-center
+    justify-center
+    overflow-visible
+    rounded-2xl">
             {/* --- NEW ADDITION: LEFT WHEEL --- */}
             <Image
               src="/ChatGPT Image 15 أغسطس 2026، 05_34_06 م.webp"
-              alt="Left Wheel"
+              alt=""
+                aria-hidden="true"
               width={176}
               height={176}
+               sizes="176px"
               className="wheel-left absolute left-1/2 top-0 z-0 -translate-x-1/2 md:left-0 md:top-1/2 md:-translate-x-0 md:-translate-y-1/2 object-contain pointer-events-none will-change-transform md:w-44"
             />
 
             <Image
               src="/ChatGPT Image 15 أغسطس 2026، 05_36_28 م.webp"
-              alt="Right Wheel"
+              alt=""
+              aria-hidden="true"
               width={176}
               height={176}
+               sizes="176px"
               className="wheel-right absolute left-1/2 bottom-0 z-0 -translate-x-1/2 md:right-0 md:left-auto md:bottom-auto md:top-1/2 md:-translate-x-0 md:-translate-y-1/2 object-contain pointer-events-none will-change-transform md:w-44"
             />
 
@@ -240,24 +310,33 @@ const About = () => {
                 } as CSSProperties
               }
             >
-              <video
-                ref={videoRef}
-                src="/video-optimized.mp4"
-                className="masked-video w-full h-full object-cover"
-                autoPlay
-                muted
-                loop
-                playsInline
-                preload="auto"
-                aria-label="فيديو السيارة المصدومة"
-              />
+              {videoLoaded && (
+                <video
+                  ref={videoRef}
+                  src="/video-optimized.mp4"
+                  className="masked-video w-full h-full object-cover"
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  preload="none"
+                  aria-label="فيديو السيارة المصدومة"
+                />
+              )}
 
               <button
                 type="button"
                 onClick={soundOn ? disableSound : enableSound}
                 className="absolute bottom-4 left-4 z-100 flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-black/40 text-sm text-white shadow-lg backdrop-blur-md transition-transform hover:scale-110 active:scale-95"
+                 aria-label={
+                      soundOn
+                        ? "إيقاف صوت الفيديو"
+                        : "تشغيل صوت الفيديو"
+                    }
+
+                    aria-pressed={soundOn}
               >
-                {soundOn ? <VolumeOff size={16} /> : <Volume2 size={16} />}
+                {soundOn ? <VolumeOff size={16}  aria-hidden="true" /> : <Volume2 size={16}  aria-hidden="true" />}
               </button>
             </div>
           </div>
