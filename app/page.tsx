@@ -12,9 +12,9 @@ export default function Home() {
     <>
       <Hero />
       <Brands />
-      <OurApproach />
       <About />
-      {/* <ServicesGrid /> */}
+      <OurApproach />
+      <ServicesGrid />
       <CitiesWeServe />
       <Contact />
       {/* <CarBrandsSection/> */}

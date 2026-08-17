@@ -61,7 +61,7 @@ export default function RootLayout({
         suppressHydrationWarning={true}
         className="bg-white text-[var(--color-ink)] antialiased"
       >
-        {/* <Navbar /> */}
+        <Navbar />
         <main>{children}</main>
       </body>
     </html>
