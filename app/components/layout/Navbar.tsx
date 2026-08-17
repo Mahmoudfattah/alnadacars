@@ -214,7 +214,7 @@ export default function Navbar() {
     mobileTimeline.current.to(
       navEl,
       {
-        xPercent: 0,
+        x: 0,
         duration: 0.8,
         ease: "power3.out",
       },
@@ -268,7 +268,7 @@ export default function Navbar() {
     mobileTimeline.current.to(
       navEl,
       {
-        xPercent: -100,
+        x: "-100%",
         duration: 0.65,
         ease: "power3.inOut",
       },
