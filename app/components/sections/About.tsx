@@ -216,13 +216,11 @@ useEffect(() => {
       className="   relative
     mb-4
     w-full
-    min-h-[720px]
+    min-h-[740px]
     h-[100svh]
     max-h-[900px]
     overflow-hidden
-    bg-(--color-bg-soft)
-    [contain:layout_paint]
-    "
+    bg-(--color-bg-soft)"
     >
       <div className=" container
     mx-auto
