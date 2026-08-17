@@ -47,10 +47,14 @@ export default function Hero() {
       });
 
       // ============================================================
-      // 1. TEXT REVEAL
-      // Use opacity + transform only.
-      // Avoid autoAlpha/visibility to reduce layout/compositing work.
+      // 1. NON-LCP CONTENT REVEAL
       // ============================================================
+      //
+      // IMPORTANT:
+      // The H1 is intentionally NOT animated here.
+      // It must be visible immediately so PageSpeed can paint
+      // the LCP element as early as possible.
+      //
 
       tl.fromTo(
         ".hero-badge",
@@ -61,61 +65,48 @@ export default function Hero() {
         {
           opacity: 1,
           y: 0,
-          duration: 1,
+          duration: 0.7,
         }
       )
-        .fromTo(
-          ".hero-title-line",
-          {
-            opacity: 0,
-            y: 30,
-          },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 1,
-          },
-          "-=0.88"
-        )
         .fromTo(
           ".hero-description",
           {
             opacity: 0,
-            y: 30,
+            y: 20,
           },
           {
             opacity: 1,
             y: 0,
-            duration: 1,
+            duration: 0.7,
           },
-          "-=0.88"
+          "-=0.5"
         )
         .fromTo(
           ".reveal-item:not(.hero-badge):not(.hero-description)",
           {
             opacity: 0,
-            y: 30,
+            y: 20,
           },
           {
             opacity: 1,
             y: 0,
-            stagger: 0.12,
-            duration: 1,
+            stagger: 0.1,
+            duration: 0.7,
           },
-          "-=0.88"
+          "-=0.5"
         )
         .fromTo(
           ".hero-map",
           {
             opacity: 0,
-            scale: 0.95,
+            scale: 0.97,
           },
           {
             opacity: 1,
             scale: 1,
-            duration: 1.2,
+            duration: 0.8,
           },
-          "-=0.8"
+          "-=0.5"
         );
 
       // ============================================================
@@ -178,7 +169,6 @@ export default function Hero() {
 
       // ============================================================
       // 5. CONTINUOUS CAR FLOAT
-      // Transform properties only.
       // ============================================================
 
       gsap.to(".hero-car-damaged", {
@@ -244,13 +234,21 @@ export default function Hero() {
             كاش فوري خلال 30 دقيقة
           </span>
 
-          {/* TITLE */}
+          {/* ============================================================
+              LCP ELEMENT
+              
+              IMPORTANT:
+              No opacity-0.
+              No GSAP initial state.
+              No hidden/invisible.
+          ============================================================ */}
 
           <h1
             className="
               hero-title-line
               text-balance
-              text-4xl font-bold
+              text-4xl
+              font-bold
               leading-[1.3]
               text-[var(--color-ink)]
               sm:text-4xl
@@ -458,7 +456,7 @@ export default function Hero() {
 
         {/* ============================================================
             IMAGE COLUMN
-            ============================================================ */}
+        ============================================================ */}
 
         <div
           className="
