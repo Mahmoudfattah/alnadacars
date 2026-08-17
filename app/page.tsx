@@ -10,9 +10,9 @@ import Contact from "./components/sections/Contact";
 export default function Home() {
   return (
     <>
-      {/* <Hero />
-      <Brands /> */}
-      <About />
+      <Hero />
+      <Brands />
+      {/* <About /> */}
       <OurApproach />
       {/* <ServicesGrid /> */}
       <CitiesWeServe />
