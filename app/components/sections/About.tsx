@@ -213,27 +213,9 @@ useEffect(() => {
     <section
       id="about"
       ref={containerRef}
-      className="   relative
-    mb-4
-    w-full
-    min-h-[740px]
-    h-[100svh]
-    max-h-[900px]
-    overflow-hidden
-    bg-(--color-bg-soft)"
+      className="relative mb-4 w-full min-h-dvh overflow-hidden bg-(--color-bg-soft)"
     >
-      <div className=" container
-    mx-auto
-    h-full
-    max-w-6xl
-    flex
-    flex-col
-    items-center
-    justify-center
-    gap-8
-    px-4
-    relative
-    z-10">
+      <div className="container mx-auto min-h-screen max-w-6xl flex flex-col items-center justify-center gap-8 px-4 relative z-10">
         {/* TITLE */}
         <h2 className="will-fade text-center text-4xl md:text-7xl font-extrabold leading-[1.2] text-gray-900 will-change-transform">
           شراء سيارات مصدومة
@@ -264,7 +246,7 @@ useEffect(() => {
           </ul>
 
           {/* CENTER VIDEO WITH MASK AND WHEELS */}
-          <div className="cocktail-img
+          <div className=" cocktail-img
     relative
     w-full
     aspect-video
