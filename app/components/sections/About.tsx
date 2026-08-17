@@ -100,8 +100,8 @@ const About = () => {
               start: start,
               end: isMobile ? "+=120%" : "+=150%",
               scrub: 1,
-              pin: true,
-              pinType: "transform", // 👈 أضف هذا السطر هنا
+              // pin: true,
+              // pinType: "transform", 
               anticipatePin: 1,
               invalidateOnRefresh: true,
               onEnter: () => videoRef.current?.play().catch(() => {}),
