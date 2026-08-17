@@ -11,7 +11,6 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
 
 const NAV_LINKS = [
-  // { label: "الرئيسية", href: "/" },
   { label: "من نحن", href: "#about" },
   { label: "كيف تعمل الخدمة", href: "#how-it-works" },
   { label: "المدن التي نخدمها", href: "#cities" },
@@ -23,12 +22,7 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [activeHash, setActiveHash] = useState("");
 
-  /* =====================================================
-     REFS
-  ====================================================== */
-
   const container = useRef<HTMLElement | null>(null);
-
   const navMobile = useRef<HTMLElement | null>(null);
   const overlay = useRef<HTMLDivElement | null>(null);
 
@@ -45,7 +39,6 @@ export default function Navbar() {
     () => {
       const tl = gsap.timeline();
 
-      // Logo
       if (logoRef.current) {
         tl.to(
           logoRef.current,
@@ -54,7 +47,6 @@ export default function Navbar() {
         );
       }
 
-      // Nav links
       if (navLinksRef.current) {
         const links = Array.from(
           navLinksRef.current.querySelectorAll(".nav"),
@@ -74,7 +66,6 @@ export default function Navbar() {
         }
       }
 
-      // CTA button
       if (ctaRef.current) {
         tl.to(
           ctaRef.current,
@@ -91,48 +82,16 @@ export default function Navbar() {
 
       if (!glass || !border) return;
 
-      const scrollAnimation = gsap.timeline({
-        paused: true,
-      });
+      const scrollAnimation = gsap.timeline({ paused: true });
 
-      scrollAnimation.to(
-        nav,
-        {
-          y: 4,
-          duration: 0.4,
-          ease: "power2.out",
-        },
-        0,
-      );
-
-      scrollAnimation.to(
-        glass,
-        {
-          opacity: 1,
-          duration: 0.4,
-          ease: "power2.out",
-        },
-        0,
-      );
-
-      scrollAnimation.to(
-        border,
-        {
-          opacity: 1,
-          duration: 0.35,
-          ease: "power2.out",
-        },
-        0,
-      );
+      scrollAnimation.to(nav, { y: 4, duration: 0.4, ease: "power2.out" }, 0);
+      scrollAnimation.to(glass, { opacity: 1, duration: 0.4, ease: "power2.out" }, 0);
+      scrollAnimation.to(border, { opacity: 1, duration: 0.35, ease: "power2.out" }, 0);
 
       const trigger = ScrollTrigger.create({
         start: "top -10",
-        onEnter: () => {
-          scrollAnimation.play();
-        },
-        onLeaveBack: () => {
-          scrollAnimation.reverse();
-        },
+        onEnter: () => scrollAnimation.play(),
+        onLeaveBack: () => scrollAnimation.reverse(),
       });
 
       return () => {
@@ -140,9 +99,7 @@ export default function Navbar() {
         scrollAnimation.kill();
       };
     },
-    {
-      scope: container,
-    },
+    { scope: container },
   );
 
   /* =====================================================
@@ -251,9 +208,7 @@ export default function Navbar() {
         x: 30,
       });
     },
-    {
-      scope: navMobile,
-    },
+    { scope: navMobile },
   );
 
   /* =====================================================
@@ -267,11 +222,9 @@ export default function Navbar() {
     if (!navEl || !overlayEl) return;
 
     setIsOpen(true);
-
     mobileTimeline.current?.kill();
 
     const links = navEl.querySelectorAll(".mobile-link");
-
     mobileTimeline.current = gsap.timeline();
 
     mobileTimeline.current.to(
@@ -318,7 +271,6 @@ export default function Navbar() {
     if (!navEl || !overlayEl) return;
 
     mobileTimeline.current?.kill();
-
     const links = navEl.querySelectorAll(".mobile-link");
 
     mobileTimeline.current = gsap.timeline({
@@ -365,7 +317,7 @@ export default function Navbar() {
   }, [closeMenu]);
 
   /* =====================================================
-     ESCAPE KEY
+     ESCAPE KEY & BODY SCROLL
   ====================================================== */
 
   useEffect(() => {
@@ -374,21 +326,12 @@ export default function Navbar() {
         closeMenu();
       }
     };
-
     window.addEventListener("keydown", handleEscape);
-
-    return () => {
-      window.removeEventListener("keydown", handleEscape);
-    };
+    return () => window.removeEventListener("keydown", handleEscape);
   }, [isOpen, closeMenu]);
-
-  /* =====================================================
-     PREVENT BODY SCROLL
-  ====================================================== */
 
   useEffect(() => {
     document.body.style.overflow = isOpen ? "hidden" : "";
-
     return () => {
       document.body.style.overflow = "";
     };
@@ -400,89 +343,17 @@ export default function Navbar() {
 
   return (
     <>
-      {/* =================================================
-          DESKTOP / MAIN NAVBAR
-      ================================================== */}
+      <header ref={container} className="sticky top-0 z-50 px-0">
+        <div className="relative mx-auto mt-1.5 max-w-7xl">
+          <div className="nav-glass pointer-events-none absolute inset-0 -z-10 rounded-[14px] bg-white/85 opacity-0 backdrop-blur-md" />
+          <div className="nav-border pointer-events-none absolute inset-0 -z-10 rounded-[14px] border-l border-r border-b border-(--color-border) opacity-0" />
 
-      <header
-        ref={container}
-        className="
-          sticky
-          top-0
-          z-50
-          px-0
-        "
-      >
-        <div
-          className="
-            relative
-            mx-auto
-            mt-1.5
-            max-w-7xl
-          "
-        >
-          <div
-            className="
-              nav-glass
-              pointer-events-none
-              absolute
-              inset-0
-              -z-10
-              rounded-[14px]
-              bg-white/85
-              opacity-0
-              backdrop-blur-md
-            "
-          />
-
-          <div
-            className="
-              nav-border
-              pointer-events-none
-              absolute
-              inset-0
-              -z-10
-              rounded-[14px]
-              border-l
-              border-r
-              border-b
-              border-(--color-border)
-              opacity-0
-            "
-          />
-
-          <div
-            className="
-              mx-auto
-              flex
-              items-center
-              justify-between
-              px-6
-              py-3
-
-              md:grid
-              md:grid-cols-[1fr_auto_1fr]
-              md:px-6
-              md:py-3
-
-              min-[940px]:px-10
-              min-[940px]:py-4
-            "
-          >
+          <div className="mx-auto flex items-center justify-between px-6 py-3 md:grid md:grid-cols-[1fr_auto_1fr] md:px-6 md:py-3 min-[940px]:px-10 min-[940px]:py-4">
             <div className="flex justify-start">
               <Link
                 href="/"
                 ref={logoRef}
-                className="
-                  logo
-                  opacity-0 -translate-y-5
-                  flex
-                  shrink-0
-                  items-center
-                  gap-2
-                  md:gap-1.5
-                  min-[940px]:gap-2
-                "
+                className="logo opacity-0 -translate-y-5 flex shrink-0 items-center gap-2 md:gap-1.5 min-[940px]:gap-2"
                 onClick={(event) => {
                   event.preventDefault();
                   window.scrollTo({ top: 0, behavior: "smooth" });
@@ -497,27 +368,9 @@ export default function Navbar() {
                   width={100}
                   height={100}
                   priority
-                  className="
-                    object-contain
-
-                    md:h-16
-                    md:w-16
-
-                    min-[940px]:h-25
-                    min-[940px]:w-25
-                  "
+                  className="object-contain md:h-16 md:w-16 min-[940px]:h-25 min-[940px]:w-25"
                 />
-
-                <span
-                  className="
-                    hidden
-                    font-bold
-                    text-(--color-cta)
-                    sm:block
-                    md:text-sm
-                    min-[940px]:text-base
-                  "
-                >
+                <span className="hidden font-bold text-(--color-cta) sm:block md:text-sm min-[940px]:text-base">
                   شراء السيارات المصدومة
                 </span>
               </Link>
@@ -525,14 +378,7 @@ export default function Navbar() {
 
             <nav
               ref={navLinksRef}
-              className="
-                hidden
-                items-center
-                justify-center
-                gap-4
-                md:flex
-                min-[940px]:gap-8
-              "
+              className="hidden items-center justify-center gap-4 md:flex min-[940px]:gap-8"
             >
               {NAV_LINKS.map((link) => (
                 <Link
@@ -543,65 +389,26 @@ export default function Navbar() {
                       if (isOpen) closeMenu();
                       return;
                     }
-
                     event.preventDefault();
                     scrollToSection(link.href);
                     if (isOpen) closeMenu();
                   }}
-                  className={`
-                    nav
-                    opacity-0 -translate-y-5
-                    whitespace-nowrap
-                    text-sm
-                    font-medium
-                    transition-colors
-                    min-[940px]:text-[16px]
-                    ${
-                      activeHash === link.href
-                        ? "text-(--color-primary) font-semibold"
-                        : "text-(--color-ink) hover:text-(--color-primary)"
-                    }
-                  `}
+                  className={`nav opacity-0 -translate-y-5 whitespace-nowrap text-sm font-medium transition-colors min-[940px]:text-[16px] ${
+                    activeHash === link.href
+                      ? "text-(--color-primary) font-semibold"
+                      : "text-(--color-ink) hover:text-(--color-primary)"
+                  }`}
                 >
                   {link.label}
                 </Link>
               ))}
             </nav>
 
-            <div
-              className="
-                hidden
-                justify-end
-                md:flex
-              "
-            >
+            <div className="hidden justify-end md:flex">
               <Link
                 href="#contact"
                 ref={ctaRef}
-                className="
-                  btn
-                  opacity-0 -translate-y-5
-                  inline-flex
-                  shrink-0
-                  items-center
-                  gap-2
-                  rounded-(--radius-pill)
-                  bg-(--color-cta)
-                  px-4
-                  py-2
-                  text-xs
-                  font-semibold
-                  text-white
-                
-                  transition-all
-                
-                  hover:bg-(--color-cta-hover)
-              
-                  min-[940px]:px-6
-                  min-[940px]:py-3
-                  min-[940px]:text-sm
-                  hover:shadow-md hover:-translate-y-1!
-                "
+                className="btn opacity-0 -translate-y-5 inline-flex shrink-0 items-center gap-2 rounded-(--radius-pill) bg-(--color-cta) px-4 py-2 text-xs font-semibold text-white transition-all hover:bg-(--color-cta-hover) min-[940px]:px-6 min-[940px]:py-3 min-[940px]:text-sm hover:shadow-md hover:-translate-y-1!"
               >
                 تواصل معنا
               </Link>
@@ -612,17 +419,7 @@ export default function Navbar() {
               onClick={openMenu}
               aria-label="فتح القائمة"
               aria-expanded={isOpen}
-              className="
-                flex
-                h-9
-                w-9
-                items-center
-                justify-center
-                rounded-full
-                border
-                text-(--color-ink)
-                md:hidden
-              "
+              className="flex h-9 w-9 items-center justify-center rounded-full border text-(--color-ink) md:hidden"
             >
               <Menu size={19} />
             </button>
@@ -630,65 +427,27 @@ export default function Navbar() {
         </div>
       </header>
 
-      {/* =================================================
-          MOBILE OVERLAY
-      ================================================== */}
-
+      {/* OVERLAY */}
       <div
         ref={overlay}
         onClick={closeMenu}
-        className={`
-          fixed
-          inset-0
-          z-90
-          bg-black/30
-          backdrop-blur-sm
-          opacity-0
-          sm:hidden
-          ${isOpen ? "pointer-events-auto" : "pointer-events-none"}
-        `}
+        className={`fixed inset-0 z-[90] bg-black/30 backdrop-blur-sm opacity-0 sm:hidden ${
+          isOpen ? "pointer-events-auto" : "pointer-events-none"
+        }`}
       />
 
-      {/* =================================================
-          MOBILE DRAWER
-      ================================================== */}
-
+      {/* MOBILE DRAWER */}
       <nav
         ref={navMobile}
         dir="rtl"
-        className="
-          fixed
-          left-0
-          top-0
-          z-100
-          h-dvh
-          w-[60%]
-          max-w-95
-          overflow-y-auto
-          bg-(--color-bg-raised)
-          px-6
-          py-6
-          shadow-[20px_0_50px_rgba(0,0,0,0.12)]
-          md:hidden
-          -translate-x-full
-        "
+        className="fixed left-0 top-0 z-[100] h-dvh w-[60%] max-w-95 overflow-y-auto bg-(--color-bg-raised) px-6 py-6 shadow-[20px_0_50px_rgba(0,0,0,0.12)] md:hidden"
       >
         <div className="flex items-center justify-end">
           <button
             type="button"
             onClick={closeMenu}
             aria-label="إغلاق القائمة"
-            className="
-              -mt-2
-              flex
-              h-9
-              w-9
-              items-center
-              justify-center
-              rounded-full
-              border
-              text-(--color-ink)
-            "
+            className="-mt-2 flex h-9 w-9 items-center justify-center rounded-full border text-(--color-ink)"
           >
             <X size={22} />
           </button>
@@ -704,25 +463,13 @@ export default function Navbar() {
                   event.preventDefault();
                   scrollToSection(link.href);
                 }
-                handleMobileLinkClick();
+                handleMobileLinkLinkClick => handleMobileLinkClick();
               }}
-              className={`
-                mobile-link
-                block
-                border-b
-                border-(--color-border)
-                py-6
-                text-right
-                text-base
-                font-medium
-                opacity-0
-                translate-x-[30px]
-                ${
-                  activeHash === link.href
-                    ? "text-(--color-primary)"
-                    : "text-(--color-ink) hover:text-(--color-primary)"
-                }
-              `}
+              className={`mobile-link block border-b border-(--color-border) py-6 text-right text-base font-medium opacity-0 translate-x-[30px] ${
+                activeHash === link.href
+                  ? "text-(--color-primary)"
+                  : "text-(--color-ink) hover:text-(--color-primary)"
+              }`}
             >
               {link.label}
             </Link>
@@ -732,24 +479,7 @@ export default function Navbar() {
         <Link
           href="#contact"
           onClick={handleMobileLinkClick}
-          className="
-            mobile-link
-            mt-6
-            flex
-            w-full
-            items-center
-            justify-center
-            rounded-(--radius-pill)
-            bg-(--color-cta)
-            px-6
-            py-3
-            text-sm
-            font-semibold
-            text-white
-            hover:shadow-md hover:-translate-y-1
-            opacity-0
-            translate-x-[30px]
-          "
+          className="mobile-link mt-6 flex w-full items-center justify-center rounded-(--radius-pill) bg-(--color-cta) px-6 py-3 text-sm font-semibold text-white hover:shadow-md hover:-translate-y-1 opacity-0 translate-x-[30px]"
         >
           تواصل معنا
         </Link>
