@@ -207,7 +207,8 @@ const About = () => {
         <h2 className="will-fade text-center text-4xl md:text-7xl font-extrabold leading-[1.2] text-gray-900 will-change-transform">
           شراء سيارات مصدومة
           <br />
-          <span className="text-blue-400 drop-shadow-sm">جدة ومكة</span>
+          <span className="text-blue-400 drop-shadow-sm">   جدة ومكة والطائف 
+              </span>
         </h2>
 
         {/* MAIN GRID CONTENT */}
@@ -289,9 +290,9 @@ const About = () => {
                 aria-pressed={soundOn}
               >
                 {soundOn ? (
-                  <VolumeOff size={16} aria-hidden="true" />
-                ) : (
                   <Volume2 size={16} aria-hidden="true" />
+                ) : (
+                  <VolumeOff size={16} aria-hidden="true" />
                 )}
               </button>
             </div>

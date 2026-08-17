@@ -5,7 +5,7 @@ import Link from "next/link";
 import { CarFront, Globe, MessageCircle, Music2, Phone } from "lucide-react";
 
 const WHATSAPP_NUMBER = "966563319110";
-const PHONE_NUMBERS = ["0563319110", "0532449975", " 0561849429"];
+const PHONE_NUMBERS = ["0563319110", "0532449975", "0561849429"];
 
 const CONTACT_METHODS = [
   {
@@ -72,7 +72,7 @@ export default function ContactFooter() {
   };
 
   return (
-    <footer className=" mx-auto max-w-[1800px] px-6 md:px-10 lg:px-16">
+    <footer className="mx-auto max-w-[1800px] px-6 md:px-10 lg:px-16">
       {/* Main Footer Container */}
       <div
         id="contact"
@@ -81,7 +81,7 @@ export default function ContactFooter() {
         <div className="px-6 py-6 md:px-10 md:py-8 lg:px-16">
           {/* Left: Heading + form */}
           <div>
-            <h2 className="mb-3 text-[38px] text-white/90 py-4  font-bold leading-tight md:text-[52px]">
+            <h2 className="mb-3 text-[38px] text-white/90 py-4 font-bold leading-tight md:text-[52px]">
               تواصل معنا
             </h2>
 
@@ -90,7 +90,7 @@ export default function ContactFooter() {
               دقائق.
             </p>
 
-            <div className="grid grid-cols-1 gap-16 lg:grid-cols-2 ">
+            <div className="grid grid-cols-1 gap-16 lg:grid-cols-2">
               <form onSubmit={handleSubmit} className="flex flex-col gap-6">
                 <div className="flex flex-col gap-2">
                   <label htmlFor="name" className="text-sm text-white/70">
@@ -104,7 +104,7 @@ export default function ContactFooter() {
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="مثال: أحمد عبدالله"
-                    className="border-b border-white/25 bg-transparent pb-3 text-[15px] text-white outline-none transition-colors placeholder:text-white/35 "
+                    className="border-b border-white/25 bg-transparent pb-3 text-[15px] text-white outline-none transition-colors placeholder:text-white/35"
                   />
                 </div>
 
@@ -121,7 +121,7 @@ export default function ContactFooter() {
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
                     placeholder="05XXXXXXXX"
-                    className="numeral border-b border-white/25 bg-transparent pb-3 text-right text-[15px] text-white outline-none transition-colors placeholder:text-white/35 "
+                    className="numeral border-b border-white/25 bg-transparent pb-3 text-right text-[15px] text-white outline-none transition-colors placeholder:text-white/35"
                   />
                 </div>
 
@@ -137,7 +137,7 @@ export default function ContactFooter() {
                     value={carInfo}
                     onChange={(e) => setCarInfo(e.target.value)}
                     placeholder="نوع السيارة، الموديل، وحالتها"
-                    className="resize-none border-b border-white/25 bg-transparent pb-3 text-[15px] leading-relaxed text-white outline-none transition-colors placeholder:text-white/35 "
+                    className="resize-none border-b border-white/25 bg-transparent pb-3 text-[15px] leading-relaxed text-white outline-none transition-colors placeholder:text-white/35"
                   />
                 </div>
                 <button
@@ -214,8 +214,6 @@ export default function ContactFooter() {
                 ))}
               </div>
             </div>
-
-            {/* Right: direct contact + quick links */}
           </div>
 
           {/* Bottom bar */}
