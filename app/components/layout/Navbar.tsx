@@ -463,7 +463,7 @@ export default function Navbar() {
                   event.preventDefault();
                   scrollToSection(link.href);
                 }
-                handleMobileLinkLinkClick => handleMobileLinkClick();
+             
               }}
               className={`mobile-link block border-b border-(--color-border) py-6 text-right text-base font-medium opacity-0 translate-x-[30px] ${
                 activeHash === link.href
