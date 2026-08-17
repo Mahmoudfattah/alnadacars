@@ -100,7 +100,7 @@ const About = () => {
               start: start,
               end: isMobile ? "+=120%" : "+=150%",
               scrub: 1,
-              // pin: true,
+              pin: true,
               // pinType: "transform", 
               anticipatePin: 1,
               invalidateOnRefresh: true,
