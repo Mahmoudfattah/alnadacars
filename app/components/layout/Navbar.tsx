@@ -43,10 +43,6 @@ export default function Navbar() {
 
   useGSAP(
     () => {
-      /* -------------------------------------------------
-         Initial animation using refs (faster & deterministic)
-      ------------------------------------------------- */
-
       const tl = gsap.timeline();
 
       // Logo
@@ -58,7 +54,7 @@ export default function Navbar() {
         );
       }
 
-      // Nav links (children of navLinksRef)
+      // Nav links
       if (navLinksRef.current) {
         const links = Array.from(
           navLinksRef.current.querySelectorAll(".nav"),
@@ -87,12 +83,7 @@ export default function Navbar() {
         );
       }
 
-      /* -------------------------------------------------
-         Scroll animation
-      ------------------------------------------------- */
-
       const nav = container.current;
-
       if (!nav) return;
 
       const glass = nav.querySelector(".nav-glass");
@@ -104,10 +95,6 @@ export default function Navbar() {
         paused: true,
       });
 
-      /*
-        Move navbar slightly down when scrolling
-      */
-
       scrollAnimation.to(
         nav,
         {
@@ -118,10 +105,6 @@ export default function Navbar() {
         0,
       );
 
-      /*
-        Glass background
-      */
-
       scrollAnimation.to(
         glass,
         {
@@ -131,11 +114,6 @@ export default function Navbar() {
         },
         0,
       );
-
-      /*
-        Left + Right + Bottom border
-        No top border
-      */
 
       scrollAnimation.to(
         border,
@@ -149,11 +127,9 @@ export default function Navbar() {
 
       const trigger = ScrollTrigger.create({
         start: "top -10",
-
         onEnter: () => {
           scrollAnimation.play();
         },
-
         onLeaveBack: () => {
           scrollAnimation.reverse();
         },
@@ -261,10 +237,6 @@ export default function Navbar() {
       if (!navMobile.current || !overlay.current) return;
 
       const links = navMobile.current.querySelectorAll(".mobile-link");
-
-      /*
-        Initial closed state
-      */
 
       gsap.set(navMobile.current, {
         xPercent: -100,
@@ -388,10 +360,6 @@ export default function Navbar() {
     );
   }, []);
 
-  /* =====================================================
-     CLOSE MENU WHEN CLICKING A LINK
-  ====================================================== */
-
   const handleMobileLinkClick = useCallback(() => {
     closeMenu();
   }, [closeMenu]);
@@ -453,10 +421,6 @@ export default function Navbar() {
             max-w-7xl
           "
         >
-          {/* =============================================
-              GLASS BACKGROUND
-          ============================================== */}
-
           <div
             className="
               nav-glass
@@ -470,15 +434,6 @@ export default function Navbar() {
               backdrop-blur-md
             "
           />
-
-          {/* =============================================
-              BORDER
-
-              ONLY:
-              LEFT
-              RIGHT
-              BOTTOM
-          ============================================== */}
 
           <div
             className="
@@ -495,10 +450,6 @@ export default function Navbar() {
               opacity-0
             "
           />
-
-          {/* =============================================
-              NAV CONTENT
-          ============================================== */}
 
           <div
             className="
@@ -518,10 +469,6 @@ export default function Navbar() {
               min-[940px]:py-4
             "
           >
-            {/* =========================================
-                LOGO
-            ========================================== */}
-
             <div className="flex justify-start">
               <Link
                 href="/"
@@ -576,10 +523,6 @@ export default function Navbar() {
               </Link>
             </div>
 
-            {/* =========================================
-                DESKTOP NAVIGATION
-            ========================================== */}
-
             <nav
               ref={navLinksRef}
               className="
@@ -625,10 +568,6 @@ export default function Navbar() {
               ))}
             </nav>
 
-            {/* =========================================
-                DESKTOP CTA
-            ========================================== */}
-
             <div
               className="
                 hidden
@@ -656,10 +595,8 @@ export default function Navbar() {
                 
                   transition-all
                 
-                  
                   hover:bg-(--color-cta-hover)
               
-
                   min-[940px]:px-6
                   min-[940px]:py-3
                   min-[940px]:text-sm
@@ -669,10 +606,6 @@ export default function Navbar() {
                 تواصل معنا
               </Link>
             </div>
-
-            {/* =========================================
-                MOBILE MENU BUTTON
-            ========================================== */}
 
             <button
               type="button"
@@ -705,15 +638,15 @@ export default function Navbar() {
         ref={overlay}
         onClick={closeMenu}
         className={`
-    fixed
-    inset-0
-    z-90
-    bg-black/30
-    backdrop-blur-sm
-    opacity-0
-    sm:hidden
-    ${isOpen ? "pointer-events-auto" : "pointer-events-none"}
-  `}
+          fixed
+          inset-0
+          z-90
+          bg-black/30
+          backdrop-blur-sm
+          opacity-0
+          sm:hidden
+          ${isOpen ? "pointer-events-auto" : "pointer-events-none"}
+        `}
       />
 
       {/* =================================================
@@ -728,27 +661,18 @@ export default function Navbar() {
           left-0
           top-0
           z-100
-
           h-dvh
           w-[60%]
           max-w-95
-
           overflow-y-auto
-
           bg-(--color-bg-raised)
-
           px-6
           py-6
-
           shadow-[20px_0_50px_rgba(0,0,0,0.12)]
-
           md:hidden
+          -translate-x-full
         "
       >
-        {/* =============================================
-            CLOSE BUTTON
-        ============================================== */}
-
         <div className="flex items-center justify-end">
           <button
             type="button"
@@ -770,10 +694,6 @@ export default function Navbar() {
           </button>
         </div>
 
-        {/* =============================================
-            MOBILE LINKS
-        ============================================== */}
-
         <div className="mt-10">
           {NAV_LINKS.map((link) => (
             <Link
@@ -788,18 +708,15 @@ export default function Navbar() {
               }}
               className={`
                 mobile-link
-
                 block
-
                 border-b
-border-(--color-border)
-
+                border-(--color-border)
                 py-6
-
                 text-right
                 text-base
                 font-medium
-
+                opacity-0
+                translate-x-[30px]
                 ${
                   activeHash === link.href
                     ? "text-(--color-primary)"
@@ -812,33 +729,26 @@ border-(--color-border)
           ))}
         </div>
 
-        {/* =============================================
-            MOBILE CTA
-        ============================================== */}
-
         <Link
           href="#contact"
           onClick={handleMobileLinkClick}
           className="
             mobile-link
-
             mt-6
             flex
             w-full
             items-center
             justify-center
-
             rounded-(--radius-pill)
-
             bg-(--color-cta)
-
             px-6
             py-3
-
             text-sm
             font-semibold
             text-white
             hover:shadow-md hover:-translate-y-1
+            opacity-0
+            translate-x-[30px]
           "
         >
           تواصل معنا
