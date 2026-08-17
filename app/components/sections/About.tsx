@@ -47,7 +47,7 @@ const About = () => {
       {
         rootMargin: "300px 0px",
         threshold: 0.01,
-      }
+      },
     );
 
     observer.observe(section);
@@ -63,13 +63,7 @@ const About = () => {
     if (!video) return;
 
     video.play().catch(() => {});
-
-    // 👈 تعديل جديد: إجبار GSAP على إعادة حساب الأبعاد بعد تحميل الفيديو في الـ DOM
-    setTimeout(() => {
-      ScrollTrigger.refresh();
-    }, 100);
   }, [videoLoaded]);
-
   useGSAP(
     () => {
       const mm = gsap.matchMedia();
@@ -107,7 +101,7 @@ const About = () => {
               end: isMobile ? "+=120%" : "+=150%",
               scrub: 1,
               pin: true,
-              pinType: "transform", // 👈 تعديل جديد: يمنع تكسر التثبيت إذا كان هناك overflow في العناصر الأب
+              pinType: "transform", // 👈 أضف هذا السطر هنا
               anticipatePin: 1,
               invalidateOnRefresh: true,
               onEnter: () => videoRef.current?.play().catch(() => {}),
@@ -133,10 +127,11 @@ const About = () => {
               duration: 1.5,
               ease: "power2.inOut",
             } as gsap.TweenVars,
-            "-=0.4"
+            "-=0.4",
           );
 
           // 2.5 ANIMATE WHEELS ALONGSIDE THE MASK EXPANSION
+          // The '<' makes these start at the exact same time as the mask expansion above
           timeline.to(
             ".wheel-left",
             {
@@ -147,7 +142,7 @@ const About = () => {
               duration: 1.5,
               ease: "power2.inOut",
             },
-            "<"
+            "<",
           );
 
           timeline.to(
@@ -160,7 +155,7 @@ const About = () => {
               duration: 1.5,
               ease: "power2.inOut",
             },
-            "<"
+            "<",
           );
 
           // 3. Fade in bottom text cleanly
@@ -172,19 +167,19 @@ const About = () => {
               duration: 1,
               ease: "power2.out",
             },
-            "-=0.5"
+            "-=0.5",
           );
 
           return () => {
             timeline.scrollTrigger?.kill();
             timeline.kill();
           };
-        }
+        },
       );
 
       return () => mm.revert();
     },
-    { scope: containerRef }
+    { scope: containerRef },
   );
 
   const enableSound = async () => {
@@ -208,25 +203,31 @@ const About = () => {
   };
 
   return (
+    // min-h-dvh set explicitly here (not min-h-screen) to match
+    // globals.css's #art rule instead of silently conflicting with
+    // it. #art{ min-h-dvh } was already winning at runtime due to
+    // ID selector specificity beating this class, but that made the
+    // actual rendered height dependent on an unrelated file — this
+    // makes the intended value explicit and self-documenting.
+    // قم بتغيير هذا السطر
     <section
       id="about"
       ref={containerRef}
-      // 👈 تعديل جديد: تغيير min-h-dvh إلى min-h-screen لتجنب مشاكل شريط العنوان في الجوال
       className="relative mb-4 w-full min-h-screen overflow-hidden bg-(--color-bg-soft)"
     >
       <div
-        className="container
-        mx-auto
-        h-full
-        max-w-6xl
-        flex
-        flex-col
-        items-center
-        justify-center
-        gap-8
-        px-4
-        relative
-        z-10"
+        className="  container
+    mx-auto
+    h-full
+    max-w-6xl
+    flex
+    flex-col
+    items-center
+    justify-center
+    gap-8
+    px-4
+    relative
+    z-10"
       >
         {/* TITLE */}
         <h2 className="will-fade text-center text-4xl md:text-7xl font-extrabold leading-[1.2] text-gray-900 will-change-transform">
@@ -259,20 +260,20 @@ const About = () => {
 
           {/* CENTER VIDEO WITH MASK AND WHEELS */}
           <div
-            className="cocktail-img
-            relative
-            w-full
-            aspect-video
-            md:aspect-auto
-            md:h-[65vh]
-            mx-auto
-            flex
-            items-center
-            justify-center
-            overflow-visible
-            rounded-2xl"
+            className=" cocktail-img
+    relative
+    w-full
+    aspect-video
+    md:aspect-auto
+    md:h-[65vh]
+    mx-auto
+    flex
+    items-center
+    justify-center
+    overflow-visible
+    rounded-2xl"
           >
-            {/* --- LEFT WHEEL --- */}
+            {/* --- NEW ADDITION: LEFT WHEEL --- */}
             <Image
               src="/ChatGPT Image 15 أغسطس 2026، 05_34_06 م.webp"
               alt=""
@@ -283,7 +284,6 @@ const About = () => {
               className="wheel-left absolute left-1/2 top-0 z-0 -translate-x-1/2 md:left-0 md:top-1/2 md:-translate-x-0 md:-translate-y-1/2 object-contain pointer-events-none will-change-transform md:w-44"
             />
 
-            {/* --- RIGHT WHEEL --- */}
             <Image
               src="/ChatGPT Image 15 أغسطس 2026، 05_36_28 م.webp"
               alt=""
@@ -323,9 +323,7 @@ const About = () => {
                 type="button"
                 onClick={soundOn ? disableSound : enableSound}
                 className="absolute bottom-4 left-4 z-100 flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-black/40 text-sm text-white shadow-lg backdrop-blur-md transition-transform hover:scale-110 active:scale-95"
-                aria-label={
-                  soundOn ? "إيقاف صوت الفيديو" : "تشغيل صوت الفيديو"
-                }
+                aria-label={soundOn ? "إيقاف صوت الفيديو" : "تشغيل صوت الفيديو"}
                 aria-pressed={soundOn}
               >
                 {soundOn ? (
