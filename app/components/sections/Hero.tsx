@@ -13,7 +13,8 @@ const STATS = [
     label: "سيارة تم شراؤها",
     icon: CarFront,
     iconBg: "bg-emerald-50",
-    iconColor: "text-emerald-600",
+     iconColor: "text-violet-600",
+
     iconRing: "ring-emerald-100",
   },
   {
@@ -30,7 +31,7 @@ const STATS = [
     label: "دفع نقدي فوري",
     icon: Banknote,
     iconBg: "bg-violet-50",
-    iconColor: "text-violet-600",
+       iconColor: "text-emerald-600",
     iconRing: "ring-violet-100",
   },
 ];
