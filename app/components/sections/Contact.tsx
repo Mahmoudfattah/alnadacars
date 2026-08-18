@@ -2,7 +2,14 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { CarFront, Globe, MessageCircle, Music2, Phone } from "lucide-react";
+import {
+  CarFront,
+  Code2,
+  Globe,
+  MessageCircle,
+  Music2,
+  Phone,
+} from "lucide-react";
 
 const WHATSAPP_NUMBER = "966562117196";
 const PHONE_NUMBERS = ["056 211 7196", "0532449975", "0561849429"];
@@ -217,13 +224,31 @@ export default function ContactFooter() {
           </div>
 
           {/* Bottom bar */}
+          {/* Bottom bar */}
           <div className="mt-10 flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-8 text-xs text-white/40 md:flex-row">
             <p>
               © {new Date().getFullYear()} شراء السيارات المصدومة. جميع الحقوق
               محفوظة.
             </p>
 
-            <p>خدماتنا تغطي جدة، مكة المكرمة، والطائف</p>
+            <div className="flex items-center gap-2 text-white/60">
+              <span className="hidden h-3 w-px bg-white/10 md:block" />
+              <Code2 size={14} className="text-white/40" />
+              <span>تم تطوير الموقع بواسطة</span>
+              <a
+                href="https://www.tiktok.com/@dev_flow"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-medium text-white underline underline-offset-4 transition-colors hover:text-blue-600"
+                aria-label="تم تطوير الموقع بواسطة DevFlow"
+              >
+                Dev Flow
+              </a>
+            </div>
+
+            <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
+              <p>خدماتنا تغطي جدة، مكة المكرمة، والطائف</p>
+            </div>
           </div>
         </div>
       </div>
