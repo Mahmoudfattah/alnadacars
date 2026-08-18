@@ -4,8 +4,8 @@ import { useState } from "react";
 import Link from "next/link";
 import { CarFront, Globe, MessageCircle, Music2, Phone } from "lucide-react";
 
-const WHATSAPP_NUMBER = "966563319110";
-const PHONE_NUMBERS = ["0563319110", "0532449975", "0561849429"];
+const WHATSAPP_NUMBER = "966562117196";
+const PHONE_NUMBERS = ["056 211 7196", "0532449975", "0561849429"];
 
 const CONTACT_METHODS = [
   {
