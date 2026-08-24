@@ -263,16 +263,3 @@ Car-shaped video mask
 
 
 
-html,
-body {
-  width: 100%;
-  max-width: 100%;
-  overflow-x: hidden;
-}
-
-@supports (overflow: clip) {
-  html,
-  body {
-    overflow-x: clip;
-  }
-}
