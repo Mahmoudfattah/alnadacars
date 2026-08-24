@@ -234,7 +234,7 @@ const About = () => {
           </ul>
 
           {/* CENTER VIDEO WITH MASK AND WHEELS */}
-          <div className="cocktail-img relative w-full aspect-video md:aspect-auto md:h-[70vh] mx-auto flex items-center justify-center  rounded-2xl">
+          <div className="cocktail-img relative w-full aspect-video md:aspect-auto md:h-[70vh] mx-auto flex items-center justify-center overflow-hidden rounded-2xl">
             {/* --- LEFT WHEEL --- */}
             <Image
               src="/ChatGPT Image 15 أغسطس 2026، 05_34_06 م.webp"
