@@ -34,7 +34,6 @@ const About = () => {
 
   useEffect(() => {
     const section = containerRef.current;
-
     if (!section) return;
 
     const observer = new IntersectionObserver(
@@ -51,17 +50,13 @@ const About = () => {
     );
 
     observer.observe(section);
-
     return () => observer.disconnect();
   }, []);
 
   useEffect(() => {
     if (!videoLoaded) return;
-
     const video = videoRef.current;
-
     if (!video) return;
-
     video.play().catch(() => {});
   }, [videoLoaded]);
 
@@ -76,29 +71,16 @@ const About = () => {
         },
         (context) => {
           const { isMobile } = context.conditions || {};
+          const start = isMobile ? "top 10%" : "top top";
 
-          const section = containerRef.current;
-          const mask = maskRef.current;
-
-          if (!section || !mask) return;
-
-          gsap.set(mask, {
-            "--mask-size": isMobile ? "82%" : "62%",
+          gsap.set(maskRef.current, {
+            "--mask-size": isMobile ? "72%" : "62%",
             scale: 1,
             force3D: true,
           } as gsap.TweenVars);
 
-          gsap.set(".will-fade", {
-            opacity: 1,
-            y: 0,
-            force3D: true,
-          });
-
-          gsap.set("#masked-content", {
-            opacity: 0,
-            y: 30,
-            force3D: true,
-          });
+          gsap.set(".will-fade", { opacity: 1, y: 0, force3D: true });
+          gsap.set("#masked-content", { opacity: 0, y: 30, force3D: true });
 
           gsap.set([".wheel-left", ".wheel-right"], {
             opacity: 0,
@@ -109,38 +91,20 @@ const About = () => {
           });
 
           const timeline = gsap.timeline({
-            scrollTrigger: isMobile
-              ? {
-                  trigger: section,
-                  start: "top 75%",
-                  end: "bottom 35%",
-                  scrub: 1,
-                  invalidateOnRefresh: true,
-                  onEnter: () => {
-                    videoRef.current?.play().catch(() => {});
-                  },
-                  onEnterBack: () => {
-                    videoRef.current?.play().catch(() => {});
-                  },
-                }
-              : {
-                  trigger: section,
-                  start: "top top",
-                  end: "+=150%",
-                  scrub: 1,
-                  pin: true,
-                  anticipatePin: 1,
-                  invalidateOnRefresh: true,
-                  onEnter: () => {
-                    videoRef.current?.play().catch(() => {});
-                  },
-                  onEnterBack: () => {
-                    videoRef.current?.play().catch(() => {});
-                  },
-                },
+            scrollTrigger: {
+              trigger: containerRef.current,
+              start: start,
+              end: isMobile ? "+=120%" : "+=150%",
+              scrub: 1,
+              pin: true,
+              anticipatePin: 1,
+              invalidateOnRefresh: true,
+              onEnter: () => videoRef.current?.play().catch(() => {}),
+              onEnterBack: () => videoRef.current?.play().catch(() => {}),
+            },
           });
 
-          // 1. Fade out heading and lists
+          // 1. Fade out header & side lists smoothly
           timeline.to(".will-fade", {
             opacity: 0,
             y: -20,
@@ -149,47 +113,46 @@ const About = () => {
             ease: "power2.inOut",
           });
 
-          // 2. Expand the mask safely
+          // 2. Expand mask & scale video container slightly
           timeline.to(
-            mask,
+            maskRef.current,
             {
-              "--mask-size": isMobile ? "180%" : "450%",
-              scale: isMobile ? 1 : 1.05,
+              "--mask-size": "450%",
+              scale: 1.05,
               duration: 1.5,
               ease: "power2.inOut",
             } as gsap.TweenVars,
             "-=0.4",
           );
 
-          // 3. Left wheel
+          // 2.5 ANIMATE WHEELS ALONGSIDE THE MASK EXPANSION
           timeline.to(
             ".wheel-left",
             {
               opacity: 1,
               x: isMobile ? 0 : -200,
-              y: isMobile ? -70 : 0,
-              rotation: -180,
+              y: isMobile ? -120 : 0,
+              rotation: isMobile ? -180 : -180,
               duration: 1.5,
               ease: "power2.inOut",
             },
             "<",
           );
 
-          // 4. Right wheel
           timeline.to(
             ".wheel-right",
             {
               opacity: 1,
               x: isMobile ? 0 : 200,
-              y: isMobile ? 70 : 0,
-              rotation: 180,
+              y: isMobile ? 120 : 0,
+              rotation: isMobile ? 180 : 180,
               duration: 1.5,
               ease: "power2.inOut",
             },
             "<",
           );
 
-          // 5. Show final content
+          // 3. Fade in bottom text cleanly
           timeline.to(
             "#masked-content",
             {
@@ -210,16 +173,12 @@ const About = () => {
 
       return () => mm.revert();
     },
-    {
-      scope: containerRef,
-    },
+    { scope: containerRef },
   );
 
   const enableSound = async () => {
     const video = videoRef.current;
-
     if (!video) return;
-
     try {
       video.muted = false;
       video.volume = 1;
@@ -232,11 +191,8 @@ const About = () => {
   };
 
   const disableSound = () => {
-    const video = videoRef.current;
-
-    if (!video) return;
-
-    video.muted = true;
+    if (!videoRef.current) return;
+    videoRef.current.muted = true;
     setSoundOn(false);
   };
 
@@ -244,28 +200,24 @@ const About = () => {
     <section
       id="about"
       ref={containerRef}
-  className="relative isolate mb-4 w-full max-w-full min-h-screen overflow-x-clip bg-(--color-bg-soft) box-border"
+      className="relative mb-4 w-full max-w-[100vw] min-h-screen overflow-x-hidden bg-(--color-bg-soft) box-border"
     >
-    <div className="container relative z-10 mx-auto h-full w-full max-w-6xl min-w-0 flex flex-col items-center justify-center gap-8 overflow-x-clip px-4 box-border">
+      <div className="container mx-auto h-full max-w-6xl flex flex-col items-center justify-center gap-8 px-4 relative z-10 box-border">
         {/* TITLE */}
-        <h2 className="will-fade max-w-full text-center text-4xl font-extrabold leading-[1.2] text-gray-900 will-change-transform md:text-7xl">
+        <h2 className="will-fade text-center text-4xl md:text-7xl font-extrabold leading-[1.2] text-gray-900 will-change-transform">
           شراء سيارات مصدومة
           <br />
-          <span className="text-blue-400 drop-shadow-sm">
-            جدة ومكة والطائف
-          </span>
+          <span className="text-blue-400 drop-shadow-sm">   جدة ومكة والطائف 
+              </span>
         </h2>
 
         {/* MAIN GRID CONTENT */}
-        <div className="grid w-full min-w-0 max-w-full grid-cols-1 items-center gap-6 md:grid-cols-[minmax(0,1fr)_minmax(0,1.7fr)_minmax(0,1fr)] md:gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-[1fr_1.7fr_1fr] gap-6 md:gap-8 items-center w-full">
           {/* LEFT LIST */}
-          <ul className="will-fade z-20 w-full min-w-0 max-w-full space-y-5 justify-self-start will-change-transform">
+          <ul className="will-fade space-y-5 justify-self-start z-20 w-full will-change-transform">
             {REASONS_PRIMARY.map((feature, index) => (
-              <li
-                key={index}
-                className="group flex min-w-0 max-w-full items-center gap-4"
-              >
-                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-blue-200 bg-blue-50">
+              <li key={index} className="flex items-center gap-4 group">
+                <div className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-50 border border-blue-200 shrink-0">
                   <Image
                     src="/check.webp"
                     alt="check"
@@ -274,17 +226,16 @@ const About = () => {
                     className="object-contain"
                   />
                 </div>
-
-                <p className="min-w-0 break-words text-base font-medium text-gray-700 md:text-md">
+                <p className="text-base md:text-md font-medium text-gray-700">
                   {feature}
                 </p>
               </li>
             ))}
           </ul>
 
-          {/* CENTER VIDEO */}
-          <div className="relative mx-auto flex w-full min-w-0 max-w-full items-center justify-center overflow-hidden rounded-2xl aspect-video md:h-[65vh] md:aspect-auto">
-            {/* LEFT WHEEL */}
+          {/* CENTER VIDEO WITH MASK AND WHEELS */}
+          <div className="cocktail-img relative w-full aspect-video md:aspect-auto md:h-[65vh] mx-auto flex items-center justify-center overflow-visible rounded-2xl">
+            {/* --- LEFT WHEEL --- */}
             <Image
               src="/ChatGPT Image 15 أغسطس 2026، 05_34_06 م.webp"
               alt=""
@@ -292,10 +243,9 @@ const About = () => {
               width={176}
               height={176}
               sizes="176px"
-              className="wheel-left pointer-events-none absolute left-1/2 top-0 z-0 w-32 max-w-[40vw] -translate-x-1/2 object-contain will-change-transform md:left-0 md:top-1/2 md:w-44 md:max-w-none md:-translate-y-1/2 md:translate-x-0"
+              className="wheel-left absolute left-1/2 top-0 z-0 -translate-x-1/2 md:left-0 md:top-1/2 md:-translate-x-0 md:-translate-y-1/2 object-contain pointer-events-none will-change-transform md:w-44"
             />
 
-            {/* RIGHT WHEEL */}
             <Image
               src="/ChatGPT Image 15 أغسطس 2026، 05_36_28 م.webp"
               alt=""
@@ -303,13 +253,13 @@ const About = () => {
               width={176}
               height={176}
               sizes="176px"
-              className="wheel-right pointer-events-none absolute bottom-0 left-1/2 z-0 w-32 max-w-[40vw] -translate-x-1/2 object-contain will-change-transform md:right-0 md:left-auto md:top-1/2 md:bottom-auto md:w-44 md:max-w-none md:-translate-y-1/2 md:translate-x-0"
+              className="wheel-right absolute left-1/2 bottom-0 z-0 -translate-x-1/2 md:right-0 md:left-auto md:bottom-auto md:top-1/2 md:-translate-x-0 md:-translate-y-1/2 object-contain pointer-events-none will-change-transform md:w-44"
             />
 
             {/* VIDEO MASK LAYER */}
             <div
               ref={maskRef}
-              className="car-mask absolute inset-0 z-10 h-full w-full max-w-full overflow-hidden rounded-2xl will-change-transform"
+              className="car-mask absolute inset-0 w-full h-full rounded-2xl overflow-hidden will-change-transform z-10"
               style={
                 {
                   "--mask-size": "62%",
@@ -321,7 +271,7 @@ const About = () => {
                 <video
                   ref={videoRef}
                   src="/video-optimized.mp4"
-                  className="masked-video h-full w-full object-cover"
+                  className="masked-video w-full h-full object-cover"
                   autoPlay
                   muted
                   loop
@@ -335,10 +285,8 @@ const About = () => {
               <button
                 type="button"
                 onClick={soundOn ? disableSound : enableSound}
-                className="absolute bottom-4 left-4 z-[100] flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-black/40 text-sm text-white shadow-lg backdrop-blur-md transition-transform hover:scale-110 active:scale-95"
-                aria-label={
-                  soundOn ? "إيقاف صوت الفيديو" : "تشغيل صوت الفيديو"
-                }
+                className="absolute bottom-4 left-4 z-100 flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-black/40 text-sm text-white shadow-lg backdrop-blur-md transition-transform hover:scale-110 active:scale-95"
+                aria-label={soundOn ? "إيقاف صوت الفيديو" : "تشغيل صوت الفيديو"}
                 aria-pressed={soundOn}
               >
                 {soundOn ? (
@@ -351,13 +299,10 @@ const About = () => {
           </div>
 
           {/* RIGHT LIST */}
-          <ul className="will-fade z-20 w-full min-w-0 max-w-full space-y-5 md:justify-self-end will-change-transform">
+          <ul className="will-fade space-y-5 md:justify-self-end z-20 w-full will-change-transform">
             {REASONS_SECONDARY.map((feature, index) => (
-              <li
-                key={index}
-                className="group flex min-w-0 max-w-full items-center gap-4"
-              >
-                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-blue-200 bg-blue-50">
+              <li key={index} className="flex items-center gap-4 group">
+                <div className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-50 border border-blue-200 shrink-0">
                   <Image
                     src="/check.webp"
                     alt="check"
@@ -366,8 +311,7 @@ const About = () => {
                     className="object-contain"
                   />
                 </div>
-
-                <p className="min-w-0 break-words text-base font-medium text-gray-700 md:text-md">
+                <p className="text-base md:text-md font-medium text-gray-700">
                   {feature}
                 </p>
               </li>
@@ -378,13 +322,12 @@ const About = () => {
         {/* FINAL REVEAL CONTENT */}
         <div
           id="masked-content"
-          className="relative z-30 flex max-w-2xl flex-col items-center justify-center px-6 text-center will-change-transform md:-mt-2"
+          className="flex flex-col items-center justify-center text-center px-6 max-w-2xl relative z-30 md:-mt-2 will-change-transform"
         >
-          <h3 className="mb-1 text-2xl font-extrabold text-gray-900 sm:mb-4 md:text-3xl">
+          <h3 className="text-2xl md:text-3xl font-extrabold text-gray-900 sm:mb-4 mb-1">
             من أول اتصال إلى استلام الكاش
           </h3>
-
-          <p className="max-w-xl text-base leading-relaxed text-gray-500 md:text-xl">
+          <p className="text-base md:text-xl text-gray-500 max-w-xl leading-relaxed">
             شاهد كيف نُقيّم سيارتك المصدومة وندفع لك القيمة نقداً في نفس اليوم.
           </p>
         </div>
