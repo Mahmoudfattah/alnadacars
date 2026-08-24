@@ -259,3 +259,20 @@ Car-shaped video mask
   width: 8px;
   height: 8px;
 }
+
+
+
+
+html,
+body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+@supports (overflow: clip) {
+  html,
+  body {
+    overflow-x: clip;
+  }
+}

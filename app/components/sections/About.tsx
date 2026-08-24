@@ -244,9 +244,9 @@ const About = () => {
     <section
       id="about"
       ref={containerRef}
-      className="relative isolate mb-4 w-full max-w-full min-h-screen overflow-x-clip bg-(--color-bg-soft) box-border"
+  className="relative isolate mb-4 w-full max-w-full min-h-screen overflow-x-clip bg-(--color-bg-soft) box-border"
     >
-      <div className="relative z-10 mx-auto flex h-full w-full max-w-6xl min-w-0 flex-col items-center justify-center gap-8 overflow-x-clip px-4 box-border">
+    <div className="container relative z-10 mx-auto h-full w-full max-w-6xl min-w-0 flex flex-col items-center justify-center gap-8 overflow-x-clip px-4 box-border">
         {/* TITLE */}
         <h2 className="will-fade max-w-full text-center text-4xl font-extrabold leading-[1.2] text-gray-900 will-change-transform md:text-7xl">
           شراء سيارات مصدومة
