@@ -211,11 +211,11 @@ export default function Hero() {
           mx-auto grid max-w-[1400px]
           items-center
           gap-12
-          px-6 py-10
+          px-6 py-20
           md:grid-cols-2
           md:gap-10
           md:px-10
-          md:py-10
+          md:py-30
         "
       >
         {/* ============================================================

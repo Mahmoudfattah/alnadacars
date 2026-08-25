@@ -317,7 +317,7 @@ export default function Navbar() {
 
   return (
     <>
-      <header ref={container} className="sticky top-0 z-50 px-0">
+      <header ref={container} className="fixed top-0 left-0 right-0 z-50 px-0">
         <div className="relative mx-auto mt-1.5 max-w-7xl">
           <div className="nav-glass pointer-events-none absolute inset-0 -z-10 rounded-[14px] bg-white/85 opacity-0 backdrop-blur-md" />
           <div className="nav-border pointer-events-none absolute inset-0 -z-10 rounded-[14px] border-l border-r border-b border-(--color-border) opacity-0" />
