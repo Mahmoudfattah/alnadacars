@@ -59,6 +59,11 @@ const SOCIAL_LINKS = [
     href: "https://silver-muffin-1fb75b.netlify.app/",
     icon: Globe,
   },
+  {
+    label: "Haraj Cars",
+    href: "https://haraj.com.sa/users/%D8%AA%D8%B4%D9%84%D9%8A%D8%AD%20%D8%A7%D9%84%D9%86%D8%AF%D9%89%20%D9%84%D8%B9%D8%A7%D9%84%D9%85%20%D8%A7%D9%84%D8%B3%D9%8A%D8%A7%D8%B1%D8%A7%D8%AA/",
+    icon: Globe,
+  },
 ];
 
 export default function ContactFooter() {
