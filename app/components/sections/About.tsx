@@ -4,281 +4,181 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import Image from "next/image";
-import { useCallback, useRef, useState } from "react";
-import {
-  Check,
-  ChevronDown,
-  MessageCircle,
-  Play,
-  Volume2,
-  VolumeOff,
-} from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import type { CSSProperties } from "react";
+import { Volume2, VolumeOff } from "lucide-react";
 
-gsap.registerPlugin(ScrollTrigger, useGSAP);
-
-/* -------------------------------------------------------------------------- */
-/*  Content                                                                    */
-/* -------------------------------------------------------------------------- */
+gsap.registerPlugin(ScrollTrigger);
 
 const REASONS_PRIMARY = [
   "تقييم فوري ومجاني لسيارتك المصدومة",
   "أسعار تنافسية تفوق متوسط السوق",
   "معاينة في موقعك دون أي تكلفة إضافية",
   "لا حاجة لإصلاح السيارة قبل البيع",
-] as const;
+];
 
 const REASONS_SECONDARY = [
   "دفع نقدي فوري خلال 30 دقيقة",
   "سطحة مجانية لنقل السيارة من موقعك",
   "نغطي جميع أحياء جدة ومكة المكرمة",
   "فريق محترف وموثوق في مجال شراء السيارات",
-] as const;
+];
 
-/* -------------------------------------------------------------------------- */
-/*  Animation constants                                                        */
-/* -------------------------------------------------------------------------- */
-
-/** Start / end must share the exact same shape so GSAP can interpolate them. */
-const CLIP_START_DESKTOP = "inset(16% 20% round 24px)";
-const CLIP_START_MOBILE = "inset(10% 10% round 20px)";
-const CLIP_END = "inset(0% 0% round 24px)";
-
-const INITIAL_MASK_STYLE = { clipPath: CLIP_START_DESKTOP } as const;
-
-const MEDIA_QUERIES = {
-  isMobile: "(max-width: 767px)",
-  isDesktop: "(min-width: 768px)",
-  reduceMotion: "(prefers-reduced-motion: reduce)",
-} as const;
-
-/* -------------------------------------------------------------------------- */
-/*  Sub-components                                                             */
-/* -------------------------------------------------------------------------- */
-
-function FeatureList({ items }: { items: readonly string[] }) {
-  return (
-    <>
-      {items.map((feature) => (
-        <li
-          key={feature}
-          className="flex items-start gap-2.5 rounded-2xl border border-white/70 bg-white/70 px-3 py-2.5 shadow-[0_1px_2px_rgba(15,23,42,0.06)] ring-1 ring-slate-900/5 backdrop-blur-[2px] md:gap-3.5 md:px-4 md:py-3"
-        >
-          <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-cyan-400 text-white shadow-sm md:h-7 md:w-7">
-            <Check size={14} strokeWidth={3} aria-hidden="true" />
-          </span>
-          <p className="text-[13px] font-semibold leading-snug text-slate-700 md:text-[15px]">
-            {feature}
-          </p>
-        </li>
-      ))}
-    </>
-  );
-}
-
-/* -------------------------------------------------------------------------- */
-/*  Component                                                                  */
-/* -------------------------------------------------------------------------- */
-
-export default function About() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const titleRef = useRef<HTMLDivElement>(null);
-  const leftListRef = useRef<HTMLUListElement>(null);
-  const rightListRef = useRef<HTMLUListElement>(null);
-  const maskRef = useRef<HTMLDivElement>(null);
-  const glowRef = useRef<HTMLDivElement>(null);
-  const hintRef = useRef<HTMLDivElement>(null);
-  const soundBtnRef = useRef<HTMLButtonElement>(null);
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const wheelLeftRef = useRef<HTMLDivElement>(null);
-  const wheelRightRef = useRef<HTMLDivElement>(null);
-  const revealRef = useRef<HTMLDivElement>(null);
+const About = () => {
+  const containerRef = useRef<HTMLElement | null>(null);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const maskRef = useRef<HTMLDivElement | null>(null);
 
   const [soundOn, setSoundOn] = useState(false);
+  const [videoLoaded, setVideoLoaded] = useState(false);
 
-  /* ------------------------------------------------------------------------ */
-  /*  Scroll animation                                                         */
-  /* ------------------------------------------------------------------------ */
+  useEffect(() => {
+    const section = containerRef.current;
+    if (!section) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVideoLoaded(true);
+          observer.disconnect();
+        }
+      },
+      {
+        rootMargin: "300px 0px",
+        threshold: 0.01,
+      },
+    );
+
+    observer.observe(section);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!videoLoaded) return;
+    const video = videoRef.current;
+    if (!video) return;
+    video.play().catch(() => {});
+  }, [videoLoaded]);
 
   useGSAP(
     () => {
-      const section = sectionRef.current;
-      const title = titleRef.current;
-      const leftList = leftListRef.current;
-      const rightList = rightListRef.current;
-      const mask = maskRef.current;
-      const glow = glowRef.current;
-      const hint = hintRef.current;
-      const soundBtn = soundBtnRef.current;
-      const wheelLeft = wheelLeftRef.current;
-      const wheelRight = wheelRightRef.current;
-      const reveal = revealRef.current;
-
-      if (
-        !section ||
-        !title ||
-        !leftList ||
-        !rightList ||
-        !mask ||
-        !glow ||
-        !hint ||
-        !soundBtn ||
-        !wheelLeft ||
-        !wheelRight ||
-        !reveal
-      ) {
-        return;
-      }
-
-      ScrollTrigger.config({ ignoreMobileResize: true });
-
-      const fadeTargets = [title, leftList, rightList];
-      const wheels = [wheelLeft, wheelRight];
-
-      const playVideo = () => {
-        videoRef.current?.play().catch(() => {});
-      };
-      const pauseVideo = () => videoRef.current?.pause();
-
       const mm = gsap.matchMedia();
 
-      mm.add(MEDIA_QUERIES, (context) => {
-        const isMobile = context.conditions?.isMobile ?? false;
-        const reduceMotion = context.conditions?.reduceMotion ?? false;
+      mm.add(
+        {
+          isMobile: "(max-width: 767px)",
+          isDesktop: "(min-width: 768px)",
+        },
+        (context) => {
+          const { isMobile } = context.conditions || {};
+          const start = isMobile ? "top 10%" : "top top";
 
-        /* ---------------- Reduced motion: static final state ---------------- */
-        if (reduceMotion) {
-          gsap.set(mask, { clipPath: CLIP_END });
-          gsap.set([glow, reveal], { autoAlpha: 1, y: 0 });
-          gsap.set(soundBtn, { autoAlpha: 1 });
-          gsap.set([hint, ...wheels], { autoAlpha: 0 });
+          gsap.set(maskRef.current, {
+            "--mask-size": isMobile ? "72%" : "62%",
+            scale: 1,
+            force3D: true,
+          } as gsap.TweenVars);
 
-          ScrollTrigger.create({
-            trigger: section,
-            start: "top 70%",
-            end: "bottom 30%",
-            onEnter: playVideo,
-            onEnterBack: playVideo,
-            onLeave: pauseVideo,
-            onLeaveBack: pauseVideo,
+          gsap.set(".will-fade", { opacity: 1, y: 0, force3D: true });
+          gsap.set("#masked-content", { opacity: 0, y: 30, force3D: true });
+
+          gsap.set([".wheel-left", ".wheel-right"], {
+            opacity: 0,
+            x: 0,
+            y: 0,
+            rotation: 0,
+            force3D: true,
           });
-          return;
-        }
 
-        /* ------------------------- Initial states ------------------------- */
+          const timeline = gsap.timeline({
+            scrollTrigger: {
+              trigger: containerRef.current,
+              start: start,
+              end: isMobile ? "+=120%" : "+=150%",
+              scrub: 1,
+              pin: true,
+              anticipatePin: 1,
+              invalidateOnRefresh: true,
+              onEnter: () => videoRef.current?.play().catch(() => {}),
+              onEnterBack: () => videoRef.current?.play().catch(() => {}),
+            },
+          });
 
-        gsap.set(fadeTargets, { opacity: 1, y: 0, force3D: true });
+          // 1. Fade out header & side lists smoothly
+          timeline.to(".will-fade", {
+            opacity: 0,
+            y: -20,
+            stagger: 0.1,
+            duration: 0.8,
+            ease: "power2.inOut",
+          });
 
-        gsap.set(mask, {
-          clipPath: isMobile ? CLIP_START_MOBILE : CLIP_START_DESKTOP,
-          scale: 1,
-          force3D: true,
-        });
+          // 2. Expand mask & scale video container slightly
+          timeline.to(
+            maskRef.current,
+            {
+              "--mask-size": "450%",
+              scale: 1.05,
+              duration: 1.5,
+              ease: "power2.inOut",
+            } as gsap.TweenVars,
+            "-=0.4",
+          );
 
-        gsap.set(glow, { autoAlpha: 0, scale: 0.9, force3D: true });
-        gsap.set(hint, { autoAlpha: 1, y: 0, force3D: true });
-        gsap.set(soundBtn, { autoAlpha: 0, y: 8, force3D: true });
-
-        gsap.set(wheels, {
-          opacity: 0,
-          x: 0,
-          y: 0,
-          rotation: 0,
-          xPercent: isMobile ? -50 : 0,
-          yPercent: isMobile ? 0 : -50,
-          force3D: true,
-        });
-
-        gsap.set(reveal, { opacity: 0, y: 30, force3D: true });
-
-        /* ---------------------------- Timeline ---------------------------- */
-
-        const tl = gsap.timeline({
-          defaults: { ease: "power2.inOut" },
-          scrollTrigger: {
-            trigger: section,
-            start: isMobile ? "top 10%" : "top top",
-            end: isMobile ? "+=120%" : "+=150%",
-            pin: true,
-            scrub: 1,
-            anticipatePin: 1,
-            invalidateOnRefresh: true,
-            onEnter: playVideo,
-            onEnterBack: playVideo,
-            onLeave: pauseVideo,
-            onLeaveBack: pauseVideo,
-          },
-        });
-
-        // 1. Title + feature lists fade up and away
-        tl.to(fadeTargets, {
-          opacity: 0,
-          y: -20,
-          stagger: 0.1,
-          duration: 0.8,
-        });
-
-        // 2. Mask opens, "watch" hint dissolves, frame glow appears
-        tl.to(
-          mask,
-          { clipPath: CLIP_END, scale: 1.03, duration: 1.5 },
-          "-=0.4",
-        )
-          .to(hint, { autoAlpha: 0, y: -10, duration: 0.5 }, "<")
-          .to(glow, { autoAlpha: 1, scale: 1, duration: 1.2 }, "<0.3");
-
-        // 3. Wheels roll away (runs in parallel with the mask)
-        tl.to(
-          wheelLeft,
-          {
-            opacity: 1,
-            x: isMobile ? 0 : -200,
-            y: isMobile ? -120 : 0,
-            rotation: -180,
-            duration: 1.5,
-          },
-          "<-0.3",
-        );
-
-        tl.to(
-          wheelRight,
-          {
-            opacity: 1,
-            x: isMobile ? 0 : 200,
-            y: isMobile ? 120 : 0,
-            rotation: 180,
-            duration: 1.5,
-          },
-          "<",
-        );
-
-        // 4. Mute button + closing copy slide in
-        tl.to(soundBtn, { autoAlpha: 1, y: 0, duration: 0.5 }, "-=0.6")
-          .to(
-            reveal,
-            { opacity: 1, y: 0, duration: 1, ease: "power2.out" },
+          // 2.5 ANIMATE WHEELS ALONGSIDE THE MASK EXPANSION
+          timeline.to(
+            ".wheel-left",
+            {
+              opacity: 1,
+              x: isMobile ? 0 : -200,
+              y: isMobile ? -120 : 0,
+              rotation: isMobile ? -180 : -180,
+              duration: 1.5,
+              ease: "power2.inOut",
+            },
             "<",
           );
-      });
+
+          timeline.to(
+            ".wheel-right",
+            {
+              opacity: 1,
+              x: isMobile ? 0 : 200,
+              y: isMobile ? 120 : 0,
+              rotation: isMobile ? 180 : 180,
+              duration: 1.5,
+              ease: "power2.inOut",
+            },
+            "<",
+          );
+
+          // 3. Fade in bottom text cleanly
+          timeline.to(
+            "#masked-content",
+            {
+              opacity: 1,
+              y: 0,
+              duration: 1,
+              ease: "power2.out",
+            },
+            "-=0.5",
+          );
+
+          return () => {
+            timeline.scrollTrigger?.kill();
+            timeline.kill();
+          };
+        },
+      );
 
       return () => mm.revert();
     },
-    { scope: sectionRef },
+    { scope: containerRef },
   );
 
-  /* ------------------------------------------------------------------------ */
-  /*  Sound toggle                                                             */
-  /* ------------------------------------------------------------------------ */
-
-  const toggleSound = useCallback(async () => {
+  const enableSound = async () => {
     const video = videoRef.current;
     if (!video) return;
-
-    if (soundOn) {
-      video.muted = true;
-      setSoundOn(false);
-      return;
-    }
-
     try {
       video.muted = false;
       video.volume = 1;
@@ -288,188 +188,1048 @@ export default function About() {
       video.muted = true;
       setSoundOn(false);
     }
-  }, [soundOn]);
+  };
 
-  /* ------------------------------------------------------------------------ */
-  /*  Markup                                                                   */
-  /* ------------------------------------------------------------------------ */
+  const disableSound = () => {
+    if (!videoRef.current) return;
+    videoRef.current.muted = true;
+    setSoundOn(false);
+  };
 
   return (
     <section
       id="about"
-      ref={sectionRef}
-      className="relative mb-4 min-h-dvh w-full overflow-x-clip bg-(--color-bg-soft)"
+      ref={containerRef}
+      className="relative mb-4 w-full max-w-[100vw] min-h-screen overflow-x-hidden bg-(--color-bg-soft) box-border"
     >
-      {/* Decorative background — pure gradients, no filters, no layers */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 -z-0 bg-[radial-gradient(60%_50%_at_85%_10%,rgba(96,165,250,0.18),transparent_70%),radial-gradient(45%_45%_at_10%_90%,rgba(34,211,238,0.14),transparent_70%)]"
-      />
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 -z-0 bg-[linear-gradient(to_right,rgba(15,23,42,0.045)_1px,transparent_1px),linear-gradient(to_bottom,rgba(15,23,42,0.045)_1px,transparent_1px)] bg-[size:48px_48px] [mask-image:radial-gradient(ellipse_at_center,black_35%,transparent_75%)]"
-      />
+      <div className="container mx-auto h-full max-w-6xl flex flex-col items-center justify-center gap-8 px-4 relative z-10 box-border">
+        {/* TITLE */}
+        <h2 className="will-fade text-center text-4xl md:text-7xl font-extrabold leading-[1.2] text-gray-900 will-change-transform">
+          شراء سيارات مصدومة
+          <br />
+          <span className="text-blue-400 drop-shadow-sm">   جدة ومكة والطائف 
+              </span>
+        </h2>
 
-      <div className="container relative z-10 mx-auto flex min-h-dvh max-w-6xl flex-col items-center justify-center gap-5 px-4 pb-8 pt-24 md:gap-7 md:pt-28">
-        {/* ---------------------------- TITLE ---------------------------- */}
-        <div
-          ref={titleRef}
-          className="flex flex-col items-center gap-3 text-center will-change-[transform,opacity]"
-        >
-          <span className="inline-flex items-center gap-2 rounded-full border border-blue-200/70 bg-white/70 px-3.5 py-1 text-xs font-bold tracking-wide text-blue-600 shadow-sm md:text-sm">
-            <span className="h-1.5 w-1.5 rounded-full bg-blue-500" />
-            لماذا تختارنا؟
-          </span>
-
-          <h2 className="text-balance text-3xl font-extrabold leading-[1.15] text-slate-900 sm:text-4xl md:text-5xl lg:text-6xl">
-            شراء سيارات مصدومة
-            <br />
-            <span className="bg-gradient-to-l from-blue-600 via-blue-500 to-cyan-400 bg-clip-text text-transparent">
-              جدة ومكة والطائف
-            </span>
-          </h2>
-        </div>
-
-        {/* ---------------------------- GRID ----------------------------- */}
-        <div className="grid w-full grid-cols-2 items-center gap-x-3 gap-y-3 md:grid-cols-[1fr_1.7fr_1fr] md:gap-8">
-          {/* LIST A */}
-          <ul
-            ref={leftListRef}
-            className="order-1 z-20 flex flex-col gap-2 will-change-[transform,opacity] md:order-1 md:gap-3"
-          >
-            <FeatureList items={REASONS_PRIMARY} />
+        {/* MAIN GRID CONTENT */}
+        <div className="grid grid-cols-1 md:grid-cols-[1fr_1.7fr_1fr] gap-6 md:gap-8 items-center w-full">
+          {/* LEFT LIST */}
+          <ul className="will-fade space-y-5 justify-self-start z-20 w-full will-change-transform">
+            {REASONS_PRIMARY.map((feature, index) => (
+              <li key={index} className="flex items-center gap-4 group">
+                <div className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-50 border border-blue-200 shrink-0">
+                  <Image
+                    src="/check.webp"
+                    alt="check"
+                    width={16}
+                    height={16}
+                    className="object-contain"
+                  />
+                </div>
+                <p className="text-base md:text-md font-medium text-gray-700">
+                  {feature}
+                </p>
+              </li>
+            ))}
           </ul>
 
-          {/* LIST B */}
-          <ul
-            ref={rightListRef}
-            className="order-2 z-20 flex flex-col gap-2 will-change-[transform,opacity] md:order-3 md:gap-3"
-          >
-            <FeatureList items={REASONS_SECONDARY} />
-          </ul>
-
-          {/* CENTER: VIDEO + WHEELS */}
-          <div className="relative order-3 col-span-2 mx-auto aspect-video w-full md:order-2 md:col-span-1 md:aspect-auto md:h-[min(58vh,560px)]">
-            {/* Ambient glow frame — revealed as the mask opens */}
-            <div
-              ref={glowRef}
+          {/* CENTER VIDEO WITH MASK AND WHEELS */}
+          <div className="cocktail-img relative w-full aspect-video md:aspect-auto md:h-[65vh] mx-auto flex items-center justify-center overflow-visible rounded-2xl">
+            {/* --- LEFT WHEEL --- */}
+            <Image
+              src="/ChatGPT Image 15 أغسطس 2026، 05_34_06 م.webp"
+              alt=""
               aria-hidden="true"
-              className="pointer-events-none absolute -inset-3 -z-10 rounded-[32px] bg-[conic-gradient(from_180deg_at_50%_50%,rgba(59,130,246,0.35),rgba(34,211,238,0.25),rgba(59,130,246,0.35))] opacity-0 will-change-[transform,opacity] md:-inset-4"
+              width={176}
+              height={176}
+              sizes="176px"
+              className="wheel-left absolute left-1/2 top-0 z-0 -translate-x-1/2 md:left-0 md:top-1/2 md:-translate-x-0 md:-translate-y-1/2 object-contain pointer-events-none will-change-transform md:w-44"
             />
 
-            {/* LEFT WHEEL */}
-            <div
-              ref={wheelLeftRef}
+            <Image
+              src="/ChatGPT Image 15 أغسطس 2026، 05_36_28 م.webp"
+              alt=""
               aria-hidden="true"
-              className="pointer-events-none absolute left-1/2 top-0 z-0 h-24 w-24 will-change-[transform,opacity] md:left-0 md:top-1/2 md:h-44 md:w-44"
-            >
-              <Image
-                src="/ChatGPT Image 15 أغسطس 2026، 05_34_06 م.webp"
-                alt=""
-                width={176}
-                height={176}
-                sizes="(max-width: 767px) 96px, 176px"
-                className="h-full w-full object-contain drop-shadow-xl"
-                draggable={false}
-              />
-            </div>
-
-            {/* RIGHT WHEEL */}
-            {/* <div
-              ref={wheelRightRef}
-              aria-hidden="true"
-              className="pointer-events-none absolute bottom-0 left-1/2 z-0 h-24 w-24 will-change-[transform,opacity] md:bottom-auto md:left-auto md:right-0 md:top-1/2 md:h-44 md:w-44"
-            >
-              <Image
-                src="/ChatGPT Image 15 أغسطس 2026، 05_36_28 م.webp"
-                alt=""
-                width={176}
-                height={176}
-                sizes="(max-width: 767px) 96px, 176px"
-                className="h-full w-full object-contain drop-shadow-xl"
-                draggable={false}
-              />
-            </div> */}
+              width={176}
+              height={176}
+              sizes="176px"
+              className="wheel-right absolute left-1/2 bottom-0 z-0 -translate-x-1/2 md:right-0 md:left-auto md:bottom-auto md:top-1/2 md:-translate-x-0 md:-translate-y-1/2 object-contain pointer-events-none will-change-transform md:w-44"
+            />
 
             {/* VIDEO MASK LAYER */}
             <div
               ref={maskRef}
-              className="absolute inset-0 z-10 overflow-hidden rounded-3xl bg-slate-900 shadow-2xl shadow-slate-900/20 will-change-[clip-path,transform]"
-              style={INITIAL_MASK_STYLE}
+              className="car-mask absolute inset-0 w-full h-full rounded-2xl overflow-hidden will-change-transform z-10"
+              style={
+                {
+                  "--mask-size": "62%",
+                  transform: "translateZ(0)",
+                } as CSSProperties
+              }
             >
-              <video
-                ref={videoRef}
-                src="/video-optimized.mp4"
-                className="h-full w-full object-cover"
-                muted
-                loop
-                playsInline
-                preload="none"
-                disablePictureInPicture
-                disableRemotePlayback
-                aria-label="فيديو السيارة المصدومة"
-              />
-
-              {/* Subtle vignette for legibility of overlays */}
-              <div
-                aria-hidden="true"
-                className="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-900/45 via-transparent to-slate-900/15"
-              />
-
-              {/* "Scroll to watch" hint — always centred so it is never clipped */}
-              <div
-                ref={hintRef}
-                aria-hidden="true"
-                className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-2 will-change-[transform,opacity]"
-              >
-                <span className="flex h-12 w-12 items-center justify-center rounded-full border border-white/30 bg-white/15 text-white backdrop-blur-md md:h-14 md:w-14">
-                  <Play size={20} className="translate-x-[1px] fill-white" />
-                </span>
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-black/40 px-3 py-1 text-[11px] font-semibold text-white/90 backdrop-blur-md md:text-xs">
-                  اسحب للأسفل لمشاهدة الفيديو
-                  <ChevronDown size={14} className="animate-bounce" />
-                </span>
-              </div>
-            </div>
-
-            {/* MUTE BUTTON — outside the clipped layer, revealed after expansion */}
-            <button
-              ref={soundBtnRef}
-              type="button"
-              onClick={toggleSound}
-              className="invisible absolute bottom-4 left-4 z-20 flex h-11 w-11 items-center justify-center rounded-full border border-white/25 bg-black/45 text-white opacity-0 shadow-lg backdrop-blur-md transition-transform will-change-[transform,opacity] hover:scale-110 active:scale-95"
-              aria-label={soundOn ? "إيقاف صوت الفيديو" : "تشغيل صوت الفيديو"}
-              aria-pressed={soundOn}
-            >
-              {soundOn ? (
-                <Volume2 size={18} aria-hidden="true" />
-              ) : (
-                <VolumeOff size={18} aria-hidden="true" />
+              {videoLoaded && (
+                <video
+                  ref={videoRef}
+                  src="/video-optimized.mp4"
+                  className="masked-video w-full h-full object-cover"
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  preload="none"
+                  aria-label="فيديو السيارة المصدومة"
+                  onLoadedMetadata={() => ScrollTrigger.refresh()}
+                />
               )}
-            </button>
+
+              <button
+                type="button"
+                onClick={soundOn ? disableSound : enableSound}
+                className="absolute bottom-4 left-4 z-100 flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-black/40 text-sm text-white shadow-lg backdrop-blur-md transition-transform hover:scale-110 active:scale-95"
+                aria-label={soundOn ? "إيقاف صوت الفيديو" : "تشغيل صوت الفيديو"}
+                aria-pressed={soundOn}
+              >
+                {soundOn ? (
+                  <Volume2 size={16} aria-hidden="true" />
+                ) : (
+                  <VolumeOff size={16} aria-hidden="true" />
+                )}
+              </button>
+            </div>
           </div>
+
+          {/* RIGHT LIST */}
+          <ul className="will-fade space-y-5 md:justify-self-end z-20 w-full will-change-transform">
+            {REASONS_SECONDARY.map((feature, index) => (
+              <li key={index} className="flex items-center gap-4 group">
+                <div className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-50 border border-blue-200 shrink-0">
+                  <Image
+                    src="/check.webp"
+                    alt="check"
+                    width={16}
+                    height={16}
+                    className="object-contain"
+                  />
+                </div>
+                <p className="text-base md:text-md font-medium text-gray-700">
+                  {feature}
+                </p>
+              </li>
+            ))}
+          </ul>
         </div>
 
-        {/* ---------------------- FINAL REVEAL TEXT ---------------------- */}
+        {/* FINAL REVEAL CONTENT */}
         <div
-          ref={revealRef}
-          className="relative z-30 flex max-w-2xl flex-col items-center px-4 text-center opacity-0 will-change-[transform,opacity]"
+          id="masked-content"
+          className="flex flex-col items-center justify-center text-center px-6 max-w-2xl relative z-30 md:-mt-2 will-change-transform"
         >
-          <h3 className="text-balance text-xl font-extrabold text-slate-900 md:text-3xl">
+          <h3 className="text-2xl md:text-3xl font-extrabold text-gray-900 sm:mb-4 mb-1">
             من أول اتصال إلى استلام الكاش
           </h3>
-          <p className="mt-2 max-w-xl text-sm leading-relaxed text-slate-500 md:mt-3 md:text-lg">
+          <p className="text-base md:text-xl text-gray-500 max-w-xl leading-relaxed">
             شاهد كيف نُقيّم سيارتك المصدومة وندفع لك القيمة نقداً في نفس اليوم.
           </p>
-          <a
-            href="#contact"
-            className="mt-4 inline-flex items-center gap-2 rounded-full bg-slate-900 px-6 py-3 text-sm font-bold text-white shadow-lg shadow-slate-900/20 transition-transform hover:-translate-y-0.5 hover:bg-slate-800 active:translate-y-0 md:mt-5 md:text-base"
-          >
-            <MessageCircle size={18} aria-hidden="true" />
-            تواصل معنا الآن
-          </a>
         </div>
       </div>
     </section>
   );
-}
+};
+
+export default About;
+
+
+
+
+
+
+
+
+// "use client";
+
+// import gsap from "gsap";
+// import { ScrollTrigger } from "gsap/ScrollTrigger";
+// import { useGSAP } from "@gsap/react";
+// import Image from "next/image";
+// import { useCallback, useRef, useState } from "react";
+// import { Volume2, VolumeOff } from "lucide-react";
+
+// gsap.registerPlugin(ScrollTrigger, useGSAP);
+
+// /* -------------------------------------------------------------------------- */
+// /*  Content                                                                    */
+// /* -------------------------------------------------------------------------- */
+
+// const REASONS_PRIMARY = [
+//   "تقييم فوري ومجاني لسيارتك المصدومة",
+//   "أسعار تنافسية تفوق متوسط السوق",
+//   "معاينة في موقعك دون أي تكلفة إضافية",
+//   "لا حاجة لإصلاح السيارة قبل البيع",
+// ] as const;
+
+// const REASONS_SECONDARY = [
+//   "دفع نقدي فوري خلال 30 دقيقة",
+//   "سطحة مجانية لنقل السيارة من موقعك",
+//   "نغطي جميع أحياء جدة ومكة المكرمة",
+//   "فريق محترف وموثوق في مجال شراء السيارات",
+// ] as const;
+
+// /* -------------------------------------------------------------------------- */
+// /*  Animation constants (kept out of render – no re-allocations)               */
+// /* -------------------------------------------------------------------------- */
+
+// /**
+//  * clip-path is interpolated by GSAP as long as the string "shape" matches.
+//  * Both values MUST share the same function, value count and units.
+//  */
+// const CLIP_START_DESKTOP = "inset(18% 22% round 16px)";
+// const CLIP_START_MOBILE = "inset(14% 12% round 16px)";
+// const CLIP_END = "inset(0% 0% round 16px)";
+
+// /** Server-rendered fallback so nothing "pops" before hydration. */
+// const INITIAL_MASK_STYLE = { clipPath: CLIP_START_DESKTOP } as const;
+
+// const MEDIA_QUERIES = {
+//   isMobile: "(max-width: 767px)",
+//   isDesktop: "(min-width: 768px)",
+// } as const;
+
+// /* -------------------------------------------------------------------------- */
+// /*  Sub-components                                                             */
+// /* -------------------------------------------------------------------------- */
+
+// type FeatureListProps = {
+//   items: readonly string[];
+//   align?: "start" | "end";
+// };
+
+// function FeatureList({ items, align = "start" }: FeatureListProps) {
+//   return (
+//     <>
+//       {items.map((feature) => (
+//         <li key={feature} className="flex items-center gap-4">
+//           <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-blue-200 bg-blue-50">
+//             <Image
+//               src="/check.webp"
+//               alt=""
+//               aria-hidden="true"
+//               width={16}
+//               height={16}
+//               className="h-4 w-4 object-contain"
+//             />
+//           </span>
+//           <p
+//             className={`text-base font-medium text-gray-700 ${
+//               align === "end" ? "md:text-right" : ""
+//             }`}
+//           >
+//             {feature}
+//           </p>
+//         </li>
+//       ))}
+//     </>
+//   );
+// }
+
+// /* -------------------------------------------------------------------------- */
+// /*  Component                                                                  */
+// /* -------------------------------------------------------------------------- */
+
+// export default function About() {
+//   const sectionRef = useRef<HTMLElement>(null);
+//   const titleRef = useRef<HTMLHeadingElement>(null);
+//   const leftListRef = useRef<HTMLUListElement>(null);
+//   const rightListRef = useRef<HTMLUListElement>(null);
+//   const maskRef = useRef<HTMLDivElement>(null);
+//   const videoRef = useRef<HTMLVideoElement>(null);
+//   const wheelLeftRef = useRef<HTMLDivElement>(null);
+//   const wheelRightRef = useRef<HTMLDivElement>(null);
+//   const revealRef = useRef<HTMLDivElement>(null);
+
+//   const [soundOn, setSoundOn] = useState(false);
+
+//   /* ------------------------------------------------------------------------ */
+//   /*  Scroll animation                                                         */
+//   /* ------------------------------------------------------------------------ */
+
+//   useGSAP(
+//     () => {
+//       const section = sectionRef.current;
+//       const title = titleRef.current;
+//       const leftList = leftListRef.current;
+//       const rightList = rightListRef.current;
+//       const mask = maskRef.current;
+//       const wheelLeft = wheelLeftRef.current;
+//       const wheelRight = wheelRightRef.current;
+//       const reveal = revealRef.current;
+
+//       if (
+//         !section ||
+//         !title ||
+//         !leftList ||
+//         !rightList ||
+//         !mask ||
+//         !wheelLeft ||
+//         !wheelRight ||
+//         !reveal
+//       ) {
+//         return;
+//       }
+
+//       // Prevent expensive refreshes when the mobile URL bar shows/hides.
+//       ScrollTrigger.config({ ignoreMobileResize: true });
+
+//       const fadeTargets = [title, leftList, rightList];
+//       const wheels = [wheelLeft, wheelRight];
+
+//       const playVideo = () => {
+//         videoRef.current?.play().catch(() => {
+//           /* Autoplay may be blocked – user gesture (mute button) will resume. */
+//         });
+//       };
+//       const pauseVideo = () => videoRef.current?.pause();
+
+//       const mm = gsap.matchMedia();
+
+//       mm.add(MEDIA_QUERIES, (context) => {
+//         const isMobile = context.conditions?.isMobile ?? false;
+
+//         /* ------------------------- Initial states ------------------------- */
+//         // All of these are compositor-friendly: transform / opacity / clip-path.
+
+//         gsap.set(fadeTargets, { opacity: 1, y: 0, force3D: true });
+
+//         gsap.set(mask, {
+//           clipPath: isMobile ? CLIP_START_MOBILE : CLIP_START_DESKTOP,
+//           scale: 1,
+//           force3D: true,
+//         });
+
+//         // Wheels are centred with GSAP percentages (NOT Tailwind translate classes)
+//         // so GSAP owns the transform matrix exclusively – no double transforms.
+//         gsap.set(wheels, {
+//           opacity: 0,
+//           x: 0,
+//           y: 0,
+//           rotation: 0,
+//           xPercent: isMobile ? -50 : 0,
+//           yPercent: isMobile ? 0 : -50,
+//           force3D: true,
+//         });
+
+//         gsap.set(reveal, { opacity: 0, y: 30, force3D: true });
+
+//         /* ---------------------------- Timeline ---------------------------- */
+
+//         const tl = gsap.timeline({
+//           defaults: { ease: "power2.inOut" },
+//           scrollTrigger: {
+//             trigger: section,
+//             start: isMobile ? "top 10%" : "top top",
+//             end: isMobile ? "+=120%" : "+=150%",
+//             pin: true,
+//             scrub: 1,
+//             anticipatePin: 1,
+//             invalidateOnRefresh: true,
+//             onEnter: playVideo,
+//             onEnterBack: playVideo,
+//             onLeave: pauseVideo,
+//             onLeaveBack: pauseVideo,
+//           },
+//         });
+
+//         // 1. Title + side lists fade up & out
+//         tl.to(fadeTargets, {
+//           opacity: 0,
+//           y: -20,
+//           stagger: 0.1,
+//           duration: 0.8,
+//         });
+
+//         // 2. Mask expands to fill the container
+//         tl.to(
+//           mask,
+//           {
+//             clipPath: CLIP_END,
+//             scale: 1.04,
+//             duration: 1.5,
+//           },
+//           "-=0.4",
+//         );
+
+//         // 3. Wheels roll out simultaneously with the mask
+//         tl.to(
+//           wheelLeft,
+//           {
+//             opacity: 1,
+//             x: isMobile ? 0 : -200,
+//             y: isMobile ? -120 : 0,
+//             rotation: -180,
+//             duration: 1.5,
+//           },
+//           "<",
+//         );
+
+//         tl.to(
+//           wheelRight,
+//           {
+//             opacity: 1,
+//             x: isMobile ? 0 : 200,
+//             y: isMobile ? 120 : 0,
+//             rotation: 180,
+//             duration: 1.5,
+//           },
+//           "<",
+//         );
+
+//         // 4. Bottom copy slides in
+//         tl.to(
+//           reveal,
+//           {
+//             opacity: 1,
+//             y: 0,
+//             duration: 1,
+//             ease: "power2.out",
+//           },
+//           "-=0.5",
+//         );
+
+//         // Everything created here is auto-reverted by this matchMedia context.
+//       });
+
+//       return () => mm.revert();
+//     },
+//     { scope: sectionRef },
+//   );
+
+//   /* ------------------------------------------------------------------------ */
+//   /*  Sound toggle                                                             */
+//   /* ------------------------------------------------------------------------ */
+
+//   const toggleSound = useCallback(async () => {
+//     const video = videoRef.current;
+//     if (!video) return;
+
+//     if (soundOn) {
+//       video.muted = true;
+//       setSoundOn(false);
+//       return;
+//     }
+
+//     try {
+//       video.muted = false;
+//       video.volume = 1;
+//       await video.play();
+//       setSoundOn(true);
+//     } catch {
+//       video.muted = true;
+//       setSoundOn(false);
+//     }
+//   }, [soundOn]);
+
+//   /* ------------------------------------------------------------------------ */
+//   /*  Markup                                                                   */
+//   /* ------------------------------------------------------------------------ */
+
+//   return (
+//     <section
+//       id="about"
+//       ref={sectionRef}
+//       className="relative mb-4 w-full min-h-screen overflow-x-clip bg-(--color-bg-soft)"
+//     >
+//       <div className="container relative z-10 mx-auto flex h-full max-w-6xl flex-col items-center justify-center gap-8 px-4">
+//         {/* ---------------------------- TITLE ---------------------------- */}
+//         <h2
+//           ref={titleRef}
+//           className="text-center text-4xl font-extrabold leading-[1.2] text-gray-900 will-change-[transform,opacity] md:text-7xl"
+//         >
+//           شراء سيارات مصدومة
+//           <br />
+//           <span className="text-blue-400 drop-shadow-sm">جدة ومكة والطائف</span>
+//         </h2>
+
+//         {/* ---------------------------- GRID ----------------------------- */}
+//         <div className="grid w-full grid-cols-1 items-center gap-6 md:grid-cols-[1fr_1.7fr_1fr] md:gap-8">
+//           {/* LEFT LIST */}
+//           <ul
+//             ref={leftListRef}
+//             className="z-20 w-full space-y-5 will-change-[transform,opacity]"
+//           >
+//             <FeatureList items={REASONS_PRIMARY} />
+//           </ul>
+
+//           {/* CENTER: VIDEO + WHEELS */}
+//           <div className="relative mx-auto aspect-video w-full overflow-visible md:aspect-auto md:h-[65vh]">
+//             {/* LEFT WHEEL — fixed box size = zero CLS when the image decodes */}
+//             <div
+//               ref={wheelLeftRef}
+//               aria-hidden="true"
+//               className="pointer-events-none absolute left-1/2 top-0 z-0 h-28 w-28 will-change-[transform,opacity] md:left-0 md:top-1/2 md:h-44 md:w-44"
+//             >
+//               <Image
+//                 src="/ChatGPT Image 15 أغسطس 2026، 05_34_06 م.webp"
+//                 alt=""
+//                 width={176}
+//                 height={176}
+//                 sizes="(max-width: 767px) 112px, 176px"
+//                 className="h-full w-full object-contain"
+//                 draggable={false}
+//               />
+//             </div>
+
+//             {/* RIGHT WHEEL */}
+//             <div
+//               ref={wheelRightRef}
+//               aria-hidden="true"
+//               className="pointer-events-none absolute bottom-0 left-1/2 z-0 h-28 w-28 will-change-[transform,opacity] md:bottom-auto md:left-auto md:right-0 md:top-1/2 md:h-44 md:w-44"
+//             >
+//               <Image
+//                 src="/ChatGPT Image 15 أغسطس 2026، 05_36_28 م.webp"
+//                 alt=""
+//                 width={176}
+//                 height={176}
+//                 sizes="(max-width: 767px) 112px, 176px"
+//                 className="h-full w-full object-contain"
+//                 draggable={false}
+//               />
+//             </div>
+
+//             {/* VIDEO MASK LAYER — clip-path is animated directly by GSAP */}
+//             <div
+//               ref={maskRef}
+//               className="absolute inset-0 z-10 overflow-hidden rounded-2xl bg-black will-change-[clip-path,transform]"
+//               style={INITIAL_MASK_STYLE}
+//             >
+//               <video
+//                 ref={videoRef}
+//                 src="/video-optimized.mp4"
+//                 className="h-full w-full object-cover"
+//                 muted
+//                 loop
+//                 playsInline
+//                 preload="none"
+//                 disablePictureInPicture
+//                 disableRemotePlayback
+//                 aria-label="فيديو السيارة المصدومة"
+//               />
+//             </div>
+
+//             {/* MUTE BUTTON — lives outside the clipped layer so it is never cut off */}
+//             <button
+//               type="button"
+//               onClick={toggleSound}
+//               className="absolute bottom-4 left-4 z-20 flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-black/40 text-white shadow-lg backdrop-blur-md transition-transform hover:scale-110 active:scale-95"
+//               aria-label={soundOn ? "إيقاف صوت الفيديو" : "تشغيل صوت الفيديو"}
+//               aria-pressed={soundOn}
+//             >
+//               {soundOn ? (
+//                 <Volume2 size={16} aria-hidden="true" />
+//               ) : (
+//                 <VolumeOff size={16} aria-hidden="true" />
+//               )}
+//             </button>
+//           </div>
+
+//           {/* RIGHT LIST */}
+//           <ul
+//             ref={rightListRef}
+//             className="z-20 w-full space-y-5 will-change-[transform,opacity] md:justify-self-end"
+//           >
+//             <FeatureList items={REASONS_SECONDARY} align="end" />
+//           </ul>
+//         </div>
+
+//         {/* ---------------------- FINAL REVEAL TEXT ---------------------- */}
+//         <div
+//           ref={revealRef}
+//           className="relative z-30 flex max-w-2xl flex-col items-center justify-center px-6 text-center opacity-0 will-change-[transform,opacity] md:-mt-2"
+//         >
+//           <h3 className="mb-1 text-2xl font-extrabold text-gray-900 sm:mb-4 md:text-3xl">
+//             من أول اتصال إلى استلام الكاش
+//           </h3>
+//           <p className="max-w-xl text-base leading-relaxed text-gray-500 md:text-xl">
+//             شاهد كيف نُقيّم سيارتك المصدومة وندفع لك القيمة نقداً في نفس اليوم.
+//           </p>
+//         </div>
+//       </div>
+//     </section>
+//   );
+// }
+
+// "use client";
+
+// import gsap from "gsap";
+// import { ScrollTrigger } from "gsap/ScrollTrigger";
+// import { useGSAP } from "@gsap/react";
+// import Image from "next/image";
+// import { useCallback, useRef, useState } from "react";
+// import {
+//   Check,
+//   ChevronDown,
+//   MessageCircle,
+//   Play,
+//   Volume2,
+//   VolumeOff,
+// } from "lucide-react";
+
+// gsap.registerPlugin(ScrollTrigger, useGSAP);
+
+// /* -------------------------------------------------------------------------- */
+// /*  Content                                                                    */
+// /* -------------------------------------------------------------------------- */
+
+// const REASONS_PRIMARY = [
+//   "تقييم فوري ومجاني لسيارتك المصدومة",
+//   "أسعار تنافسية تفوق متوسط السوق",
+//   "معاينة في موقعك دون أي تكلفة إضافية",
+//   "لا حاجة لإصلاح السيارة قبل البيع",
+// ] as const;
+
+// const REASONS_SECONDARY = [
+//   "دفع نقدي فوري خلال 30 دقيقة",
+//   "سطحة مجانية لنقل السيارة من موقعك",
+//   "نغطي جميع أحياء جدة ومكة المكرمة",
+//   "فريق محترف وموثوق في مجال شراء السيارات",
+// ] as const;
+
+// /* -------------------------------------------------------------------------- */
+// /*  Animation constants                                                        */
+// /* -------------------------------------------------------------------------- */
+
+// /** Start / end must share the exact same shape so GSAP can interpolate them. */
+// const CLIP_START_DESKTOP = "inset(16% 20% round 24px)";
+// const CLIP_START_MOBILE = "inset(10% 10% round 20px)";
+// const CLIP_END = "inset(0% 0% round 24px)";
+
+// const INITIAL_MASK_STYLE = { clipPath: CLIP_START_DESKTOP } as const;
+
+// const MEDIA_QUERIES = {
+//   isMobile: "(max-width: 767px)",
+//   isDesktop: "(min-width: 768px)",
+//   reduceMotion: "(prefers-reduced-motion: reduce)",
+// } as const;
+
+// /* -------------------------------------------------------------------------- */
+// /*  Sub-components                                                             */
+// /* -------------------------------------------------------------------------- */
+
+// function FeatureList({ items }: { items: readonly string[] }) {
+//   return (
+//     <>
+//       {items.map((feature) => (
+//         <li
+//           key={feature}
+//           className="flex items-start gap-2.5 rounded-2xl border border-white/70 bg-white/70 px-3 py-2.5 shadow-[0_1px_2px_rgba(15,23,42,0.06)] ring-1 ring-slate-900/5 backdrop-blur-[2px] md:gap-3.5 md:px-4 md:py-3"
+//         >
+//           <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-cyan-400 text-white shadow-sm md:h-7 md:w-7">
+//             <Check size={14} strokeWidth={3} aria-hidden="true" />
+//           </span>
+//           <p className="text-[13px] font-semibold leading-snug text-slate-700 md:text-[15px]">
+//             {feature}
+//           </p>
+//         </li>
+//       ))}
+//     </>
+//   );
+// }
+
+// /* -------------------------------------------------------------------------- */
+// /*  Component                                                                  */
+// /* -------------------------------------------------------------------------- */
+
+// export default function About() {
+//   const sectionRef = useRef<HTMLElement>(null);
+//   const titleRef = useRef<HTMLDivElement>(null);
+//   const leftListRef = useRef<HTMLUListElement>(null);
+//   const rightListRef = useRef<HTMLUListElement>(null);
+//   const maskRef = useRef<HTMLDivElement>(null);
+//   const glowRef = useRef<HTMLDivElement>(null);
+//   const hintRef = useRef<HTMLDivElement>(null);
+//   const soundBtnRef = useRef<HTMLButtonElement>(null);
+//   const videoRef = useRef<HTMLVideoElement>(null);
+//   const wheelLeftRef = useRef<HTMLDivElement>(null);
+//   const wheelRightRef = useRef<HTMLDivElement>(null);
+//   const revealRef = useRef<HTMLDivElement>(null);
+
+//   const [soundOn, setSoundOn] = useState(false);
+
+//   /* ------------------------------------------------------------------------ */
+//   /*  Scroll animation                                                         */
+//   /* ------------------------------------------------------------------------ */
+
+//   useGSAP(
+//     () => {
+//       const section = sectionRef.current;
+//       const title = titleRef.current;
+//       const leftList = leftListRef.current;
+//       const rightList = rightListRef.current;
+//       const mask = maskRef.current;
+//       const glow = glowRef.current;
+//       const hint = hintRef.current;
+//       const soundBtn = soundBtnRef.current;
+//       const wheelLeft = wheelLeftRef.current;
+//       const wheelRight = wheelRightRef.current;
+//       const reveal = revealRef.current;
+
+//       if (
+//         !section ||
+//         !title ||
+//         !leftList ||
+//         !rightList ||
+//         !mask ||
+//         !glow ||
+//         !hint ||
+//         !soundBtn ||
+//         !wheelLeft ||
+//         !wheelRight ||
+//         !reveal
+//       ) {
+//         return;
+//       }
+
+//       ScrollTrigger.config({ ignoreMobileResize: true });
+
+//       const fadeTargets = [title, leftList, rightList];
+//       const wheels = [wheelLeft, wheelRight];
+
+//       const playVideo = () => {
+//         videoRef.current?.play().catch(() => {});
+//       };
+//       const pauseVideo = () => videoRef.current?.pause();
+
+//       const mm = gsap.matchMedia();
+
+//       mm.add(MEDIA_QUERIES, (context) => {
+//         const isMobile = context.conditions?.isMobile ?? false;
+//         const reduceMotion = context.conditions?.reduceMotion ?? false;
+
+//         /* ---------------- Reduced motion: static final state ---------------- */
+//         if (reduceMotion) {
+//           gsap.set(mask, { clipPath: CLIP_END });
+//           gsap.set([glow, reveal], { autoAlpha: 1, y: 0 });
+//           gsap.set(soundBtn, { autoAlpha: 1 });
+//           gsap.set([hint, ...wheels], { autoAlpha: 0 });
+
+//           ScrollTrigger.create({
+//             trigger: section,
+//             start: "top 70%",
+//             end: "bottom 30%",
+//             onEnter: playVideo,
+//             onEnterBack: playVideo,
+//             onLeave: pauseVideo,
+//             onLeaveBack: pauseVideo,
+//           });
+//           return;
+//         }
+
+//         /* ------------------------- Initial states ------------------------- */
+
+//         gsap.set(fadeTargets, { opacity: 1, y: 0, force3D: true });
+
+//         gsap.set(mask, {
+//           clipPath: isMobile ? CLIP_START_MOBILE : CLIP_START_DESKTOP,
+//           scale: 1,
+//           force3D: true,
+//         });
+
+//         gsap.set(glow, { autoAlpha: 0, scale: 0.9, force3D: true });
+//         gsap.set(hint, { autoAlpha: 1, y: 0, force3D: true });
+//         gsap.set(soundBtn, { autoAlpha: 0, y: 8, force3D: true });
+
+//         gsap.set(wheels, {
+//           opacity: 0,
+//           x: 0,
+//           y: 0,
+//           rotation: 0,
+//           xPercent: isMobile ? -50 : 0,
+//           yPercent: isMobile ? 0 : -50,
+//           force3D: true,
+//         });
+
+//         gsap.set(reveal, { opacity: 0, y: 30, force3D: true });
+
+//         /* ---------------------------- Timeline ---------------------------- */
+
+//         const tl = gsap.timeline({
+//           defaults: { ease: "power2.inOut" },
+//           scrollTrigger: {
+//             trigger: section,
+//             start: isMobile ? "top 10%" : "top top",
+//             end: isMobile ? "+=120%" : "+=150%",
+//             pin: true,
+//             scrub: 1,
+//             anticipatePin: 1,
+//             invalidateOnRefresh: true,
+//             onEnter: playVideo,
+//             onEnterBack: playVideo,
+//             onLeave: pauseVideo,
+//             onLeaveBack: pauseVideo,
+//           },
+//         });
+
+//         // 1. Title + feature lists fade up and away
+//         tl.to(fadeTargets, {
+//           opacity: 0,
+//           y: -20,
+//           stagger: 0.1,
+//           duration: 0.8,
+//         });
+
+//         // 2. Mask opens, "watch" hint dissolves, frame glow appears
+//         tl.to(
+//           mask,
+//           { clipPath: CLIP_END, scale: 1.03, duration: 1.5 },
+//           "-=0.4",
+//         )
+//           .to(hint, { autoAlpha: 0, y: -10, duration: 0.5 }, "<")
+//           .to(glow, { autoAlpha: 1, scale: 1, duration: 1.2 }, "<0.3");
+
+//         // 3. Wheels roll away (runs in parallel with the mask)
+//         tl.to(
+//           wheelLeft,
+//           {
+//             opacity: 1,
+//             x: isMobile ? 0 : -200,
+//             y: isMobile ? -120 : 0,
+//             rotation: -180,
+//             duration: 1.5,
+//           },
+//           "<-0.3",
+//         );
+
+//         tl.to(
+//           wheelRight,
+//           {
+//             opacity: 1,
+//             x: isMobile ? 0 : 200,
+//             y: isMobile ? 120 : 0,
+//             rotation: 180,
+//             duration: 1.5,
+//           },
+//           "<",
+//         );
+
+//         // 4. Mute button + closing copy slide in
+//         tl.to(soundBtn, { autoAlpha: 1, y: 0, duration: 0.5 }, "-=0.6")
+//           .to(
+//             reveal,
+//             { opacity: 1, y: 0, duration: 1, ease: "power2.out" },
+//             "<",
+//           );
+//       });
+
+//       return () => mm.revert();
+//     },
+//     { scope: sectionRef },
+//   );
+
+//   /* ------------------------------------------------------------------------ */
+//   /*  Sound toggle                                                             */
+//   /* ------------------------------------------------------------------------ */
+
+//   const toggleSound = useCallback(async () => {
+//     const video = videoRef.current;
+//     if (!video) return;
+
+//     if (soundOn) {
+//       video.muted = true;
+//       setSoundOn(false);
+//       return;
+//     }
+
+//     try {
+//       video.muted = false;
+//       video.volume = 1;
+//       await video.play();
+//       setSoundOn(true);
+//     } catch {
+//       video.muted = true;
+//       setSoundOn(false);
+//     }
+//   }, [soundOn]);
+
+//   /* ------------------------------------------------------------------------ */
+//   /*  Markup                                                                   */
+//   /* ------------------------------------------------------------------------ */
+
+//   return (
+//     <section
+//       id="about"
+//       ref={sectionRef}
+//       className="relative mb-4 min-h-dvh w-full overflow-x-clip bg-(--color-bg-soft)"
+//     >
+//       {/* Decorative background — pure gradients, no filters, no layers */}
+//       <div
+//         aria-hidden="true"
+//         className="pointer-events-none absolute inset-0 -z-0 bg-[radial-gradient(60%_50%_at_85%_10%,rgba(96,165,250,0.18),transparent_70%),radial-gradient(45%_45%_at_10%_90%,rgba(34,211,238,0.14),transparent_70%)]"
+//       />
+//       <div
+//         aria-hidden="true"
+//         className="pointer-events-none absolute inset-0 -z-0 bg-[linear-gradient(to_right,rgba(15,23,42,0.045)_1px,transparent_1px),linear-gradient(to_bottom,rgba(15,23,42,0.045)_1px,transparent_1px)] bg-[size:48px_48px] [mask-image:radial-gradient(ellipse_at_center,black_35%,transparent_75%)]"
+//       />
+
+//       <div className="container relative z-10 mx-auto flex min-h-dvh max-w-6xl flex-col items-center justify-center gap-5 px-4 pb-8 pt-24 md:gap-7 md:pt-28">
+//         {/* ---------------------------- TITLE ---------------------------- */}
+//         <div
+//           ref={titleRef}
+//           className="flex flex-col items-center gap-3 text-center will-change-[transform,opacity]"
+//         >
+//           <span className="inline-flex items-center gap-2 rounded-full border border-blue-200/70 bg-white/70 px-3.5 py-1 text-xs font-bold tracking-wide text-blue-600 shadow-sm md:text-sm">
+//             <span className="h-1.5 w-1.5 rounded-full bg-blue-500" />
+//             لماذا تختارنا؟
+//           </span>
+
+//           <h2 className="text-balance text-3xl font-extrabold leading-[1.15] text-slate-900 sm:text-4xl md:text-5xl lg:text-6xl">
+//             شراء سيارات مصدومة
+//             <br />
+//             <span className="bg-gradient-to-l from-blue-600 via-blue-500 to-cyan-400 bg-clip-text text-transparent">
+//               جدة ومكة والطائف
+//             </span>
+//           </h2>
+//         </div>
+
+//         {/* ---------------------------- GRID ----------------------------- */}
+//         <div className="grid w-full grid-cols-2 items-center gap-x-3 gap-y-3 md:grid-cols-[1fr_1.7fr_1fr] md:gap-8">
+//           {/* LIST A */}
+//           <ul
+//             ref={leftListRef}
+//             className="order-1 z-20 flex flex-col gap-2 will-change-[transform,opacity] md:order-1 md:gap-3"
+//           >
+//             <FeatureList items={REASONS_PRIMARY} />
+//           </ul>
+
+//           {/* LIST B */}
+//           <ul
+//             ref={rightListRef}
+//             className="order-2 z-20 flex flex-col gap-2 will-change-[transform,opacity] md:order-3 md:gap-3"
+//           >
+//             <FeatureList items={REASONS_SECONDARY} />
+//           </ul>
+
+//           {/* CENTER: VIDEO + WHEELS */}
+//           <div className="relative order-3 col-span-2 mx-auto aspect-video w-full md:order-2 md:col-span-1 md:aspect-auto md:h-[min(58vh,560px)]">
+//             {/* Ambient glow frame — revealed as the mask opens */}
+//             <div
+//               ref={glowRef}
+//               aria-hidden="true"
+//               className="pointer-events-none absolute -inset-3 -z-10 rounded-[32px] bg-[conic-gradient(from_180deg_at_50%_50%,rgba(59,130,246,0.35),rgba(34,211,238,0.25),rgba(59,130,246,0.35))] opacity-0 will-change-[transform,opacity] md:-inset-4"
+//             />
+
+//             {/* LEFT WHEEL */}
+//             <div
+//               ref={wheelLeftRef}
+//               aria-hidden="true"
+//               className="pointer-events-none absolute left-1/2 top-0 z-0 h-24 w-24 will-change-[transform,opacity] md:left-0 md:top-1/2 md:h-44 md:w-44"
+//             >
+//               <Image
+//                 src="/ChatGPT Image 15 أغسطس 2026، 05_34_06 م.webp"
+//                 alt=""
+//                 width={176}
+//                 height={176}
+//                 sizes="(max-width: 767px) 96px, 176px"
+//                 className="h-full w-full object-contain drop-shadow-xl"
+//                 draggable={false}
+//               />
+//             </div>
+
+//             {/* RIGHT WHEEL */}
+//             <div
+//               ref={wheelRightRef}
+//               aria-hidden="true"
+//               className="pointer-events-none absolute bottom-0 left-1/2 z-0 h-24 w-24 will-change-[transform,opacity] md:bottom-auto md:left-auto md:right-0 md:top-1/2 md:h-44 md:w-44"
+//             >
+//               <Image
+//                 src="/ChatGPT Image 15 أغسطس 2026، 05_36_28 م.webp"
+//                 alt=""
+//                 width={176}
+//                 height={176}
+//                 sizes="(max-width: 767px) 96px, 176px"
+//                 className="h-full w-full object-contain drop-shadow-xl"
+//                 draggable={false}
+//               />
+//             </div>
+
+//             {/* VIDEO MASK LAYER */}
+//             <div
+//               ref={maskRef}
+//               className="absolute inset-0 z-10 overflow-hidden rounded-3xl bg-slate-900 shadow-2xl shadow-slate-900/20 will-change-[clip-path,transform]"
+//               style={INITIAL_MASK_STYLE}
+//             >
+//               <video
+//                 ref={videoRef}
+//                 src="/video-optimized.mp4"
+//                 className="h-full w-full object-cover"
+//                 muted
+//                 loop
+//                 playsInline
+//                 preload="none"
+//                 disablePictureInPicture
+//                 disableRemotePlayback
+//                 aria-label="فيديو السيارة المصدومة"
+//               />
+
+//               {/* Subtle vignette for legibility of overlays */}
+//               <div
+//                 aria-hidden="true"
+//                 className="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-900/45 via-transparent to-slate-900/15"
+//               />
+
+//               {/* "Scroll to watch" hint — always centred so it is never clipped */}
+//               <div
+//                 ref={hintRef}
+//                 aria-hidden="true"
+//                 className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-2 will-change-[transform,opacity]"
+//               >
+//                 <span className="flex h-12 w-12 items-center justify-center rounded-full border border-white/30 bg-white/15 text-white backdrop-blur-md md:h-14 md:w-14">
+//                   <Play size={20} className="translate-x-[1px] fill-white" />
+//                 </span>
+//                 <span className="inline-flex items-center gap-1.5 rounded-full bg-black/40 px-3 py-1 text-[11px] font-semibold text-white/90 backdrop-blur-md md:text-xs">
+//                   اسحب للأسفل لمشاهدة الفيديو
+//                   <ChevronDown size={14} className="animate-bounce" />
+//                 </span>
+//               </div>
+//             </div>
+
+//             {/* MUTE BUTTON — outside the clipped layer, revealed after expansion */}
+//             <button
+//               ref={soundBtnRef}
+//               type="button"
+//               onClick={toggleSound}
+//               className="invisible absolute bottom-4 left-4 z-20 flex h-11 w-11 items-center justify-center rounded-full border border-white/25 bg-black/45 text-white opacity-0 shadow-lg backdrop-blur-md transition-transform will-change-[transform,opacity] hover:scale-110 active:scale-95"
+//               aria-label={soundOn ? "إيقاف صوت الفيديو" : "تشغيل صوت الفيديو"}
+//               aria-pressed={soundOn}
+//             >
+//               {soundOn ? (
+//                 <Volume2 size={18} aria-hidden="true" />
+//               ) : (
+//                 <VolumeOff size={18} aria-hidden="true" />
+//               )}
+//             </button>
+//           </div>
+//         </div>
+
+//         {/* ---------------------- FINAL REVEAL TEXT ---------------------- */}
+//         <div
+//           ref={revealRef}
+//           className="relative z-30 flex max-w-2xl flex-col items-center px-4 text-center opacity-0 will-change-[transform,opacity]"
+//         >
+//           <h3 className="text-balance text-xl font-extrabold text-slate-900 md:text-3xl">
+//             من أول اتصال إلى استلام الكاش
+//           </h3>
+//           <p className="mt-2 max-w-xl text-sm leading-relaxed text-slate-500 md:mt-3 md:text-lg">
+//             شاهد كيف نُقيّم سيارتك المصدومة وندفع لك القيمة نقداً في نفس اليوم.
+//           </p>
+//           <a
+//             href="#contact"
+//             className="mt-4 inline-flex items-center gap-2 rounded-full bg-slate-900 px-6 py-3 text-sm font-bold text-white shadow-lg shadow-slate-900/20 transition-transform hover:-translate-y-0.5 hover:bg-slate-800 active:translate-y-0 md:mt-5 md:text-base"
+//           >
+//             <MessageCircle size={18} aria-hidden="true" />
+//             تواصل معنا الآن
+//           </a>
+//         </div>
+//       </div>
+//     </section>
+//   );
+// }
+
+

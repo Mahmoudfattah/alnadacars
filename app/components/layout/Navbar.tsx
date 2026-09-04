@@ -17,6 +17,7 @@ const NAV_LINKS = [
 ];
 
 const NAV_OFFSET = 110;
+const WHATSAPP_NUMBER = "966562117196";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -380,7 +381,9 @@ export default function Navbar() {
 
             <div className="hidden justify-end md:flex">
               <Link
-                href="#contact"
+                href={`https://wa.me/${WHATSAPP_NUMBER}`}
+                target="_blank"
+                rel="noopener noreferrer"
                 ref={ctaRef}
                 className="btn opacity-0 -translate-y-5 inline-flex shrink-0 items-center gap-2 rounded-(--radius-pill) bg-(--color-cta) px-4 py-2 text-xs font-semibold text-white transition-all hover:bg-(--color-cta-hover) min-[940px]:px-6 min-[940px]:py-3 min-[940px]:text-sm hover:shadow-md hover:-translate-y-1!"
               >
@@ -454,7 +457,9 @@ export default function Navbar() {
         </div>
 
         <Link
-          href="#contact"
+          href={`https://wa.me/${WHATSAPP_NUMBER}`}
+          target="_blank"
+          rel="noopener noreferrer"
           style={{ opacity: 0, transform: "translateX(30px)" }}
           onClick={handleMobileLinkClick}
           className="mobile-link mt-6 flex w-full items-center justify-center rounded-(--radius-pill) bg-(--color-cta) px-6 py-3 text-sm font-semibold text-white hover:shadow-md hover:-translate-y-1"
