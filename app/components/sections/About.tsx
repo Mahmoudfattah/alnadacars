@@ -375,7 +375,7 @@ export default function About() {
             </div>
 
             {/* RIGHT WHEEL */}
-            <div
+            {/* <div
               ref={wheelRightRef}
               aria-hidden="true"
               className="pointer-events-none absolute bottom-0 left-1/2 z-0 h-24 w-24 will-change-[transform,opacity] md:bottom-auto md:left-auto md:right-0 md:top-1/2 md:h-44 md:w-44"
@@ -389,7 +389,7 @@ export default function About() {
                 className="h-full w-full object-contain drop-shadow-xl"
                 draggable={false}
               />
-            </div>
+            </div> */}
 
             {/* VIDEO MASK LAYER */}
             <div
