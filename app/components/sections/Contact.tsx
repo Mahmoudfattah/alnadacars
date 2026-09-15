@@ -5,6 +5,7 @@ import Link from "next/link";
 import {
   CarFront,
   Code2,
+  Facebook,
   Globe,
   MessageCircle,
   Music2,
@@ -36,9 +37,15 @@ const QUICK_LINKS = [
   { label: "من نحن", href: "#about" },
   { label: "كيف تعمل الخدمة", href: "#how-it-works" },
   { label: "المدن التي نخدمها", href: "#cities" },
+  { label: "المدونة", href: "https://sikrabsa.com/blog" },
 ];
 
 const SOCIAL_LINKS = [
+  {
+    label: "Facebook",
+    href: "https://www.facebook.com/share/1Ez8SPcBxB/",
+    icon: Facebook,
+  },
   {
     label: "TikTok",
     href: "https://www.tiktok.com/@ahmdtop3?_r=1&_t=ZS-988TmPzlcFM",
@@ -53,11 +60,6 @@ const SOCIAL_LINKS = [
     label: "Alnada Cars",
     href: "https://alnada-cars.com/",
     icon: CarFront,
-  },
-  {
-    label: "Netlify",
-    href: "https://silver-muffin-1fb75b.netlify.app/",
-    icon: Globe,
   },
   {
     label: "Haraj Cars",
