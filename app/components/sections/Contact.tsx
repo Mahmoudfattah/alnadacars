@@ -5,7 +5,6 @@ import Link from "next/link";
 import {
   CarFront,
   Code2,
-  Facebook,
   Globe,
   MessageCircle,
   Music2,
