@@ -74,7 +74,7 @@ export default function ContactFooter() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
+    
     const message = `مرحباً، أريد تقييم سيارتي:%0Aالاسم: ${encodeURIComponent(
       name,
     )}%0Aرقم الجوال: ${encodeURIComponent(

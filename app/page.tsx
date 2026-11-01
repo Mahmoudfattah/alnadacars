@@ -8,7 +8,7 @@ import Contact from "./components/sections/Contact";
 
 export default function Home() {
   const phoneNumber = "0562117196";
-  const internationalNumber = "971562117196"; // Update country code if needed (e.g., +971 for UAE)
+  const internationalNumber = "966562117196"; // Update country code if needed (e.g., +971 for UAE)
 
   return (
     <>
