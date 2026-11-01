@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Cairo, IBM_Plex_Sans_Arabic } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 import Navbar from "./components/layout/Navbar";
 
@@ -69,6 +70,7 @@ export default function RootLayout({
     "@type": "AutoDealer",
     name: "بيعها كاش لشراء السيارات المصدومة والتشليح",
     url: "https://ba3hacash.com",
+    image: "https://ba3hacash.com/logocut.webp",
     telephone: "+966562117196",
     description:
       "شراء سيارات مصدومة وتالفة وتشليح ومتعطلة في جدة ومكة المكرمة والطائف نقداً وبأفضل سعر فوري مع سطحة مجانية.",
@@ -80,8 +82,10 @@ export default function RootLayout({
     ],
     address: {
       "@type": "PostalAddress",
+      streetAddress: "جدة",
       addressLocality: "جدة",
       addressRegion: "منطقة مكة المكرمة",
+      postalCode: "21442",
       addressCountry: "SA",
     },
     geo: {
@@ -122,6 +126,35 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
+        {/* Google Analytics 4 (GA4) + Automatic WhatsApp & Phone Call Click Tracking */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-684T78PHY0"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-684T78PHY0');
+
+            document.addEventListener('click', function(e) {
+              var link = e.target.closest('a');
+              if (!link || !link.href) return;
+              if (link.href.includes('wa.me') || link.href.includes('whatsapp')) {
+                gtag('event', 'whatsapp_click', {
+                  event_category: 'Lead',
+                  event_label: link.href
+                });
+              } else if (link.href.startsWith('tel:')) {
+                gtag('event', 'phone_call_click', {
+                  event_category: 'Lead',
+                  event_label: link.href
+                });
+              }
+            });
+          `}
+        </Script>
         <Navbar />
         <main>{children}</main>
       </body>
