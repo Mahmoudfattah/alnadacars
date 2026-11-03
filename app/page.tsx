@@ -5,6 +5,7 @@ import OurApproach from "./components/sections/OurApproach";
 import ServicesGrid from "./components/sections/ServicesGrid";
 import CitiesWeServe from "./components/sections/CitiesWeServe";
 import Contact from "./components/sections/Contact";
+import FAQ from "./components/sections/FQA";
 
 export default function Home() {
   const phoneNumber = "0562117196";
@@ -18,6 +19,7 @@ export default function Home() {
       <OurApproach />
       <ServicesGrid />
       <CitiesWeServe />
+      <FAQ/>
       <Contact />
       {/* <CarBrandsSection/> */}
 
