@@ -13,8 +13,7 @@ const STATS = [
     label: "سيارة تم شراؤها",
     icon: CarFront,
     iconBg: "bg-emerald-50",
-     iconColor: "text-violet-600",
-
+    iconColor: "text-violet-600",
     iconRing: "ring-emerald-100",
   },
   {
@@ -31,7 +30,7 @@ const STATS = [
     label: "دفع نقدي فوري",
     icon: Banknote,
     iconBg: "bg-violet-50",
-       iconColor: "text-emerald-600",
+    iconColor: "text-emerald-600",
     iconRing: "ring-violet-100",
   },
 ];
@@ -47,16 +46,7 @@ export default function Hero() {
         },
       });
 
-      // ============================================================
       // 1. NON-LCP CONTENT REVEAL
-      // ============================================================
-      //
-      // IMPORTANT:
-      // The H1 is intentionally NOT animated here.
-      // It must be visible immediately so PageSpeed can paint
-      // the LCP element as early as possible.
-      //
-
       tl.fromTo(
         ".hero-badge",
         {
@@ -110,10 +100,7 @@ export default function Hero() {
           "-=0.5",
         );
 
-      // ============================================================
       // 2. CLEAN CAR ENTERS
-      // ============================================================
-
       tl.fromTo(
         ".hero-car-clean",
         {
@@ -130,11 +117,6 @@ export default function Hero() {
         },
         "-=0.5",
       )
-
-        // ============================================================
-        // 3. CLEAN CAR FADES OUT
-        // ============================================================
-
         .to(
           ".hero-car-clean",
           {
@@ -144,11 +126,6 @@ export default function Hero() {
           },
           "-=0.6",
         )
-
-        // ============================================================
-        // 4. DAMAGED CAR FADES IN
-        // ============================================================
-
         .fromTo(
           ".hero-car-damaged",
           {
@@ -168,10 +145,7 @@ export default function Hero() {
           "<",
         );
 
-      // ============================================================
-      // 5. CONTINUOUS CAR FLOAT
-      // ============================================================
-
+      // 3. CONTINUOUS FLOATS
       gsap.to(".hero-car-damaged", {
         y: -12,
         rotation: -1,
@@ -181,10 +155,6 @@ export default function Hero() {
         ease: "sine.inOut",
         delay: 0.4,
       });
-
-      // ============================================================
-      // 6. MAP FLOAT
-      // ============================================================
 
       gsap.to(".hero-map", {
         scale: 1.03,
@@ -218,31 +188,17 @@ export default function Hero() {
           md:py-30
         "
       >
-        {/* ============================================================
-            TEXT COLUMN
-        ============================================================ */}
-
+        {/* TEXT COLUMN */}
         <div className="flex flex-col items-start gap-6">
-          {/* BADGE */}
-
-          <span className="reveal-item hero-badge inline-flex items-center gap-2 rounded-full border border-slate-200/60 bg-white/60 px-5 py-2.5 text-xs font-semibold text-slate-700 shadow-sm backdrop-blur-md">
+          <span className="reveal-item hero-badge inline-flex items-center gap-2 rounded-full border border-slate-200/60 bg-white/60 px-5 py-2.5 text-xs font-semibold text-slate-800 shadow-sm backdrop-blur-md">
             <span className="relative flex h-2.5 w-2.5">
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-
               <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-emerald-500" />
             </span>
             كاش فوري خلال 30 دقيقة
           </span>
 
-          {/* ============================================================
-              LCP ELEMENT
-              
-              IMPORTANT:
-              No opacity-0.
-              No GSAP initial state.
-              No hidden/invisible.
-          ============================================================ */}
-
+          {/* LCP H1 ELEMENT — Optimized for Saudi local queries */}
           <h1
             className="
               hero-title-line
@@ -255,10 +211,8 @@ export default function Hero() {
               md:text-[40px]
             "
           >
-            شراء سيارات مصدومة وتالف في جدة ومكة نقداً وبأفضل سعر
+            شراء سيارات مصدومة وتالفة وتشليح في جدة ومكة والطائف كاش فوري
           </h1>
-
-          {/* DESCRIPTION */}
 
           <p
             className="
@@ -268,17 +222,15 @@ export default function Hero() {
               text-base
               font-medium
               leading-relaxed
-              text-slate-600
+              text-slate-700
               md:text-lg
             "
           >
-            نشتري سيارتك المصدومة أو التالفة أياً كانت حالتها، بمعاينة فورية
-            وسعر عادل، مع{" "}
+            نشتري سيارتك المصدومة أو التالفة أو المتعطلة أياً كانت حالتها،
+            بمعاينة فورية وسعر عادل في نفس اليوم، مع{" "}
             <strong className="font-bold text-slate-900">سطحة مجانية</strong>{" "}
-            لنقل السيارة من موقعك.
+            لنقل السيارة من موقعك بجدة ومكة والطائف.
           </p>
-
-          {/* CTA BUTTONS */}
 
           <div className="reveal-item flex flex-wrap items-center gap-4 pt-4">
             <Link
@@ -305,7 +257,6 @@ export default function Hero() {
               "
             >
               <span className="relative z-10">احصل على السعر الآن</span>
-
               <ArrowLeft
                 size={18}
                 strokeWidth={2.5}
@@ -327,13 +278,13 @@ export default function Hero() {
                 gap-2
                 rounded-full
                 border
-                border-slate-200
-                bg-white/50
+                border-slate-300
+                bg-white/70
                 px-8
                 py-4
                 text-sm
                 font-semibold
-                text-slate-700
+                text-slate-800
                 backdrop-blur-sm
                 transition-all
                 hover:-translate-y-1
@@ -345,10 +296,7 @@ export default function Hero() {
             </Link>
           </div>
 
-          {/* ============================================================
-              TRUST STATS
-          ============================================================ */}
-
+          {/* TRUST STATS */}
           <div
             className="
               reveal-item
@@ -415,14 +363,13 @@ export default function Hero() {
                       "
                     >
                       {stat.value}
-
                       {stat.unit && (
                         <span
                           className="
                             mr-1
                             text-[11px]
                             font-semibold
-                            text-slate-500
+                            text-slate-600
                           "
                         >
                           {stat.unit}
@@ -433,8 +380,8 @@ export default function Hero() {
                     <span
                       className="
                         text-[10px]
-                        font-medium
-                        text-slate-500
+                        font-semibold
+                        text-slate-600
                         sm:text-xs
                       "
                     >
@@ -447,10 +394,7 @@ export default function Hero() {
           </div>
         </div>
 
-        {/* ============================================================
-            IMAGE COLUMN
-        ============================================================ */}
-
+        {/* IMAGE COLUMN — Optimized Alt Texts */}
         <div
           className="
             relative
@@ -462,7 +406,6 @@ export default function Hero() {
           "
         >
           {/* MAP */}
-
           <div
             className="
               hero-map
@@ -476,7 +419,7 @@ export default function Hero() {
           >
             <Image
               src="/map.webp"
-              alt=""
+              alt="خريطة مناطق تغطية شراء السيارات المصدومة في جدة ومكة المكرمة والطائف"
               fill
               className="object-contain"
               sizes="(max-width: 768px) 90vw, 45vw"
@@ -484,10 +427,9 @@ export default function Hero() {
           </div>
 
           {/* CLEAN CAR */}
-
           <Image
             src="/car.png"
-            alt="سيارة سليمة"
+            alt="تقييم سيارات مصدومة وتشليح بأعلى سعر في جدة ومكة"
             fill
             priority
             className="
@@ -501,10 +443,9 @@ export default function Hero() {
           />
 
           {/* DAMAGED CAR */}
-
           <Image
             src="/cardamage.webp"
-            alt="سيارة مصدومة جاهزة للبيع فوراً"
+            alt="سيارة مصدومة وتالفة للبيع تشليح نقداً مع سطحة مجانية في جدة ومكة والطائف"
             fill
             className="
               hero-car-damaged

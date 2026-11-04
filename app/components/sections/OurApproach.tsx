@@ -12,31 +12,31 @@ gsap.registerPlugin(ScrollTrigger, SplitText);
 const IMAGES = [
   {
     src: "/car1.webp",
-    alt: "شراء سيارات مصدومة في جدة ومكة والطائف",
+    alt: "شراء سيارات مصدومة بحوادث في جدة ومكة والطائف بأعلى سعر كاش فوري",
     title: "شراء سيارات مصدومة",
     subtitle: "في جدة ومكة والطائف",
   },
   {
     src: "/car2.webp",
-    alt: "شراء سيارات تالفة ومكبس في جدة ومكة",
+    alt: "شراء سيارات تالفة بالكامل ومكبس وسكراب في جدة ومكة مع سطحة مجانية",
     title: "سيارات تالفة ومكبس",
     subtitle: "سعر فوري وشراء نقدي",
   },
   {
     src: "/car3.webp",
-    alt: "شراء سيارات تشليح وقطع غيار في جدة ومكة",
+    alt: "شراء سيارات تشليح وقطع غيار وإسقاط لوحات في جدة ومكة والطائف",
     title: "شراء سيارات تشليح",
     subtitle: "معاملة شفافة وسريعة",
   },
   {
     src: "/car4.webp",
-    alt: "شراء سيارات متعطلة ومصدومة في جدة ومكة",
+    alt: "شراء سيارات متعطلة ميكانيكياً وكهربائياً في جدة ومكة بدون فحص دوري",
     title: "سيارات متعطلة",
     subtitle: "بيعها بسهولة وبدون تعقيد",
   },
   {
     src: "/car5.webp",
-    alt: "شراء سيارات قديمة وتالفه في مكة وجدة",
+    alt: "شراء سيارات قديمة وتالفة متوقفة في مكة وجدة مع نقل فوري",
     title: "شراء سيارات قديمة",
     subtitle: "تقييم عادل ونتيجة في نفس اليوم",
   },
@@ -55,16 +55,10 @@ export default function OurApproach() {
 
       if (!title || !items.length) return;
 
-      // ---------------------------------------------
-      // Split title
-      // ---------------------------------------------
       const titleSplit = SplitText.create(title, {
         type: "words",
       });
 
-      // ---------------------------------------------
-      // Initial state
-      // ---------------------------------------------
       gsap.set(titleSplit.words, {
         opacity: 0,
         yPercent: 100,
@@ -75,9 +69,6 @@ export default function OurApproach() {
         y: 20,
       });
 
-      // ---------------------------------------------
-      // Scroll animation
-      // ---------------------------------------------
       const timeline = gsap.timeline({
         scrollTrigger: {
           trigger: section,
@@ -88,9 +79,6 @@ export default function OurApproach() {
       });
 
       timeline
-        // -------------------------------------------
-        // TITLE
-        // -------------------------------------------
         .to(titleSplit.words, {
           opacity: 1,
           yPercent: 0,
@@ -98,9 +86,6 @@ export default function OurApproach() {
           ease: "expo.out",
           stagger: 0.025,
         })
-        // -------------------------------------------
-        // IMAGES
-        // -------------------------------------------
         .to(
           items,
           {
@@ -114,9 +99,6 @@ export default function OurApproach() {
           "-=0.35",
         );
 
-      // ---------------------------------------------
-      // Cleanup
-      // ---------------------------------------------
       return () => {
         titleSplit.revert();
       };
@@ -133,30 +115,25 @@ export default function OurApproach() {
       ref={sectionRef}
       id="how-it-works"
       dir="rtl"
-      className="mx-auto max-w-[1300px] px-5  2xl:px-0"
+      className="mx-auto max-w-[1300px] px-5 2xl:px-0"
     >
-      {/* ============================================
-          HEADER
-      ============================================ */}
-
+      {/* HEADER */}
       <div className="mb-16 px-4 md:px-0">
         <div className="grid grid-cols-1 gap-5 lg:grid-cols-12">
           {/* TITLE */}
-
           <div className="lg:col-span-8">
-            <p className="mb-8 inline-block rounded-full bg-[var(--color-cta)] px-4 py-2 text-sm font-medium text-white">
-              شراء سيارات مصدومة وتالفة ومكبس في جدة ومكة والطائف
-            </p>
+            <span className="mb-8 inline-block rounded-full bg-[var(--color-cta)] px-4 py-2 text-sm font-semibold text-white">
+              خدماتنا: شراء سيارات مصدومة وتالفة ومكبس في جدة ومكة والطائف
+            </span>
 
-            <h2 className="max-w-lg text-5xl font-bold leading-tight text-[var(--color-ink)] md:text-5xl">
+            <h2 className="max-w-lg text-4xl font-bold leading-tight text-[var(--color-ink)] md:text-5xl">
               شراء سيارات مصدومة وتالفة ومكبس بسرعة وشفافية كاملة
             </h2>
           </div>
 
           {/* DESCRIPTION */}
-
           <div className="mt-4 flex flex-col justify-between gap-2 lg:col-span-4 lg:mt-0">
-            <p className="text-lg leading-relaxed text-[var(--color-ink-soft)]">
+            <p className="text-lg leading-relaxed text-[var(--color-ink-soft)] font-medium">
               نشتري سيارات مصدومة، تالفة، ومكبس في جدة ومكة والطائف بأعلى
               مستويات الثقة والشفافية. نضمن لك تقييمًا عادلًا، صفقة سريعة،
               واستلام نقدي بدون تعقيد أو ضغط.
@@ -167,7 +144,7 @@ export default function OurApproach() {
                 +5000
               </p>
 
-              <p className="text-sm font-medium text-[var(--color-ink-soft)]">
+              <p className="text-sm font-semibold text-[var(--color-ink-soft)]">
                 سيارة تم شراؤها بنظام موثوق
               </p>
             </div>
@@ -175,10 +152,7 @@ export default function OurApproach() {
         </div>
       </div>
 
-      {/* ============================================
-          IMAGE GRID — ROW 1
-      ============================================ */}
-
+      {/* IMAGE GRID — ROW 1 */}
       <div className="mb-5 grid grid-cols-1 gap-5 px-5 md:px-0 xl:grid-cols-12">
         {IMAGES.slice(0, 3).map((image, index) => (
           <div
@@ -206,11 +180,14 @@ export default function OurApproach() {
               }
             />
 
-            <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
 
             <div className="absolute inset-x-0 bottom-0 p-4 text-right text-white">
-              <p className="text-lg text-white font-bold md:text-2xl">{image.title}</p>
-              <p className="mt-1 text-xs text-white/80 md:text-sm">
+              {/* Semantic H3 for each service */}
+              <h3 className="text-lg text-white font-bold md:text-2xl">
+                {image.title}
+              </h3>
+              <p className="mt-1 text-xs text-white/90 font-medium md:text-sm">
                 {image.subtitle}
               </p>
             </div>
@@ -218,10 +195,7 @@ export default function OurApproach() {
         ))}
       </div>
 
-      {/* ============================================
-          IMAGE GRID — ROW 2
-      ============================================ */}
-
+      {/* IMAGE GRID — ROW 2 */}
       <div className="grid grid-cols-1 gap-5 px-5 md:grid-cols-12 md:px-0">
         {IMAGES.slice(3).map((image, index) => (
           <div
@@ -242,11 +216,14 @@ export default function OurApproach() {
               }
             />
 
-            <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
 
             <div className="absolute inset-x-0 bottom-0 p-4 text-right text-white">
-              <p className="text-lg text-white font-bold md:text-2xl">{image.title}</p>
-              <p className="mt-1 text-xs text-white/80 md:text-sm">
+              {/* Semantic H3 for each service */}
+              <h3 className="text-lg text-white font-bold md:text-2xl">
+                {image.title}
+              </h3>
+              <p className="mt-1 text-xs text-white/90 font-medium md:text-sm">
                 {image.subtitle}
               </p>
             </div>
