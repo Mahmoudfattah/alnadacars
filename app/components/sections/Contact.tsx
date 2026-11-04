@@ -2,14 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import {
-  CarFront,
-  Code2,
-  Globe,
-  MessageCircle,
-  Music2,
-  Phone,
-} from "lucide-react";
+import { Code2, Globe, MessageCircle, Phone } from "lucide-react";
 
 const WHATSAPP_NUMBER = "966562117196";
 const PHONE_NUMBERS = ["056 211 7196", "0532449975", "0561849429"];
@@ -26,7 +19,7 @@ const CONTACT_METHODS = [
     icon: Phone,
     title: "اتصل بنا مباشرة",
     desc: "فريقنا متاح للرد على استفساراتك خلال أوقات العمل.",
-    action: `tel:${PHONE_NUMBERS[0]}`,
+    action: `tel:${PHONE_NUMBERS[0].replace(/\s+/g, "")}`,
     actionLabel: PHONE_NUMBERS[0],
   },
 ];
@@ -36,30 +29,11 @@ const QUICK_LINKS = [
   { label: "من نحن", href: "#about" },
   { label: "كيف تعمل الخدمة", href: "#how-it-works" },
   { label: "المدن التي نخدمها", href: "#cities" },
+  { label: "الأسئلة الشائعة", href: "#faq" },
   { label: "المدونة", href: "https://sikrabsa.com/blog" },
 ];
 
 const SOCIAL_LINKS = [
-  // {
-  //   label: "Facebook",
-  //   href: "https://www.facebook.com/share/1Ez8SPcBxB/",
-  //   icon: Facebook,
-  // },
-  // {
-  //   label: "TikTok",
-  //   href: "https://www.tiktok.com/@ahmdtop3?_r=1&_t=ZS-988TmPzlcFM",
-  //   icon: Music2,
-  // },
-  // {
-  //   label: "Ahmed Alhawary",
-  //   href: "https://ahmed-alhawary.com/",
-  //   icon: Globe,
-  // },
-  // {
-  //   label: "Alnada Cars",
-  //   href: "https://alnada-cars.com/",
-  //   icon: CarFront,
-  // },
   {
     label: "Haraj Cars",
     href: "https://haraj.com.sa/users/%D8%AA%D8%B4%D9%84%D9%8A%D8%AD%20%D8%A7%D9%84%D9%86%D8%AF%D9%89%20%D9%84%D8%B9%D8%A7%D9%84%D9%85%20%D8%A7%D9%84%D8%B3%D9%8A%D8%A7%D8%B1%D8%A7%D8%AA/",
@@ -74,7 +48,23 @@ export default function ContactFooter() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
+    // Track WhatsApp Evaluation Form Submission in GA4
+    if (
+      typeof window !== "undefined" &&
+      typeof (window as unknown as { gtag?: (...args: unknown[]) => void })
+        .gtag === "function"
+    ) {
+      (window as unknown as { gtag: (...args: unknown[]) => void }).gtag(
+        "event",
+        "whatsapp_form_submit",
+        {
+          event_category: "Lead",
+          event_label: carInfo,
+        },
+      );
+    }
+
     const message = `مرحباً، أريد تقييم سيارتي:%0Aالاسم: ${encodeURIComponent(
       name,
     )}%0Aرقم الجوال: ${encodeURIComponent(
@@ -230,7 +220,6 @@ export default function ContactFooter() {
           </div>
 
           {/* Bottom bar */}
-          {/* Bottom bar */}
           <div className="mt-10 flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-8 text-xs text-white/40 md:flex-row">
             <p>
               © {new Date().getFullYear()} شراء السيارات المصدومة. جميع الحقوق
@@ -242,13 +231,13 @@ export default function ContactFooter() {
               <Code2 size={14} className="text-white/40" />
               <span>تم تطوير الموقع بواسطة</span>
               <a
-                href="https://www.tiktok.com/@dev_flow"
+                href="https://www.tiktok.com/@mahmoudfattah.dev"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="font-medium text-white underline underline-offset-4 transition-colors hover:text-blue-600"
                 aria-label="تم تطوير الموقع بواسطة DevFlow"
               >
-                Dev Flow
+                mahmoudfattah.dev
               </a>
             </div>
 
