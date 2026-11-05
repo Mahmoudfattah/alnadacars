@@ -5,21 +5,21 @@ import { useEffect, useRef, useState } from "react";
 import { Volume2, VolumeOff } from "lucide-react";
 
 /* -------------------------------------------------------------------------- */
-/*  Content                                                                   */
+/*  Content — Enriched with Jeddah, Makkah & Taif Local SEO Signals           */
 /* -------------------------------------------------------------------------- */
 
 const REASONS_PRIMARY = [
-  "تقييم فوري ومجاني لسيارتك المصدومة",
-  "أسعار تنافسية تفوق متوسط السوق",
-  "معاينة في موقعك دون أي تكلفة إضافية",
-  "لا حاجة لإصلاح السيارة قبل البيع",
+  "تقييم فوري ومجاني لسيارتك المصدومة أو التالفة",
+  "أعلى سعر شراء نقدي يفوق متوسط سوق التشليح",
+  "معاينة فورية في موقعك دون أي رسوم أو تكلفة",
+  "شراء السيارات بحالتها دون الحاجة لإصلاح أو فحص",
 ];
 
 const REASONS_SECONDARY = [
-  "دفع نقدي فوري خلال 30 دقيقة",
-  "سطحة مجانية لنقل السيارة من موقعك",
-  "نغطي جميع أحياء جدة ومكة المكرمة",
-  "فريق محترف وموثوق في مجال شراء السيارات",
+  "دفع كاش فوري أو تحويل بنكي خلال 30 دقيقة",
+  "سطحة خاصة مجانية لنقل السيارة من أمام منزلك",
+  "تغطية شاملة لجميع أحياء جدة ومكة المكرمة والطائف",
+  "إنهاء إجراءات نقل الملكية وإسقاط اللوحات فوراً",
 ];
 
 /* -------------------------------------------------------------------------- */
@@ -42,14 +42,14 @@ function FeatureList({ items, align = "start" }: FeatureListProps) {
           <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-blue-50 to-blue-100/50 shadow-inner ring-1 ring-blue-200/50 transition-transform duration-300 group-hover:scale-110">
             <Image
               src="/check.webp"
-              alt="علامة صح"
+              alt="ميزة شراء السيارات المصدومة والتشليح"
               width={18}
               height={18}
               className="object-contain opacity-90"
             />
           </div>
           <p
-            className={`w-full text-sm font-semibold leading-relaxed text-gray-700 md:text-base ${
+            className={`w-full text-sm font-semibold leading-relaxed text-gray-800 md:text-base ${
               align === "end" ? "md:text-left" : "md:text-right"
             } text-right`}
             dir="rtl"
@@ -72,6 +72,26 @@ const About = () => {
 
   const [soundOn, setSoundOn] = useState(false);
   const [videoLoaded, setVideoLoaded] = useState(false);
+
+  const videoSchema = {
+    "@context": "https://schema.org",
+    "@type": "VideoObject",
+    name: "شراء سيارات مصدومة وتالفة وتشليح في جدة ومكة والطائف كاش فوري — بيعها كاش",
+    description:
+      "شاهد خطوات تقييم وشراء السيارات المصدومة والتالفة والمتعطلة والتشليح في جدة ومكة المكرمة والطائف بأفضل سعر كاش فوري خلال 30 دقيقة مع سطحة مجانية وإسقاط اللوحات.",
+    thumbnailUrl: ["https://ba3hacash.com/car1.webp"],
+    uploadDate: "2026-08-21T12:00:00+03:00",
+    duration: "PT35S",
+    contentUrl: "https://ba3hacash.com/video-optimized.mp4",
+    embedUrl: "https://ba3hacash.com/#about",
+    inLanguage: "ar-SA",
+    isFamilyFriendly: true,
+    publisher: {
+      "@type": "Organization",
+      name: "بيعها كاش لشراء السيارات المصدومة والتشليح",
+      url: "https://ba3hacash.com",
+    },
+  };
 
   // Lazy load the video when the section comes into view
   useEffect(() => {
@@ -129,27 +149,28 @@ const About = () => {
       ref={containerRef}
       className="relative w-full overflow-hidden bg-(--color-bg-soft) py-16 md:py-24"
     >
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(videoSchema) }}
+      />
+
       <div className="container mx-auto flex max-w-7xl flex-col items-center justify-center gap-12 px-6 relative z-10">
-        
         {/* TITLE */}
         <div className="text-center">
           <h2 className="text-4xl font-black tracking-tight text-gray-900 md:text-5xl lg:text-6xl leading-[1.2]">
-            شراء سيارات مصدومة
+            شراء سيارات مصدومة وتشليح
             <br className="hidden md:block" />
             <span className="mt-2 block bg-gradient-to-r from-blue-600 to-blue-400 bg-clip-text text-transparent pb-2 drop-shadow-sm">
-              جدة ومكة والطائف
+              جدة ومكة المكرمة والطائف
             </span>
           </h2>
         </div>
 
         {/* MAIN GRID */}
-        {/* order-first md:order-none on the video ensures it sits at the top on mobile, but center on desktop */}
         <div className="flex w-full flex-col gap-8 md:grid md:grid-cols-[1fr_2.5fr_1fr] md:items-center md:gap-6 lg:gap-10">
-          
           {/* CENTER VIDEO WITH DECORATIVE WHEELS */}
           <div className="relative mx-auto w-full max-w-2xl order-first md:order-none aspect-square md:aspect-[4/3] lg:h-[65vh] flex items-center justify-center">
-            
-            {/* DECORATIVE BACKGROUND WHEELS (Hidden on very small screens, visible behind video otherwise) */}
+            {/* DECORATIVE BACKGROUND WHEELS */}
             <Image
               src="/ChatGPT Image 15 أغسطس 2026، 05_34_06 م.webp"
               alt=""
@@ -173,13 +194,14 @@ const About = () => {
                 <video
                   ref={videoRef}
                   src="/video-optimized.mp4"
+                  poster="/car1.webp"
                   className="h-full w-full object-cover transition-opacity duration-700"
                   autoPlay
                   muted
                   loop
                   playsInline
                   preload="none"
-                  aria-label="فيديو السيارة المصدومة"
+                  aria-label="فيديو توضيحي لخطوات شراء السيارات المصدومة والتالفة في جدة ومكة والطائف"
                 />
               )}
 
@@ -214,25 +236,19 @@ const About = () => {
         {/* FINAL REVEAL CONTENT */}
         <div className="mt-4 flex w-full max-w-2xl flex-col items-center justify-center text-center">
           <h3 className="mb-3 text-2xl font-black text-gray-900 md:text-3xl">
-            من أول اتصال إلى استلام الكاش
+            من أول اتصال إلى استلام الكاش ونقل الملكية
           </h3>
-          <p className="text-base font-medium leading-relaxed text-gray-600 md:text-lg">
-            شاهد كيف نُقيّم سيارتك المصدومة وندفع لك القيمة نقداً في نفس اليوم.
+          <p className="text-base font-medium leading-relaxed text-gray-700 md:text-lg">
+            شاهد كيف نُقيّم سيارتك المصدومة أو التالفة في جدة ومكة والطائف وندفع
+            لك القيمة نقداً في نفس اليوم مع سطحة مجانية.
           </p>
         </div>
-        
       </div>
     </section>
   );
 };
 
 export default About;
-
-
-
-
-
-
 
 // "use client";
 
@@ -1120,5 +1136,3 @@ export default About;
 //     </section>
 //   );
 // }
-
-
