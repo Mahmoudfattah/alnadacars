@@ -30,7 +30,7 @@ const QUICK_LINKS = [
   { label: "كيف تعمل الخدمة", href: "#how-it-works" },
   { label: "المدن التي نخدمها", href: "#cities" },
   { label: "الأسئلة الشائعة", href: "#faq" },
-  { label: "المدونة", href: "https://sikrabsa.com/blog" },
+  // { label: "المدونة", href: "https://sikrabsa.com/blog" },
 ];
 
 const SOCIAL_LINKS = [
