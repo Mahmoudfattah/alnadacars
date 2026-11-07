@@ -14,6 +14,7 @@ const NAV_LINKS = [
   { label: "من نحن", href: "#about" },
   { label: "كيف تعمل الخدمة", href: "#how-it-works" },
   { label: "المدن التي نخدمها", href: "#cities" },
+  { label: "الأسئلة الشائعة", href: "#faq" },
 ];
 
 const NAV_OFFSET = 110;
@@ -31,6 +32,18 @@ export default function Navbar() {
   const logoRef = useRef<HTMLAnchorElement | null>(null);
   const navLinksRef = useRef<HTMLElement | null>(null);
   const ctaRef = useRef<HTMLAnchorElement | null>(null);
+
+  const trackNavbarWhatsApp = (locationLabel: string) => {
+    if (
+      typeof window !== "undefined" &&
+      typeof (window as any).gtag === "function"
+    ) {
+      (window as any).gtag("event", "whatsapp_click", {
+        event_category: "engagement",
+        event_label: locationLabel,
+      });
+    }
+  };
 
   /* =====================================================
      DESKTOP NAVBAR ANIMATIONS
@@ -86,8 +99,16 @@ export default function Navbar() {
       const scrollAnimation = gsap.timeline({ paused: true });
 
       scrollAnimation.to(nav, { y: 4, duration: 0.4, ease: "power2.out" }, 0);
-      scrollAnimation.to(glass, { opacity: 1, duration: 0.4, ease: "power2.out" }, 0);
-      scrollAnimation.to(border, { opacity: 1, duration: 0.35, ease: "power2.out" }, 0);
+      scrollAnimation.to(
+        glass,
+        { opacity: 1, duration: 0.4, ease: "power2.out" },
+        0,
+      );
+      scrollAnimation.to(
+        border,
+        { opacity: 1, duration: 0.35, ease: "power2.out" },
+        0,
+      );
 
       const trigger = ScrollTrigger.create({
         start: "top -10",
@@ -328,6 +349,7 @@ export default function Navbar() {
               <Link
                 href="/"
                 ref={logoRef}
+                aria-label="بيعها كاش - الصفحة الرئيسية"
                 className="logo opacity-0 -translate-y-5 flex shrink-0 items-center gap-2 md:gap-1.5 min-[940px]:gap-2"
                 onClick={(event) => {
                   event.preventDefault();
@@ -339,21 +361,22 @@ export default function Navbar() {
               >
                 <Image
                   src="/logocut.webp"
-                  alt="شراء السيارات المصدومة"
+                  alt="بيعها كاش - شراء السيارات المصدومة والتشليح في جدة ومكة والطائف"
                   width={100}
                   height={100}
                   priority
                   className="object-contain md:h-16 md:w-16 min-[940px]:h-25 min-[940px]:w-25"
                 />
                 <span className="hidden font-bold text-(--color-cta) sm:block md:text-sm min-[940px]:text-base">
-                  شراء السيارات المصدومة
+                  بيعها كاش — شراء السيارات المصدومة
                 </span>
               </Link>
             </div>
 
             <nav
               ref={navLinksRef}
-              className="hidden items-center justify-center gap-4 md:flex min-[940px]:gap-8"
+              aria-label="التنقل الرئيسي"
+              className="hidden items-center justify-center gap-4 md:flex min-[940px]:gap-7"
             >
               {NAV_LINKS.map((link) => (
                 <Link
@@ -385,6 +408,7 @@ export default function Navbar() {
                 target="_blank"
                 rel="noopener noreferrer"
                 ref={ctaRef}
+                onClick={() => trackNavbarWhatsApp("desktop_navbar_whatsapp")}
                 className="btn opacity-0 -translate-y-5 inline-flex shrink-0 items-center gap-2 rounded-(--radius-pill) bg-(--color-cta) px-4 py-2 text-xs font-semibold text-white transition-all hover:bg-(--color-cta-hover) min-[940px]:px-6 min-[940px]:py-3 min-[940px]:text-sm hover:shadow-md hover:-translate-y-1!"
               >
                 تواصل معنا
@@ -418,6 +442,7 @@ export default function Navbar() {
       <nav
         ref={navMobile}
         dir="rtl"
+        aria-label="قائمة الموبايل"
         style={{ transform: "translateX(-100%)" }}
         className="fixed left-0 top-0 z-[100] h-dvh w-[60%] max-w-95 overflow-y-auto bg-(--color-bg-raised) px-6 py-6 shadow-[20px_0_50px_rgba(0,0,0,0.12)] md:hidden"
       >
@@ -461,7 +486,10 @@ export default function Navbar() {
           target="_blank"
           rel="noopener noreferrer"
           style={{ opacity: 0, transform: "translateX(30px)" }}
-          onClick={handleMobileLinkClick}
+          onClick={() => {
+            trackNavbarWhatsApp("mobile_navbar_whatsapp");
+            handleMobileLinkClick();
+          }}
           className="mobile-link mt-6 flex w-full items-center justify-center rounded-(--radius-pill) bg-(--color-cta) px-6 py-3 text-sm font-semibold text-white hover:shadow-md hover:-translate-y-1"
         >
           تواصل معنا
