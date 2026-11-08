@@ -2,7 +2,7 @@
 
 import { useState, useRef } from "react";
 import Link from "next/link";
-import { MapPin } from "lucide-react";
+import { MapPin, ArrowLeft } from "lucide-react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -27,6 +27,7 @@ const CITIES = [
     ],
     lat: 21.5433,
     lng: 39.1728,
+    href: "",
   },
   {
     name: "مكة المكرمة",
@@ -43,6 +44,7 @@ const CITIES = [
     ],
     lat: 21.3891,
     lng: 39.8579,
+    href: "",
   },
   {
     name: "الطائف",
@@ -59,6 +61,7 @@ const CITIES = [
     ],
     lat: 21.2854,
     lng: 40.4183,
+    href: "/taif",
   },
 ];
 
@@ -245,10 +248,14 @@ export default function CitiesWeServe() {
               const isActive = i === active;
 
               return (
-                <button
+                <div
                   key={c.name}
-                  type="button"
                   onClick={() => handleCityChange(i)}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") handleCityChange(i);
+                  }}
                   className={`city-item group relative flex cursor-pointer flex-col items-start gap-3 overflow-hidden rounded-2xl border p-5 text-right transition-all duration-500 ease-out ${
                     isActive
                       ? "scale-[1.02] border-blue-200 bg-white shadow-lg shadow-blue-900/5 ring-1 ring-blue-100"
@@ -279,15 +286,28 @@ export default function CitiesWeServe() {
                     </span>
 
                     <div className="min-w-0 flex-1">
-                      <h3
-                        className={`mb-1 text-lg font-bold transition-colors duration-300 ${
-                          isActive
-                            ? "text-blue-600"
-                            : "text-gray-900 group-hover:text-blue-600"
-                        }`}
-                      >
-                        {c.name}
-                      </h3>
+                      <div className="flex items-center justify-between gap-2">
+                        <h3
+                          className={`mb-1 text-lg font-bold transition-colors duration-300 ${
+                            isActive
+                              ? "text-blue-600"
+                              : "text-gray-900 group-hover:text-blue-600"
+                          }`}
+                        >
+                          {c.name}
+                        </h3>
+
+                        {c.href && (
+                          <Link
+                            href={c.href}
+                            onClick={(e) => e.stopPropagation()}
+                            className="inline-flex items-center gap-1 rounded-full bg-blue-50 border border-blue-200 px-3 py-1 text-xs font-bold text-blue-700 hover:bg-blue-600 hover:text-white transition-all"
+                          >
+                            <span>صفحة فرع {c.name}</span>
+                            <ArrowLeft className="w-3.5 h-3.5" />
+                          </Link>
+                        )}
+                      </div>
 
                       <p className="text-sm leading-relaxed text-slate-600">
                         {c.desc}
@@ -310,7 +330,7 @@ export default function CitiesWeServe() {
                       </span>
                     ))}
                   </div>
-                </button>
+                </div>
               );
             })}
 

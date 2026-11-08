@@ -30,7 +30,7 @@ const QUICK_LINKS = [
   { label: "كيف تعمل الخدمة", href: "#how-it-works" },
   { label: "المدن التي نخدمها", href: "#cities" },
   { label: "الأسئلة الشائعة", href: "#faq" },
-  // { label: "المدونة", href: "https://sikrabsa.com/blog" },
+  { label: "شراء سيارات مصدومة في الطائف", href: "/taif" },
 ];
 
 const SOCIAL_LINKS = [
@@ -186,7 +186,7 @@ export default function ContactFooter() {
             </div>
 
             <div className="grid grid-cols-1 gap-16 pt-4 lg:grid-cols-2">
-              <nav>
+              <nav aria-label="روابط الفوتر">
                 <p className="mb-4 text-sm text-white/50">روابط سريعة</p>
 
                 <ul className="flex flex-wrap gap-x-8 gap-y-3">
@@ -222,8 +222,8 @@ export default function ContactFooter() {
           {/* Bottom bar */}
           <div className="mt-10 flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-8 text-xs text-white/40 md:flex-row">
             <p>
-              © {new Date().getFullYear()} شراء السيارات المصدومة. جميع الحقوق
-              محفوظة.
+              © {new Date().getFullYear()} بيعها كاش لشراء السيارات المصدومة
+              والتشليح. جميع الحقوق محفوظة.
             </p>
 
             <div className="flex items-center gap-2 text-white/60">
@@ -235,9 +235,9 @@ export default function ContactFooter() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="font-medium text-white underline underline-offset-4 transition-colors hover:text-blue-600"
-                aria-label="تم تطوير الموقع بواسطة DevFlow"
+                aria-label="تم تطوير الموقع بواسطة mahmoudfattah.dev"
               >
-                mahmoudfattah.dev
+                Mahmoud Fattah | Developer
               </a>
             </div>
 
