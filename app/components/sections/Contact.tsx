@@ -2,7 +2,12 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Code2, Globe, MessageCircle, Phone } from "lucide-react";
+import {
+  Code2,
+  Globe,
+  MessageCircle,
+  Phone,
+} from "lucide-react";
 
 const WHATSAPP_NUMBER = "966562117196";
 const PHONE_NUMBERS = ["056 211 7196", "0532449975", "0561849429"];
@@ -30,7 +35,8 @@ const QUICK_LINKS = [
   { label: "كيف تعمل الخدمة", href: "#how-it-works" },
   { label: "المدن التي نخدمها", href: "#cities" },
   { label: "الأسئلة الشائعة", href: "#faq" },
-  { label: "شراء سيارات مصدومة في الطائف", href: "/taif" },
+  { label: "تشليح وشراء سيارات مكة", href: "/makkah" },
+  { label: "شراء سيارات مصدومة الطائف", href: "/taif" },
 ];
 
 const SOCIAL_LINKS = [
@@ -50,19 +56,11 @@ export default function ContactFooter() {
     e.preventDefault();
 
     // Track WhatsApp Evaluation Form Submission in GA4
-    if (
-      typeof window !== "undefined" &&
-      typeof (window as unknown as { gtag?: (...args: unknown[]) => void })
-        .gtag === "function"
-    ) {
-      (window as unknown as { gtag: (...args: unknown[]) => void }).gtag(
-        "event",
-        "whatsapp_form_submit",
-        {
-          event_category: "Lead",
-          event_label: carInfo,
-        },
-      );
+    if (typeof window !== "undefined" && typeof (window as unknown as { gtag?: (...args: unknown[]) => void }).gtag === "function") {
+      (window as unknown as { gtag: (...args: unknown[]) => void }).gtag("event", "whatsapp_form_submit", {
+        event_category: "Lead",
+        event_label: carInfo,
+      });
     }
 
     const message = `مرحباً، أريد تقييم سيارتي:%0Aالاسم: ${encodeURIComponent(

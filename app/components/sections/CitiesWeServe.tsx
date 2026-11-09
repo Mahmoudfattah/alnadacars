@@ -44,7 +44,7 @@ const CITIES = [
     ],
     lat: 21.3891,
     lng: 39.8579,
-    href: "",
+    href: "/makkah",
   },
   {
     name: "الطائف",
