@@ -27,7 +27,7 @@ const CITIES = [
     ],
     lat: 21.5433,
     lng: 39.1728,
-    href: "",
+    href: "/jeddah",
   },
   {
     name: "مكة المكرمة",

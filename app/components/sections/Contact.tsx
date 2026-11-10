@@ -35,6 +35,7 @@ const QUICK_LINKS = [
   { label: "كيف تعمل الخدمة", href: "#how-it-works" },
   { label: "المدن التي نخدمها", href: "#cities" },
   { label: "الأسئلة الشائعة", href: "#faq" },
+    { label: "شراء سيارات مصدومة جدة", href: "/jeddah" },
   { label: "تشليح وشراء سيارات مكة", href: "/makkah" },
   { label: "شراء سيارات مصدومة الطائف", href: "/taif" },
 ];
