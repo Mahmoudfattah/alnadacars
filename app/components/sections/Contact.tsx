@@ -2,12 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import {
-  Code2,
-  Globe,
-  MessageCircle,
-  Phone,
-} from "lucide-react";
+import { Code2, Globe, MessageCircle, Phone } from "lucide-react";
 
 const WHATSAPP_NUMBER = "966562117196";
 const PHONE_NUMBERS = ["056 211 7196", "0532449975", "0561849429"];
@@ -32,16 +27,12 @@ const CONTACT_METHODS = [
 const QUICK_LINKS = [
   { label: "الرئيسية", href: "/" },
   { label: "من نحن", href: "#about" },
-  { label: "كيف تعمل الخدمة", href: "#how-it-works" },
-  { label: "المدن التي نخدمها", href: "#cities" },
   { label: "الأسئلة الشائعة", href: "#faq" },
   { label: "شراء سيارات مصدومة جدة", href: "/jeddah" },
   { label: "تشليح وشراء سيارات مكة", href: "/makkah" },
   { label: "شراء سيارات مصدومة الطائف", href: "/taif" },
-  {
-    label: "شراء سيارات تويوتا وهيونداي وجمس مصدوم",
-    href: "/scrap-car-brands",
-  },
+  { label: "شراء جميع ماركات السيارات", href: "/scrap-car-brands" },
+  { label: "المدونة والدليل الإرشادي", href: "/blog" },
 ];
 
 const SOCIAL_LINKS = [
@@ -60,12 +51,19 @@ export default function ContactFooter() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Track WhatsApp Evaluation Form Submission in GA4
-    if (typeof window !== "undefined" && typeof (window as unknown as { gtag?: (...args: unknown[]) => void }).gtag === "function") {
-      (window as unknown as { gtag: (...args: unknown[]) => void }).gtag("event", "whatsapp_form_submit", {
-        event_category: "Lead",
-        event_label: carInfo,
-      });
+    if (
+      typeof window !== "undefined" &&
+      typeof (window as unknown as { gtag?: (...args: unknown[]) => void })
+        .gtag === "function"
+    ) {
+      (window as unknown as { gtag: (...args: unknown[]) => void }).gtag(
+        "event",
+        "whatsapp_form_submit",
+        {
+          event_category: "Lead",
+          event_label: carInfo,
+        },
+      );
     }
 
     const message = `مرحباً، أريد تقييم سيارتي:%0Aالاسم: ${encodeURIComponent(
@@ -79,13 +77,11 @@ export default function ContactFooter() {
 
   return (
     <footer className="mx-auto max-w-[1800px] px-6 md:px-10 lg:px-16">
-      {/* Main Footer Container */}
       <div
         id="contact"
         className="mx-auto max-w-[1400px] overflow-hidden rounded-t-[2.5rem] bg-[var(--color-ink)] text-white"
       >
         <div className="px-6 py-6 md:px-10 md:py-8 lg:px-16">
-          {/* Left: Heading + form */}
           <div>
             <h2 className="mb-3 text-[38px] text-white/90 py-4 font-bold leading-tight md:text-[52px]">
               تواصل معنا
@@ -190,9 +186,11 @@ export default function ContactFooter() {
 
             <div className="grid grid-cols-1 gap-16 pt-4 lg:grid-cols-2">
               <nav aria-label="روابط الفوتر">
-                <p className="mb-4 text-sm text-white/50">روابط سريعة</p>
+                <p className="mb-4 text-sm text-white/50">
+                  روابط سريعة وفروعنا
+                </p>
 
-                <ul className="flex flex-wrap gap-x-8 gap-y-3">
+                <ul className="flex flex-wrap gap-x-6 gap-y-3">
                   {QUICK_LINKS.map((link) => (
                     <li key={link.href}>
                       <Link
@@ -222,7 +220,6 @@ export default function ContactFooter() {
             </div>
           </div>
 
-          {/* Bottom bar */}
           <div className="mt-10 flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-8 text-xs text-white/40 md:flex-row">
             <p>
               © {new Date().getFullYear()} بيعها كاش لشراء السيارات المصدومة
@@ -238,7 +235,7 @@ export default function ContactFooter() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="font-medium text-white underline underline-offset-4 transition-colors hover:text-blue-600"
-                aria-label="تم تطوير الموقع بواسطة mahmoudfattah.dev"
+                aria-label="تم تطوير الموقع بواسطة MahmoudFattah"
               >
                 Mahmoud Fattah | Developer
               </a>
