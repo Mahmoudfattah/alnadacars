@@ -7,6 +7,7 @@ import { Menu, X } from "lucide-react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useRouter } from "next/navigation";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -128,12 +129,19 @@ export default function Navbar() {
      HASH SCROLL + ACTIVE STATE
   ====================================================== */
 
+  // 2. جوه كومبوننت الـ Navbar عرّف الـ router:
+  const router = useRouter();
+
+  // 3. وجوه دالة scrollToSection استبدل if (!section) بـ router.push:
   const scrollToSection = (hash: string) => {
     const id = hash.replace("#", "");
     if (!id) return;
 
     const section = document.getElementById(id);
-    if (!section) return;
+    if (!section) {
+      router.push(`/${hash}`);
+      return;
+    }
 
     const top =
       section.getBoundingClientRect().top + window.scrollY - NAV_OFFSET;

@@ -32,6 +32,8 @@ const QUICK_LINKS = [
   { label: "تشليح وشراء سيارات مكة", href: "/makkah" },
   { label: "شراء سيارات مصدومة الطائف", href: "/taif" },
   { label: "شراء جميع ماركات السيارات", href: "/scrap-car-brands" },
+  { label: "إسقاط اللوحات الفوري عبر أبشر", href: "/isqat-lohat" },
+  // { label: "شراء سيارات متعطلة ومخبطة", href: "/broken-engine-cars" },
   { label: "المدونة والدليل الإرشادي", href: "/blog" },
 ];
 
