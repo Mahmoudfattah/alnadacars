@@ -3,6 +3,7 @@ import { Cairo, IBM_Plex_Sans_Arabic } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 import Navbar from "./components/layout/Navbar";
+import StickyMobileBar from "./components/layout/StickyMobileBar";
 
 /* Display font — headings, hero, CTAs */
 const cairo = Cairo({
@@ -169,6 +170,7 @@ export default function RootLayout({
 
         <Navbar />
         <main>{children}</main>
+        <StickyMobileBar/>
       </body>
     </html>
   );
