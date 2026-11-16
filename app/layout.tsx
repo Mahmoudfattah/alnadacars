@@ -121,7 +121,7 @@ export default function RootLayout({
     >
       <body
         suppressHydrationWarning={true}
-        className="bg-white text-[var(--color-ink)] antialiased"
+        className="bg-white text-[var(--color-ink)] antialiased pb-14 md:pb-0"
       >
         <script
           type="application/ld+json"
@@ -170,7 +170,7 @@ export default function RootLayout({
 
         <Navbar />
         <main>{children}</main>
-        <StickyMobileBar/>
+        <StickyMobileBar />
       </body>
     </html>
   );
