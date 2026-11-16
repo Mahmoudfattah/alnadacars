@@ -3,9 +3,9 @@
 import { useRef } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
-import Link from "next/link";
 import Image from "next/image";
-import { ArrowLeft, Banknote, CarFront, Clock3 } from "lucide-react";
+import { Banknote, CarFront, Clock3, Phone } from "lucide-react";
+import HeroQuickForm from "./HeroQuickForm";
 
 const STATS = [
   {
@@ -46,128 +46,25 @@ export default function Hero() {
         },
       });
 
-      // 1. NON-LCP CONTENT REVEAL
       tl.fromTo(
         ".hero-badge",
-        {
-          opacity: 0,
-          y: 30,
-        },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.7,
-        },
+        { opacity: 0, y: 20 },
+        { opacity: 1, y: 0, duration: 0.6 },
       )
         .fromTo(
           ".hero-description",
-          {
-            opacity: 0,
-            y: 20,
-          },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.7,
-          },
-          "-=0.5",
+          { opacity: 0, y: 15 },
+          { opacity: 1, y: 0, duration: 0.6 },
+          "-=0.4",
         )
         .fromTo(
           ".reveal-item:not(.hero-badge):not(.hero-description)",
-          {
-            opacity: 0,
-            y: 20,
-          },
-          {
-            opacity: 1,
-            y: 0,
-            stagger: 0.1,
-            duration: 0.7,
-          },
-          "-=0.5",
-        )
-        .fromTo(
-          ".hero-map",
-          {
-            opacity: 0,
-            scale: 0.97,
-          },
-          {
-            opacity: 1,
-            scale: 1,
-            duration: 0.8,
-          },
-          "-=0.5",
+          { opacity: 0, y: 15 },
+          { opacity: 1, y: 0, stagger: 0.08, duration: 0.6 },
+          "-=0.4",
         );
-
-      // 2. CLEAN CAR ENTERS
-      tl.fromTo(
-        ".hero-car-clean",
-        {
-          opacity: 0,
-          x: -400,
-          rotation: -2,
-        },
-        {
-          opacity: 1,
-          x: 0,
-          rotation: 0,
-          duration: 1.4,
-          ease: "power3.out",
-        },
-        "-=0.5",
-      )
-        .to(
-          ".hero-car-clean",
-          {
-            opacity: 0,
-            duration: 0.6,
-            ease: "power2.inOut",
-          },
-          "-=0.6",
-        )
-        .fromTo(
-          ".hero-car-damaged",
-          {
-            opacity: 0,
-            scale: 0.96,
-            x: 15,
-            rotation: 1,
-          },
-          {
-            opacity: 1,
-            scale: 1,
-            x: 0,
-            rotation: 0,
-            duration: 0.8,
-            ease: "power2.out",
-          },
-          "<",
-        );
-
-      // 3. CONTINUOUS FLOATS
-      gsap.to(".hero-car-damaged", {
-        y: -12,
-        rotation: -1,
-        duration: 3,
-        repeat: -1,
-        yoyo: true,
-        ease: "sine.inOut",
-        delay: 0.4,
-      });
-
-      gsap.to(".hero-map", {
-        scale: 1.03,
-        rotation: 1,
-        duration: 5,
-        repeat: -1,
-        yoyo: true,
-        ease: "sine.inOut",
-      });
     },
-    {
-      scope: heroRef,
-    },
+    { scope: heroRef },
   );
 
   return (
@@ -180,17 +77,17 @@ export default function Hero() {
         className="
           mx-auto grid max-w-[1400px]
           items-center
-          gap-12
-          px-6 py-20
+          gap-10
+          px-6 pt-24 pb-14
           md:grid-cols-2
-          md:gap-10
+          md:gap-12
           md:px-10
-          md:py-30
+          md:pt-28 md:pb-20
         "
       >
-        {/* TEXT COLUMN */}
-        <div className="flex flex-col items-start gap-6">
-          <span className="reveal-item hero-badge inline-flex items-center gap-2 rounded-full border border-slate-200/60 bg-white/60 px-5 py-2.5 text-xs font-semibold text-slate-800 shadow-sm backdrop-blur-md">
+        {/* RIGHT COLUMN: HEADLINE + DIRECT CALL + STATS */}
+        <div className="flex flex-col items-start gap-5">
+          <span className="reveal-item hero-badge inline-flex items-center gap-2 rounded-full border border-slate-200/60 bg-white/70 px-5 py-2 text-xs font-semibold text-slate-800 shadow-sm backdrop-blur-md">
             <span className="relative flex h-2.5 w-2.5">
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
               <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-emerald-500" />
@@ -198,193 +95,55 @@ export default function Hero() {
             كاش فوري خلال 30 دقيقة
           </span>
 
-          {/* LCP H1 ELEMENT — Optimized for Saudi local queries */}
-          <h1
-            className="
-              hero-title-line
-              text-balance
-              text-4xl
-              font-bold
-              leading-[1.3]
-              text-[var(--color-ink)]
-              sm:text-4xl
-              md:text-[40px]
-            "
-          >
+          <h1 className="hero-title-line text-balance text-3xl font-bold leading-[1.3] text-[var(--color-ink)] sm:text-4xl md:text-[40px]">
             شراء سيارات مصدومة وتالفة وتشليح في جدة ومكة والطائف كاش فوري
           </h1>
 
-          <p
-            className="
-              reveal-item
-              hero-description
-              max-w-lg
-              text-base
-              font-medium
-              leading-relaxed
-              text-slate-700
-              md:text-lg
-            "
-          >
-            نشتري سيارتك المصدومة أو التالفة أو المتعطلة أياً كانت حالتها،
-            بمعاينة فورية وسعر عادل في نفس اليوم، مع{" "}
+          <p className="reveal-item hero-description max-w-lg text-base font-medium leading-relaxed text-slate-700 md:text-lg">
+            نشتري سيارتك المصدومة أو التالفة أو المتعطلة بإجراءات نظامية 100%
+            عبر أبشر، بمعاينة فورية وسعر عادل في نفس اليوم، مع{" "}
             <strong className="font-bold text-slate-900">سطحة مجانية</strong>{" "}
             لنقل السيارة من موقعك بجدة ومكة والطائف.
           </p>
 
-          <div className="reveal-item flex flex-wrap items-center gap-4 pt-4">
-            <Link
-              href="#contact"
-              className="
-                group
-                relative
-                inline-flex
-                items-center
-                gap-3
-                overflow-hidden
-                rounded-full
-                bg-slate-900
-                px-8
-                py-4
-                text-sm
-                font-semibold
-                text-white
-                transition-all
-                hover:-translate-y-1
-                hover:bg-slate-800
-                hover:shadow-xl
-                hover:shadow-slate-900/20
-              "
+          {/* SINGLE DIRECT CALL CTA (Desktop & Mobile) */}
+          <div className="reveal-item flex flex-wrap items-center gap-3 pt-1">
+            <a
+              href="tel:+966562117196"
+              className="inline-flex items-center gap-3 rounded-full bg-slate-900 px-7 py-3.5 text-sm font-bold text-white shadow-md transition-all hover:-translate-y-0.5 hover:bg-slate-800"
             >
-              <span className="relative z-10">احصل على السعر الآن</span>
-              <ArrowLeft
-                size={18}
-                strokeWidth={2.5}
-                className="
-                  relative
-                  z-10
-                  transition-transform
-                  duration-300
-                  group-hover:-translate-x-1
-                "
-              />
-            </Link>
-
-            <Link
-              href="#how-it-works"
-              className="
-                inline-flex
-                items-center
-                gap-2
-                rounded-full
-                border
-                border-slate-300
-                bg-white/70
-                px-8
-                py-4
-                text-sm
-                font-semibold
-                text-slate-800
-                backdrop-blur-sm
-                transition-all
-                hover:-translate-y-1
-                hover:bg-white
-                hover:shadow-md
-              "
-            >
-              كيف تعمل الخدمة
-            </Link>
+              <Phone size={18} className="text-sky-400" />
+              <span>اتصال مباشر:</span>
+              <span dir="ltr" className="text-sky-300">
+                0562117196
+              </span>
+            </a>
           </div>
 
           {/* TRUST STATS */}
-          <div
-            className="
-              reveal-item
-              mt-8
-              grid
-              w-full
-              grid-cols-3
-              gap-4
-              rounded-3xl
-              border
-              border-white/40
-              bg-white/40
-              p-4
-              shadow-[0_8px_30px_rgb(0,0,0,0.04)]
-              backdrop-blur-xl
-            "
-          >
+          <div className="reveal-item mt-2 grid w-full grid-cols-3 gap-3 rounded-3xl border border-white/40 bg-white/50 p-4 shadow-[0_8px_30px_rgb(0,0,0,0.04)] backdrop-blur-xl">
             {STATS.map((stat) => {
               const Icon = stat.icon;
-
               return (
                 <div
                   key={stat.label}
-                  className="
-                    flex
-                    flex-col
-                    items-center
-                    justify-center
-                    gap-3
-                    text-center
-                    sm:flex-row
-                    sm:justify-start
-                    sm:text-right
-                  "
+                  className="flex flex-col items-center justify-center gap-2 text-center sm:flex-row sm:justify-start sm:text-right"
                 >
                   <div
-                    className={`
-                      flex
-                      h-11
-                      w-11
-                      shrink-0
-                      items-center
-                      justify-center
-                      rounded-2xl
-                      ${stat.iconBg}
-                      ${stat.iconColor}
-                      ${stat.iconRing}
-                      ring-1
-                      shadow-sm
-                    `}
+                    className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl ${stat.iconBg} ${stat.iconColor} ${stat.iconRing} ring-1 shadow-sm`}
                   >
-                    <Icon size={20} strokeWidth={2} />
+                    <Icon size={18} strokeWidth={2} />
                   </div>
-
-                  <div className="flex flex-col gap-0.5">
-                    <span
-                      className="
-                        text-lg
-                        font-extrabold
-                        tracking-tight
-                        text-slate-900
-                        sm:text-base
-                        md:text-xl
-                      "
-                    >
+                  <div className="flex flex-col">
+                    <span className="text-base font-extrabold tracking-tight text-slate-900 md:text-lg">
                       {stat.value}
                       {stat.unit && (
-                        <span
-                          className="
-                            mr-1
-                            text-[11px]
-                            font-semibold
-                            text-slate-600
-                          "
-                        >
+                        <span className="mr-1 text-[11px] font-semibold text-slate-600">
                           {stat.unit}
                         </span>
                       )}
                     </span>
-
-                    <span
-                      className="
-                        text-[10px]
-                        font-semibold
-                        text-slate-600
-                        sm:text-xs
-                      "
-                    >
+                    <span className="text-[10px] font-semibold text-slate-600 sm:text-xs">
                       {stat.label}
                     </span>
                   </div>
@@ -394,70 +153,22 @@ export default function Hero() {
           </div>
         </div>
 
-        {/* IMAGE COLUMN — Optimized Alt Texts */}
-        <div
-          className="
-            relative
-            mx-auto
-            aspect-[4/3]
-            w-full
-            max-w-lg
-            md:max-w-none
-          "
-        >
-          {/* MAP */}
-          <div
-            className="
-              hero-map
-              absolute
-              inset-x-0
-              top-[-5%]
-              z-0
-              h-[55%]
-              md:h-[58%]
-            "
-          >
+        {/* LEFT COLUMN: COMPACT CAR IMAGE + QUICK FORM */}
+        <div className="reveal-item flex flex-col items-center gap-4 w-full">
+          {/* <div className="relative w-full h-40 sm:h-48">
             <Image
-              src="/map.webp"
-              alt="خريطة مناطق تغطية شراء السيارات المصدومة في جدة ومكة المكرمة والطائف"
+              src="/cardamage.webp"
+              alt="سيارة مصدومة وتالفة للبيع تشليح نقداً مع سطحة مجانية في جدة ومكة والطائف"
               fill
-              className="object-contain"
+              priority
+              className="object-contain drop-shadow-xl"
               sizes="(max-width: 768px) 90vw, 45vw"
             />
+          </div> */}
+
+          <div className="w-full">
+            <HeroQuickForm />
           </div>
-
-          {/* CLEAN CAR */}
-          <Image
-            src="/car.png"
-            alt="تقييم سيارات مصدومة وتشليح بأعلى سعر في جدة ومكة"
-            fill
-            priority
-            className="
-              hero-car-clean
-              relative
-              z-10
-              object-contain
-              drop-shadow-2xl
-            "
-            sizes="(max-width: 768px) 90vw, 45vw"
-          />
-
-          {/* DAMAGED CAR */}
-          <Image
-            src="/cardamage.webp"
-            alt="سيارة مصدومة وتالفة للبيع تشليح نقداً مع سطحة مجانية في جدة ومكة والطائف"
-            fill
-            className="
-              hero-car-damaged
-              absolute
-              inset-0
-              z-10
-              object-contain
-              drop-shadow-2xl
-              opacity-0
-            "
-            sizes="(max-width: 768px) 90vw, 45vw"
-          />
         </div>
       </div>
     </section>
