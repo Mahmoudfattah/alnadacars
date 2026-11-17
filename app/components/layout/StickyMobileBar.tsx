@@ -54,7 +54,7 @@ export default function StickyMobileBar() {
           target="_blank"
           rel="noopener noreferrer"
           onClick={() => trackEvent("whatsapp_click", "sticky_mobile_bar")}
-          className="relative flex flex-[1.2] items-center justify-center gap-2 rounded-xl bg-gradient-to-l from-emerald-600 to-emerald-500 active:scale-[0.98] py-3 px-3 text-xs sm:text-sm font-extrabold text-white shadow-[0_6px_16px_-3px_rgba(16,185,129,0.45)] transition-all"
+          className="relative flex flex-[1.2] items-center justify-center gap-2 rounded-xl bg-gradient-to-l from-emerald-600 to-emerald-500 active:scale-[0.98] py-4 px-3 text-xs sm:text-sm font-extrabold text-white shadow-[0_6px_16px_-3px_rgba(16,185,129,0.45)] transition-all"
         >
           {/* مؤشر متصل الآن */}
           <span className="relative flex h-2 w-2">
