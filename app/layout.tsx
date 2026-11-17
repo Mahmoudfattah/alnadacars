@@ -69,52 +69,54 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "AutoDealer",
-    name: "بيعها كاش لشراء السيارات المصدومة والتشليح",
-    url: "https://ba3hacash.com",
-    image: "https://ba3hacash.com/logocut.webp",
-    telephone: "+966562117196",
-    description:
-      "شراء سيارات مصدومة وتالفة وتشليح ومتعطلة في جدة ومكة المكرمة والطائف نقداً وبأفضل سعر فوري مع سطحة مجانية.",
-    priceRange: "$$",
-    areaServed: [
-      { "@type": "City", name: "جدة" },
-      { "@type": "City", name: "مكة المكرمة" },
-      { "@type": "City", name: "الطائف" },
-    ],
-    address: {
-      "@type": "PostalAddress",
-      streetAddress: "جدة",
-      addressLocality: "جدة",
-      addressRegion: "منطقة مكة المكرمة",
-      postalCode: "21442",
-      addressCountry: "SA",
-    },
-    geo: {
-      "@type": "GeoCoordinates",
-      latitude: 21.5433,
-      longitude: 39.1728,
-    },
-    openingHoursSpecification: {
-      "@type": "OpeningHoursSpecification",
-      dayOfWeek: [
-        "Monday",
-        "Tuesday",
-        "Wednesday",
-        "Thursday",
-        "Friday",
-        "Saturday",
-        "Sunday",
-      ],
-      opens: "00:00",
-      closes: "23:59",
-    },
-    sameAs: [
-      "https://haraj.com.sa/users/%D8%AA%D8%B4%D9%84%D9%8A%D8%AD%20%D8%A7%D9%84%D9%86%D8%AF%D9%89%20%D9%84%D8%B9%D8%A7%D9%84%D9%85%20%D8%A7%D9%84%D8%B3%D9%8A%D8%A7%D8%B1%D8%A7%D8%AA/",
-    ],
-  };
+ const jsonLd = {
+   "@context": "https://schema.org",
+   "@type": "AutoDealer",
+   "@id": "https://ba3hacash.com/#autodealer",
+   name: "بيعها كاش لشراء السيارات المصدومة والتشليح",
+   url: "https://ba3hacash.com",
+   image: "https://ba3hacash.com/logocut.webp",
+   telephone: "+966562117196",
+   description:
+     "نشتري السيارات المصدومة والتالفة والتشليح والمتعطلة في جدة ومكة المكرمة والطائف بأعلى سعر كاش فوري مع سطحة مجانية وإسقاط لوحات نظامي عبر أبشر (سواء كانت الاستمارة سارية أو منتهية).",
+   priceRange: "$$",
+   areaServed: [
+     { "@type": "City", name: "جدة" },
+     { "@type": "City", name: "مكة المكرمة" },
+     { "@type": "City", name: "الطائف" },
+   ],
+   address: {
+     "@type": "PostalAddress",
+     streetAddress:
+       "تشليح الندى لعالم السيارات، رقم 207، الخمرة الصناعية الثالثة",
+     addressLocality: "جدة",
+     addressRegion: "منطقة مكة المكرمة",
+     postalCode: "22525",
+     addressCountry: "SA",
+   },
+   geo: {
+     "@type": "GeoCoordinates",
+     latitude: 21.3342,
+     longitude: 39.2206,
+   },
+   openingHoursSpecification: {
+     "@type": "OpeningHoursSpecification",
+     dayOfWeek: [
+       "Monday",
+       "Tuesday",
+       "Wednesday",
+       "Thursday",
+       "Friday",
+       "Saturday",
+       "Sunday",
+     ],
+     opens: "00:00",
+     closes: "23:59",
+   },
+   sameAs: [
+     "https://haraj.com.sa/users/%D8%AA%D8%B4%D9%84%D9%8A%D8%AD%20%D8%A7%D9%84%D9%86%D8%AF%D9%89%20%D9%84%D8%B9%D8%A7%D9%84%D9%85%20%D8%A7%D9%84%D8%B3%D9%8A%D8%A7%D8%B1%D8%A7%D8%AA/",
+   ],
+ };
 
   return (
     <html
