@@ -68,7 +68,7 @@ Do NOT redefine --font-display here if it is already defined by next/font.
 
   html {
     scroll-behavior: smooth;
-    scroll-padding-top: 120px;
+    /* scroll-padding-top: 120px; */
     /* منع أي تمدد أفقي على مستوى المتصفح بالكامل */
     overflow-x: hidden; 
   }
