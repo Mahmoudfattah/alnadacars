@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     template: "%s | بيعها كاش",
   },
   description:
-    "تبي تبيع سيارتك المصدومة أو المتعطلة؟ نشتريها فوراً بأعلى سعر كاش في جدة ومكة والطائف مع سطحة مجانية وإسقاط لوحات نظامي عبر أبشر (الاستمارة سارية). اتصل الآن: 0562117196",
+    "تبي تبيع سيارتك المصدومة أو المتعطلة؟ نشتريها فوراً بأعلى سعر كاش في جدة ومكة والطائف مع سطحة مجانية وإسقاط لوحات نظامي عبر أبشر (الاستمارة منتهية أو سارية). اتصل الآن: 0562117196",
   keywords: [
     "بيع سيارة مصدومة جدة",
     "ارقام تشليح جدة",
@@ -69,54 +69,56 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
- const jsonLd = {
-   "@context": "https://schema.org",
-   "@type": "AutoDealer",
-   "@id": "https://ba3hacash.com/#autodealer",
-   name: "بيعها كاش لشراء السيارات المصدومة والتشليح",
-   url: "https://ba3hacash.com",
-   image: "https://ba3hacash.com/logocut.webp",
-   telephone: "+966562117196",
-   description:
-     "نشتري السيارات المصدومة والتالفة والتشليح والمتعطلة في جدة ومكة المكرمة والطائف بأعلى سعر كاش فوري مع سطحة مجانية وإسقاط لوحات نظامي عبر أبشر (سواء كانت الاستمارة سارية أو منتهية).",
-   priceRange: "$$",
-   areaServed: [
-     { "@type": "City", name: "جدة" },
-     { "@type": "City", name: "مكة المكرمة" },
-     { "@type": "City", name: "الطائف" },
-   ],
-   address: {
-     "@type": "PostalAddress",
-     streetAddress:
-       "تشليح الندى لعالم السيارات، رقم 207، الخمرة الصناعية الثالثة",
-     addressLocality: "جدة",
-     addressRegion: "منطقة مكة المكرمة",
-     postalCode: "22525",
-     addressCountry: "SA",
-   },
-   geo: {
-     "@type": "GeoCoordinates",
-     latitude: 21.3342,
-     longitude: 39.2206,
-   },
-   openingHoursSpecification: {
-     "@type": "OpeningHoursSpecification",
-     dayOfWeek: [
-       "Monday",
-       "Tuesday",
-       "Wednesday",
-       "Thursday",
-       "Friday",
-       "Saturday",
-       "Sunday",
-     ],
-     opens: "00:00",
-     closes: "23:59",
-   },
-   sameAs: [
-     "https://haraj.com.sa/users/%D8%AA%D8%B4%D9%84%D9%8A%D8%AD%20%D8%A7%D9%84%D9%86%D8%AF%D9%89%20%D9%84%D8%B9%D8%A7%D9%84%D9%85%20%D8%A7%D9%84%D8%B3%D9%8A%D8%A7%D8%B1%D8%A7%D8%AA/",
-   ],
- };
+  const isProd = process.env.NODE_ENV === "production";
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "AutoDealer",
+    "@id": "https://ba3hacash.com/#autodealer",
+    name: "بيعها كاش لشراء السيارات المصدومة والتشليح",
+    url: "https://ba3hacash.com",
+    image: "https://ba3hacash.com/logocut.webp",
+    telephone: "+966562117196",
+    description:
+      "نشتري السيارات المصدومة والتالفة والتشليح والمتعطلة في جدة ومكة المكرمة والطائف بأعلى سعر كاش فوري مع سطحة مجانية وإسقاط لوحات نظامي عبر أبشر (سواء كانت الاستمارة سارية أو منتهية).",
+    priceRange: "$$",
+    areaServed: [
+      { "@type": "City", name: "جدة" },
+      { "@type": "City", name: "مكة المكرمة" },
+      { "@type": "City", name: "الطائف" },
+    ],
+    address: {
+      "@type": "PostalAddress",
+      streetAddress:
+        "تشليح الندى لعالم السيارات، رقم 207، الخمرة الصناعية الثالثة",
+      addressLocality: "جدة",
+      addressRegion: "منطقة مكة المكرمة",
+      postalCode: "22525",
+      addressCountry: "SA",
+    },
+    geo: {
+      "@type": "GeoCoordinates",
+      latitude: 21.3342,
+      longitude: 39.2206,
+    },
+    openingHoursSpecification: {
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+        "Sunday",
+      ],
+      opens: "00:00",
+      closes: "23:59",
+    },
+    sameAs: [
+      "https://haraj.com.sa/users/%D8%AA%D8%B4%D9%84%D9%8A%D8%AD%20%D8%A7%D9%84%D9%86%D8%AF%D9%89%20%D9%84%D8%B9%D8%A7%D9%84%D9%85%20%D8%A7%D9%84%D8%B3%D9%8A%D8%A7%D8%B1%D8%A7%D8%AA/",
+    ],
+  };
 
   return (
     <html
@@ -132,46 +134,62 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-        {/* Google Analytics 4 (GA4) + Automatic WhatsApp & Phone Call Click Tracking */}
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-684T78PHY0"
-          strategy="afterInteractive"
-        />
-        <Script id="google-analytics" strategy="afterInteractive">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-684T78PHY0');
 
-            document.addEventListener('click', function(e) {
-              var link = e.target.closest('a');
-              if (!link || !link.href) return;
-              if (link.href.includes('wa.me') || link.href.includes('whatsapp')) {
-                gtag('event', 'whatsapp_click', {
-                  event_category: 'Lead',
-                  event_label: link.href
-                });
-              } else if (link.href.startsWith('tel:')) {
-                gtag('event', 'phone_call_click', {
-                  event_category: 'Lead',
-                  event_label: link.href
-                });
-              }
-            });
-          `}
-        </Script>
+        {isProd && (
+          <>
+            {/* Google Analytics 4 (GA4) + Automatic WhatsApp & Phone Call Click Tracking */}
+            <Script
+              src="https://www.googletagmanager.com/gtag/js?id=G-684T78PHY0"
+              strategy="afterInteractive"
+            />
+            <Script id="google-analytics" strategy="afterInteractive">
+              {`
+                (function() {
+                  var h = window.location.hostname;
+                  if (h === 'localhost' || h === '127.0.0.1') return;
 
-        {/* Microsoft Clarity */}
-        <Script id="microsoft-clarity" strategy="afterInteractive">
-          {`
-            (function(c,l,a,r,i,t,y){
-                c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-                t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-                y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-            })(window, document, "clarity", "script", "zelj7jms76");
-          `}
-        </Script>
+                  window.dataLayer = window.dataLayer || [];
+                  function gtag(){window.dataLayer.push(arguments);}
+                  window.gtag = gtag;
+                  gtag('js', new Date());
+                  gtag('config', 'G-684T78PHY0');
+
+                  document.addEventListener('click', function(e) {
+                    var link = e.target.closest('a');
+                    if (!link || !link.href) return;
+                    if (link.href.includes('wa.me') || link.href.includes('whatsapp')) {
+                      gtag('event', 'whatsapp_click', {
+                        event_category: 'Lead',
+                        event_label: link.href
+                      });
+                    } else if (link.href.startsWith('tel:')) {
+                      gtag('event', 'phone_call_click', {
+                        event_category: 'Lead',
+                        event_label: link.href
+                      });
+                    }
+                  });
+                })();
+              `}
+            </Script>
+
+            {/* Microsoft Clarity */}
+            <Script id="microsoft-clarity" strategy="lazyOnload">
+              {`
+                (function() {
+                  var h = window.location.hostname;
+                  if (h === 'localhost' || h === '127.0.0.1') return;
+
+                  (function(c,l,a,r,i,t,y){
+                    c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+                    t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+                    y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+                  })(window, document, "clarity", "script", "zelj7jms76");
+                })();
+              `}
+            </Script>
+          </>
+        )}
 
         <Navbar />
         <main>{children}</main>
