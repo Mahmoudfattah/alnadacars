@@ -26,8 +26,8 @@ const CONTACT_METHODS = [
 
 const QUICK_LINKS = [
   { label: "الرئيسية", href: "/" },
-  { label: "من نحن", href: "#about" },
-  { label: "الأسئلة الشائعة", href: "#faq" },
+  { label: "من نحن", href: "/#about" },
+  { label: "الأسئلة الشائعة", href: "/#faq" },
   { label: "شراء سيارات مصدومة جدة", href: "/jeddah" },
   { label: "تشليح وشراء سيارات مكة", href: "/makkah" },
   { label: "شراء سيارات مصدومة الطائف", href: "/taif" },
@@ -35,6 +35,14 @@ const QUICK_LINKS = [
   { label: "إسقاط اللوحات الفوري عبر أبشر", href: "/isqat-lohat" },
   // { label: "شراء سيارات متعطلة ومخبطة", href: "/broken-engine-cars" },
   { label: "المدونة والدليل الإرشادي", href: "/blog" },
+  {
+    label: "شراء سيارات سكراب وقديمة كاش",
+    href: "/blog/sell-scrap-old-cars",
+  },
+  // {
+  //   label: "بيع السيارة العطلانة من أمام المنزل",
+  //   href: "/blog/sell-broken-car-from-home",
+  // },
 ];
 
 const SOCIAL_LINKS = [

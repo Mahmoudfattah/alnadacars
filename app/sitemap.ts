@@ -48,6 +48,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     //   priority: 0.85,
     // },
     {
+      url: "https://ba3hacash.com/blog/sell-scrap-old-cars",
+      lastModified: new Date("2026-11-21"),
+      changeFrequency: "monthly",
+      priority: 0.75,
+    },
+    {
       url: `${baseUrl}/blog`,
       lastModified,
       changeFrequency: "weekly",
