@@ -144,49 +144,49 @@ export default function RootLayout({
             />
             <Script id="google-analytics" strategy="afterInteractive">
               {`
-                (function() {
-                  var h = window.location.hostname;
-                  if (h === 'localhost' || h === '127.0.0.1') return;
+  (function() {
+    var h = window.location.hostname;
+    if (h !== 'ba3hacash.com' && h !== 'www.ba3hacash.com') return;
 
-                  window.dataLayer = window.dataLayer || [];
-                  function gtag(){window.dataLayer.push(arguments);}
-                  window.gtag = gtag;
-                  gtag('js', new Date());
-                  gtag('config', 'G-684T78PHY0');
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){window.dataLayer.push(arguments);}
+    window.gtag = gtag;
+    gtag('js', new Date());
+    gtag('config', 'G-684T78PHY0');
 
-                  document.addEventListener('click', function(e) {
-                    var link = e.target.closest('a');
-                    if (!link || !link.href) return;
-                    if (link.href.includes('wa.me') || link.href.includes('whatsapp')) {
-                      gtag('event', 'whatsapp_click', {
-                        event_category: 'Lead',
-                        event_label: link.href
-                      });
-                    } else if (link.href.startsWith('tel:')) {
-                      gtag('event', 'phone_call_click', {
-                        event_category: 'Lead',
-                        event_label: link.href
-                      });
-                    }
-                  });
-                })();
-              `}
+    document.addEventListener('click', function(e) {
+      var link = e.target.closest('a');
+      if (!link || !link.href) return;
+      if (link.href.includes('wa.me') || link.href.includes('whatsapp')) {
+        gtag('event', 'whatsapp_click', {
+          event_category: 'Lead',
+          event_label: link.href
+        });
+      } else if (link.href.startsWith('tel:')) {
+        gtag('event', 'phone_call_click', {
+          event_category: 'Lead',
+          event_label: link.href
+        });
+      }
+    });
+  })();
+`}
             </Script>
 
             {/* Microsoft Clarity */}
             <Script id="microsoft-clarity" strategy="lazyOnload">
               {`
-                (function() {
-                  var h = window.location.hostname;
-                  if (h === 'localhost' || h === '127.0.0.1') return;
+  (function() {
+    var h = window.location.hostname;
+    if (h !== 'ba3hacash.com' && h !== 'www.ba3hacash.com') return;
 
-                  (function(c,l,a,r,i,t,y){
-                    c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-                    t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-                    y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-                  })(window, document, "clarity", "script", "zelj7jms76");
-                })();
-              `}
+    (function(c,l,a,r,i,t,y){
+      c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+      t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+      y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "zelj7jms76");
+  })();
+`}
             </Script>
           </>
         )}

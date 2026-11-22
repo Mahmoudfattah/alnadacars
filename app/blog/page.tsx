@@ -337,6 +337,28 @@ export default function Ba3haCashBlogPage() {
               </div>
             </div>
           </div>
+          {/* مقالات جديدة في المدونة */}
+          <div className="mt-10 pt-8 border-t border-slate-200">
+            <h2 className="text-lg sm:text-xl font-extrabold text-slate-900 mb-4!">
+              مقالات أخرى في مدونة بيعها كاش
+            </h2>
+            <Link
+              href="/blog/sell-scrap-old-cars"
+              className="group block rounded-2xl border border-slate-200 bg-slate-50/80 p-5 hover:border-[#0284C7] hover:bg-sky-50/40 transition-all"
+            >
+              <span className="inline-block text-xs font-bold text-[#0284C7] mb-1.5">
+                دليل السيارات السكراب والقديمة
+              </span>
+              <h3 className="text-base sm:text-lg font-extrabold text-slate-900 group-hover:text-[#0284C7] transition-colors">
+                شراء سيارات سكراب وقديمة بجدة ومكة والطائف: كيف تتخلص من سيارتك
+                المتوقفة كاش؟
+              </h3>
+              <p className="mt-1.5 text-sm text-slate-600">
+                تعرف على عوامل تسعير السيارات القديمة والمتوقفة مع سطحة مجانية
+                وإسقاط لوحات نظامي عبر أبشر.
+              </p>
+            </Link>
+          </div>
         </article>
       </main>
     </>
