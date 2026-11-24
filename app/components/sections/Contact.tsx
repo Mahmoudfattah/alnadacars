@@ -39,10 +39,10 @@ const QUICK_LINKS = [
     label: "شراء سيارات سكراب وقديمة كاش",
     href: "/blog/sell-scrap-old-cars",
   },
-  // {
-  //   label: "بيع السيارة العطلانة من أمام المنزل",
-  //   href: "/blog/sell-broken-car-from-home",
-  // },
+  {
+    label: "بيع السيارة العطلانة من أمام المنزل",
+    href: "/blog/sell-broken-car-from-home",
+  },
 ];
 
 const SOCIAL_LINKS = [
