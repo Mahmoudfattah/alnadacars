@@ -23,12 +23,13 @@ const WHATSAPP_LINK =
 export const metadata: Metadata = {
   title: "نشتري سيارتك المصدومة والتشليح في جدة كاش خلال 30 دقيقة | 0562117196",
   description:
-    "تبي تبيع سيارتك المصدومة أو التالفة في جدة؟ نشتريها بأعلى سعر كاش فوري من موقعك مع سطحة مجانية وإسقاط لوحات نظامي عبر أبشر (تشليح الندى 207 — الاستمارة سارية أو منتهية): 0562117196",
+    "تبي تبيع سيارتك المصدومة أو التالفة أو السكراب في جدة؟ نشتريها بأعلى سعر كاش فوري من موقعك مع سطحة مجانية وإسقاط لوحات نظامي عبر أبشر (تشليح الندى 207 الخمرة — الاستمارة سارية أو منتهية): 0562117196",
   keywords: [
     "بيع سيارة مصدومة جدة",
     "ارقام تشليح جدة",
     "نشتري سيارات مصدومة جدة",
     "شراء سيارات تشليح بريمان والخمرة",
+    "شراء سيارات سكراب جدة",
     "اسقاط لوحات سيارات جدة",
     "بيعها كاش جدة",
   ],
@@ -38,7 +39,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "نشتري سيارتك المصدومة والتشليح في جدة كاش فوري | 0562117196",
     description:
-      "شراء وتثمين السيارات المصدومة والتالفة في كافة أحياء جدة مع سطحة مجانية وإجراءات نظامية عبر أبشر. اتصل: 0562117196",
+      "شراء وتثمين السيارات المصدومة والتالفة والسكراب في كافة أحياء جدة مع سطحة مجانية وإجراءات نظامية عبر أبشر (الاستمارة سارية أو منتهية). اتصل: 0562117196",
     url: "https://ba3hacash.com/jeddah",
     siteName: "بيعها كاش لشراء السيارات المصدومة والتشليح",
     locale: "ar_SA",
@@ -68,11 +69,11 @@ const SERVICES_JEDDAH = [
   },
   {
     title: "شراء سيارات تشليح وسكراب بجدة (الحمدانية وبريمان)",
-    desc: "تقييم عادل وفوري للسيارات التالفة بالكامل والقديمة والسكراب في جميع أحياء شمال وجنوب جدة مع سحب مجاني بالسطحة.",
+    desc: "تقييم عادل وفوري للسيارات التالفة بالكامل والقديمة والسكراب في جميع أحياء شمال وجنوب جدة مع سحب مجاني بالسطحة من أمام المنزل.",
   },
   {
-    title: "شراء سيارات متعطلة (مكينة أو قير) وبدون فحص",
-    desc: "سيارتك متعطلة في المكينة أو الجيربوكس أو منتهية الاستمارة والفحص الدوري؟ نشتريها فوراً في موقعك بجدة ونتكفل بإجراءات أبشر.",
+    title: "شراء سيارات متعطلة (مكينة أو قير) وإسقاط أبشر",
+    desc: "سيارتك متعطلة في المكينة أو الجيربوكس؟ نشتريها فوراً في موقعك بجدة ونتكفل بإجراءات أبشر سواء كانت الاستمارة سارية أو منتهية.",
   },
 ];
 
@@ -90,8 +91,12 @@ const FAQS_JEDDAH = [
     a: "نعم بالتأكيد، نُنهي إجراءات نقل الملكية أو إسقاط اللوحات الفوري رسمياً عبر منصة أبشر في نفس يوم استلام السيارة ودفع المبلغ دون أي رسوم إضافية.",
   },
   {
-    q: "هل تشترون السيارات في جدة لو الاستمارة منتهية أو بدون فحص دوري؟",
-    a: "نعم، نشتري جميع السيارات المصدومة والتالفة والمتعطلة في جدة حتى لو كانت الاستمارة منتهية أو الفحص الدوري غير ساري المفعول.",
+    q: "هل تشترون السيارات في جدة لو الاستمارة منتهية؟",
+    a: "نعم، نشتري جميع السيارات المصدومة والتالفة والمتعطلة والسكراب في جدة بإجراءات نظامية عبر أبشر سواء كانت الاستمارة سارية أو منتهية الصلاحية، ولا يُشترط وجود فحص دوري ساري.",
+  },
+  {
+    q: "أين يقع مقركم الرسمي في جدة وهل يمكن معاينة السيارة مباشرة؟",
+    a: "مقرنا الرسمي في تشليح الندى لعالم السيارات — رقم 207، الخمرة الصناعية الثالثة، جدة، كما نوفر خدمة المعاينة الميدانية والسحب المجاني بالسطحة إلى أي حي في جدة.",
   },
 ];
 
@@ -104,7 +109,7 @@ export default function JeddahLandingPage() {
         "@id": "https://ba3hacash.com/jeddah#service",
         name: "شراء سيارات مصدومة وتشليح في جدة — بيعها كاش",
         description:
-          "خدمة شراء السيارات المصدومة والتالفة والمتعطلة والتشليح في جميع أحياء جدة (الحمدانية، بريمان، أبحر، الصفا، المروة، السامر، الخمرة) بأعلى سعر كاش فوري مع سطحة مجانية وإسقاط لوحات عبر أبشر.",
+          "خدمة شراء السيارات المصدومة والتالفة والمتعطلة والسكراب في جميع أحياء جدة (الحمدانية، بريمان، أبحر، الصفا، المروة، السامر، الخمرة) بأعلى سعر كاش فوري مع سطحة مجانية وإسقاط لوحات عبر أبشر.",
         provider: {
           "@id": "https://ba3hacash.com/#autodealer",
         },
@@ -153,7 +158,7 @@ export default function JeddahLandingPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      <main
+      <div
         dir="rtl"
         className="min-h-screen bg-[#F8FAFC] text-slate-900 pt-28 pb-16"
       >
@@ -183,7 +188,8 @@ export default function JeddahLandingPage() {
             <div className="inline-flex items-center gap-2 rounded-full bg-sky-50 border border-sky-200 px-4 py-1.5 text-xs sm:text-sm font-bold text-[#0284C7] mb-5">
               <MapPin className="w-4 h-4" />
               <span>
-                تغطية شاملة لجميع أحياء شمال وجنوب جدة على مدار 24 ساعة
+                تشليح الندى رقم 207 — الخمرة 3 جدة | تغطية شاملة لجميع الأحياء
+                24/7
               </span>
             </div>
 
@@ -195,16 +201,23 @@ export default function JeddahLandingPage() {
             </h1>
 
             <p className="mt-5 text-base sm:text-lg leading-relaxed text-slate-600 max-w-3xl">
-              هل لديك <strong>سيارة مصدومة للبيع في جدة</strong> أو تبحث عن{" "}
-              <strong>أفضل مشتري سيارات تشليح وتالفة ومتعطلة في جدة</strong>؟ في{" "}
-              <strong>بيعها كاش</strong> نشتري كافة أنواع السيارات في{" "}
+              هل تبحث عن <strong>بيع سيارة مصدومة في جدة</strong> أو{" "}
+              <strong>أرقام تشليح جدة لشراء السيارات التالفة والمتعطلة</strong>؟
+              في <strong>بيعها كاش</strong> (تشليح الندى رقم 207 بالخمرة) نشتري
+              كافة أنواع السيارات في{" "}
               <strong>
                 الحمدانية، بريمان، أبحر، الصفا، المروة، السامر، والخمرة
               </strong>{" "}
               بأعلى تثمين نقدي فوري خلال 30 دقيقة، مع{" "}
               <strong>سطحة خاصة مجانية</strong> لسحب السيارة من أمام منزلك
               وإنهاء إجراءات نقل الملكية و
-              <strong>إسقاط اللوحات الفوري عبر أبشر</strong>.
+              <Link
+                href="/isqat-lohat"
+                className="text-[#0284C7] underline font-semibold"
+              >
+                إسقاط اللوحات الفوري عبر أبشر
+              </Link>{" "}
+              (سواء كانت الاستمارة سارية أو منتهية).
             </p>
 
             {/* CTA Buttons */}
@@ -264,7 +277,7 @@ export default function JeddahLandingPage() {
                     إسقاط لوحات فوري عبر أبشر
                   </h2>
                   <p className="text-xs text-slate-500 mt-0.5">
-                    إنهاء الإجراءات النظامية وإخلاء المسؤولية في نفس اليوم
+                    إخلاء مسؤولية في نفس اليوم (الاستمارة سارية أو منتهية)
                   </p>
                 </div>
               </div>
@@ -353,42 +366,77 @@ export default function JeddahLandingPage() {
               ))}
             </div>
 
-            <div className="mt-8 pt-6 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4">
-              <p className="text-sm font-bold text-slate-700">
-                تصفح أيضاً فروعنا الأخرى في المنطقة الغربية:
-              </p>
-              <div className="flex flex-wrap items-center gap-3">
-                <a
-                  href={WHATSAPP_LINK}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="rounded-full bg-[#16a34a] px-6 py-2.5 text-sm font-bold text-white hover:bg-[#15803d] transition-all"
-                >
-                  تواصل واتساب الآن
-                </a>
+            <div className="mt-8 pt-6 border-t border-slate-200 flex flex-col gap-4">
+              <div className="flex flex-wrap items-center gap-2.5 text-xs sm:text-sm text-slate-600">
+                <span className="font-bold text-slate-800">
+                  أدلة وخدمات تهمك:
+                </span>
                 <Link
-                  href="/makkah"
-                  className="rounded-full border border-sky-200 bg-sky-50 px-5 py-2.5 text-sm font-semibold text-[#0284C7] hover:bg-sky-100 transition-all"
+                  href="/isqat-lohat"
+                  className="text-[#0284C7] hover:underline"
                 >
-                  فرع مكة المكرمة
+                  إسقاط اللوحات الفوري عبر أبشر
                 </Link>
+                <span>•</span>
                 <Link
-                  href="/taif"
-                  className="rounded-full border border-sky-200 bg-sky-50 px-5 py-2.5 text-sm font-semibold text-[#0284C7] hover:bg-sky-100 transition-all"
+                  href="/blog/sell-scrap-old-cars"
+                  className="text-[#0284C7] hover:underline"
                 >
-                  فرع الطائف
+                  شراء سيارات سكراب وقديمة كاش
                 </Link>
+                <span>•</span>
                 <Link
-                  href="/"
-                  className="rounded-full border border-slate-300 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50 transition-all"
+                  href="/blog/sell-broken-car-from-home"
+                  className="text-[#0284C7] hover:underline"
                 >
-                  العودة للرئيسية
+                  بيع السيارة العطلانة من أمام المنزل
                 </Link>
+                <span>•</span>
+                <Link
+                  href="/scrap-car-brands"
+                  className="text-[#0284C7] hover:underline"
+                >
+                  الماركات التي نشتريها
+                </Link>
+              </div>
+
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-2">
+                <p className="text-sm font-bold text-slate-700">
+                  تصفح أيضاً فروعنا الأخرى في المنطقة الغربية:
+                </p>
+                <div className="flex flex-wrap items-center gap-3">
+                  <a
+                    href={WHATSAPP_LINK}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="rounded-full bg-[#16a34a] px-6 py-2.5 text-sm font-bold text-white hover:bg-[#15803d] transition-all"
+                  >
+                    تواصل واتساب الآن
+                  </a>
+                  <Link
+                    href="/makkah"
+                    className="rounded-full border border-sky-200 bg-sky-50 px-5 py-2.5 text-sm font-semibold text-[#0284C7] hover:bg-sky-100 transition-all"
+                  >
+                    فرع مكة المكرمة
+                  </Link>
+                  <Link
+                    href="/taif"
+                    className="rounded-full border border-sky-200 bg-sky-50 px-5 py-2.5 text-sm font-semibold text-[#0284C7] hover:bg-sky-100 transition-all"
+                  >
+                    فرع الطائف
+                  </Link>
+                  <Link
+                    href="/"
+                    className="rounded-full border border-slate-300 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50 transition-all"
+                  >
+                    العودة للرئيسية
+                  </Link>
+                </div>
               </div>
             </div>
           </div>
         </section>
-      </main>
+      </div>
     </>
   );
 }
